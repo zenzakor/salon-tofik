@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الإدارة | صالون توفيق</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; display: flex; min-height: 100vh;}
+        
+        /* شاشة تسجيل الدخول للإدارة */
+        #adminLoginSection { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f6f9; display: flex; justify-content: center; align-items: center; z-index: 1000;}
+        .login-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 350px; border-top: 5px solid #000;}
+        .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px;}
+        .btn-login { background-color: #000; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; margin-top: 10px;}
+        .btn-login:hover { background-color: #333; }
+
+        #adminContent { display: none; width: 100%; display: flex; } /* سيتم تغييره بالجافاسكريبت */
+        
+        /* القائمة الجانبية (Sidebar) */
+        .sidebar { width: 250px; background-color: #111; color: white; display: flex; flex-direction: column; padding-top: 20px;}
+        .sidebar-logo { text-align: center; margin-bottom: 30px; }
+        .sidebar-logo img { max-width: 150px; }
+        .nav-link { padding: 15px 20px; color: #aaa; text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; font-size: 16px; font-weight: bold; border-right: 4px solid transparent;}
+        .nav-link:hover, .nav-link.active { background-color: #222; color: white; border-right-color: #fff; }
+        .logout-btn { margin-top: auto; background: #ff4d4d; color: white; text-align: center; padding: 15px; cursor: pointer; font-weight: bold; transition: 0.3s;}
+        .logout-btn:hover { background: #cc0000; }
+
+        /* منطقة المحتوى */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; height: 100vh; box-sizing: border-box;}
+        h1 { color: #000; margin-top: 0; font-size: 28px; border-bottom: 2px solid #ddd; padding-bottom: 15px;}
+        
+        /* الأقسام المخفية */
+        .admin-section { display: none; animation: fadeIn 0.4s; }
+        .admin-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden;}
+        th, td { border-bottom: 1px solid #eee; padding: 15px; text-align: center; vertical-align: middle; }
+        th { background-color: #000; color: white; }
+        tr:hover { background-color: #f9f9f9; }
+        
+        .btn-action { color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin: 2px; font-weight: bold; font-size: 13px;}
+        .btn-delete { background-color: #ff4d4d; }
+        .btn-update { background-color: #4CAF50; }
+        .btn-sale { background-color: #FF9800; }
+        
+        /* صندوق إضافة منتج */
+        .add-box { background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd;}
+        .add-box h3 { margin-top: 0;}
+        .input-group { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;}
+        .input-group input, .input-group textarea { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;}
+        .btn-add { background-color: #000; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;}
+        
+        .product-img-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        
+        /* تصميم مربع الاختيار (Checkbox) الاحترافي */
+        .featured-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #000;}
+        .sale-badge { background: #ff4d4d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-right: 5px;}
+        .old-price { text-decoration: line-through; color: #999; font-size: 13px; margin-left: 5px;}
+    </style>
+</head>
+<body>
+
+    <div id="adminLoginSection">
+        <div class="login-box">
+            <h2 style="margin-top: 0;">🔒 الإدارة السريّة</h2>
+            <input type="email" id="adminEmail" placeholder="البريد الإلكتروني للإدارة">
+            <input type="password" id="adminPassword" placeholder="كلمة المرور السريّة">
+            <button id="adminLoginBtn" class="btn-login">دخول للوحة التحكم</button>
+        </div>
+    </div>
+
+    <div id="adminContent" style="display: none;">
+        
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h2 style="margin:0; color:white; font-family:serif; letter-spacing: 2px;">SALON TOFIK</h2>
+                <span style="font-size: 12px; color: #888;">Admin Panel</span>
+            </div>
+            
+            <a class="nav-link active" onclick="switchTab('appointments')"><span class="material-symbols-outlined">calendar_month</span> المواعيد</a>
+            <a class="nav-link" onclick="switchTab('orders')"><span class="material-symbols-outlined">shopping_cart</span> الطلبات المشتراة</a>
+            <a class="nav-link" onclick="switchTab('products')"><span class="material-symbols-outlined">inventory_2</span> المتجر والمنتجات</a>
+            <a class="nav-link" onclick="switchTab('accounts')"><span class="material-symbols-outlined">group</span> حسابات الزبائن</a>
+            <a class="nav-link" onclick="switchTab('reviews')"><span class="material-symbols-outlined">star</span> التقييمات</a>
+            
+            <div class="logout-btn" id="adminLogoutBtn"><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span> تسجيل الخروج</div>
+        </div>
+
+        <div class="main-content">
+            
+            <div id="appointments" class="admin-section active">
+                <h1>📅 إدارة المواعيد</h1>
+                <table id="appointmentsTable"></table>
+            </div>
+
+            <div id="orders" class="admin-section">
+                <h1>📦 إدارة طلبات الشراء</h1>
+                <table id="ordersTable"></table>
+            </div>
+
+            <div id="products" class="admin-section">
+                <h1>🛍️ إدارة المتجر والمنتجات</h1>
+                
+                <div class="add-box">
+                    <h3>إضافة منتج جديد:</h3>
+                    <div class="input-group">
+                        <input type="text" id="productName" placeholder="اسم المنتج">
+                        <input type="number" id="productPrice" placeholder="السعر (₪)">
+                        <input type="url" id="productImageLink" placeholder="رابط صورة المنتج">
+                    </div>
+                    <div class="input-group">
+                        <textarea id="productDescription" rows="2" placeholder="تفاصيل المنتج (الفوائد، طريقة الاستخدام...)"></textarea>
+                    </div>
+                    <button id="addProductBtn" class="btn-add">إضافة للمتجر ➕</button>
+                </div>
+                
+                <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c7d2fe;">
+                    <strong>ملاحظة هامة 📌:</strong> يمكنك وضع علامة (✔) بجانب <b>3 منتجات فقط</b> لعرضها كعينة تشويقية في الصفحة الرئيسية.
+                </div>
+                
+                <table id="productsTable"></table>
+            </div>
+
+            <div id="accounts" class="admin-section">
+                <h1>👥 حسابات الزبائن المسجلين</h1>
+                <table id="usersTable"></table>
+            </div>
+
+            <div id="reviews" class="admin-section">
+                <h1>⭐ إدارة التقييمات</h1>
+                <table id="reviewsTable"></table>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        const THE_ADMIN_EMAIL = "admin@tofik.com"; 
+
+        const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // نظام التبديل بين الأقسام
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // تسجيل الدخول والخروج
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === THE_ADMIN_EMAIL) {
+                document.getElementById("adminLoginSection").style.display = "none"; 
+                document.getElementById("adminContent").style.display = "flex";
+                loadAllData();
+            } else {
+                document.getElementById("adminLoginSection").style.display = "flex"; 
+                document.getElementById("adminContent").style.display = "none";
+            }
+        });
+
+        document.getElementById("adminLoginBtn").addEventListener("click", async () => {
+            const email = document.getElementById("adminEmail").value; const pass = document.getElementById("adminPassword").value;
+            if (!email || !pass) return alert("الرجاء إدخال البريد وكلمة المرور.");
+            try { await signInWithEmailAndPassword(auth, email, pass); } catch (error) { alert("البيانات غير صحيحة!"); }
+        });
+
+        document.getElementById("adminLogoutBtn").addEventListener("click", async () => { 
+            await signOut(auth); window.location.href = "index.html"; 
+        });
+
+        function loadAllData() {
+            loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews();
+        }
+
+        // ================= 1. المواعيد =================
+        async function loadAppointments() {
+            const table = document.getElementById("appointmentsTable"); 
+            table.innerHTML = `<tr><th>الزبونة</th><th>الخدمة</th><th>التاريخ والوقت</th><th>الملاحظات</th><th>الحالة</th><th>الإجراءات</th></tr>`;
+            const querySnapshot = await getDocs(collection(db, "Appointments"));
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
+                row.insertCell(1).innerHTML = data.service || "-"; 
+                row.insertCell(2).innerHTML = `${data.date}<br>${data.time}`; 
+                row.insertCell(3).innerHTML = data.notes || "-"; 
+                
+                let statusColor = data.status.includes('تأكيد') ? 'green' : (data.status.includes('رفض') ? 'red' : '#000');
+                row.insertCell(4).innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${data.status}</span>`;
+                
+                const actionsCell = row.insertCell(5);
+                const updateBtn = document.createElement("button"); updateBtn.innerText = "تعديل"; updateBtn.className = "btn-action btn-update";
+                updateBtn.onclick = async () => { const newStatus = prompt("الحالة الجديدة (مثال: تم التأكيد):", data.status); if (newStatus) { await updateDoc(doc(db, "Appointments", id), { status: newStatus }); loadAppointments(); } };
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف"; deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm("تأكيد الحذف؟")) { await deleteDoc(doc(db, "Appointments", id)); loadAppointments(); } };
+                actionsCell.appendChild(updateBtn); actionsCell.appendChild(deleteBtn);
+            });
+        }
+
+        // ================= 2. الطلبات =================
+        async function loadOrders() {
+            const table = document.getElementById("ordersTable"); 
+            table.innerHTML = `<tr><th>الطلب</th><th>المبلغ</th><th>الزبونة</th><th>الحالة</th><th>الإجراءات</th></tr>`;
+            const querySnapshot = await getDocs(collection(db, "Orders"));
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
+                row.insertCell(0).innerHTML = data.productName; 
+                row.insertCell(1).innerHTML = `<strong>${data.price} ₪</strong>`; 
+                row.insertCell(2).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
+                row.insertCell(3).innerHTML = data.status;
+                const actionsCell = row.insertCell(4);
+                const updateBtn = document.createElement("button"); updateBtn.innerText = "تعديل"; updateBtn.className = "btn-action btn-update";
+                updateBtn.onclick = async () => { const newStatus = prompt("تحديث الحالة:", data.status); if (newStatus) { await updateDoc(doc(db, "Orders", id), { status: newStatus }); loadOrders(); } };
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف"; deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm("حذف الطلب؟")) { await deleteDoc(doc(db, "Orders", id)); loadOrders(); } };
+                actionsCell.appendChild(updateBtn); actionsCell.appendChild(deleteBtn);
+            });
+        }
+
+        // ================= 3. المنتجات (المربعات + الخصومات) =================
+        window.toggleFeatured = async function(checkbox, productId) {
+            // التحقق من عدد المربعات المختارة حالياً
+            const allChecked = document.querySelectorAll('.featured-checkbox:checked');
+            if (checkbox.checked && allChecked.length > 3) {
+                alert("❌ لا يمكنك اختيار أكثر من 3 منتجات لتظهر في الصفحة الرئيسية!");
+                checkbox.checked = false; // التراجع عن الاختيار
+                return;
+            }
+            // حفظ التغيير في قاعدة البيانات
+            await updateDoc(doc(db, "Products", productId), { isFeatured: checkbox.checked });
+        }
+
+        window.makeSale = async function(productId, currentPrice) {
+            const newPrice = prompt("أدخل السعر الجديد بعد الخصم:", currentPrice);
+            if (newPrice && Number(newPrice) < currentPrice) {
+                await updateDoc(doc(db, "Products", productId), {
+                    originalPrice: currentPrice, // حفظ السعر القديم
+                    price: Number(newPrice)      // السعر الجديد المخفض
+                });
+                loadProducts();
+            } else if (newPrice) {
+                alert("يجب أن يكون سعر الخصم أقل من السعر الأصلي!");
+            }
+        }
+
+        window.removeSale = async function(productId, originalPrice) {
+            if (confirm("هل تريد إلغاء الخصم والعودة للسعر الأصلي؟")) {
+                await updateDoc(doc(db, "Products", productId), {
+                    price: originalPrice,
+                    originalPrice: null // مسح السعر القديم
+                });
+                loadProducts();
+            }
+        }
+
+        async function loadProducts() {
+            const table = document.getElementById("productsTable");
+            table.innerHTML = `<tr><th>للصئيسية</th><th>الصورة</th><th>المنتج</th><th>السعر</th><th>الإجراءات</th></tr>`;
+            const querySnapshot = await getDocs(collection(db, "Products"));
+            
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
+                
+                // مربع اختيار العرض في الرئيسية
+                const isChecked = data.isFeatured ? "checked" : "";
+                row.insertCell(0).innerHTML = `<input type="checkbox" class="featured-checkbox" onchange="toggleFeatured(this, '${id}')" ${isChecked}>`;
+                
+                const imgUrl = data.imageUrl ? data.imageUrl : 'https://via.placeholder.com/60?text=No+Image';
+                row.insertCell(1).innerHTML = `<img src="${imgUrl}" class="product-img-preview">`;
+                row.insertCell(2).innerHTML = `<strong>${data.name}</strong><br><small style="color:#666;">${data.description ? data.description.substring(0,25)+'...' : ''}</small>`; 
+                
+                // عرض السعر مع الخصم إذا وجد
+                if (data.originalPrice) {
+                    row.insertCell(3).innerHTML = `<span class="sale-badge">خصم</span> <strong>${data.price}₪</strong> <span class="old-price">${data.originalPrice}₪</span>`;
+                } else {
+                    row.insertCell(3).innerHTML = `<strong>${data.price} ₪</strong>`;
+                }
+
+                const actionsCell = row.insertCell(4);
+                
+                // زر التخفيضات
+                const saleBtn = document.createElement("button"); 
+                saleBtn.className = "btn-action btn-sale";
+                if (data.originalPrice) {
+                    saleBtn.innerText = "إلغاء الخصم";
+                    saleBtn.onclick = () => removeSale(id, data.originalPrice);
+                } else {
+                    saleBtn.innerText = "تخفيض 📉";
+                    saleBtn.onclick = () => makeSale(id, data.price);
+                }
+
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف ❌"; deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm("تأكيد حذف المنتج من المتجر؟")) { await deleteDoc(doc(db, "Products", id)); loadProducts(); } };
+                
+                actionsCell.appendChild(saleBtn); actionsCell.appendChild(deleteBtn);
+            });
+        }
+
+        document.getElementById("addProductBtn").addEventListener("click", async () => {
+            const nameVal = document.getElementById("productName").value; 
+            const priceVal = document.getElementById("productPrice").value;
+            const imgVal = document.getElementById("productImageLink").value; 
+            const descVal = document.getElementById("productDescription").value; 
+
+            if (!nameVal || !priceVal) return alert("أدخل اسم المنتج والسعر!");
+            
+            await addDoc(collection(db, "Products"), { 
+                name: nameVal, 
+                price: Number(priceVal),
+                imageUrl: imgVal,
+                description: descVal,
+                isFeatured: false, // افتراضياً لا يظهر في الرئيسية
+                originalPrice: null
+            });
+            
+            document.getElementById("productName").value = ""; document.getElementById("productPrice").value = ""; 
+            document.getElementById("productImageLink").value = ""; document.getElementById("productDescription").value = ""; 
+            loadProducts();
+        });
+
+        // ================= 4. الحسابات =================
+        async function loadUsers() {
+            const table = document.getElementById("usersTable"); 
+            table.innerHTML = `<tr><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th></tr>`;
+            const querySnapshot = await getDocs(collection(db, "Users"));
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data(); 
+                if(data.email === THE_ADMIN_EMAIL) return; // لا تعرض حساب الإدارة
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${data.firstName} ${data.lastName || ''}</strong>`; 
+                row.insertCell(1).innerHTML = data.email; 
+                row.insertCell(2).innerHTML = `<span dir="ltr">${data.phone || 'غير متوفر'}</span>`; 
+            });
+        }
+
+        // ================= 5. التقييمات =================
+        async function loadAdminReviews() {
+            const table = document.getElementById("reviewsTable"); 
+            table.innerHTML = `<tr><th>الزبونة</th><th>التقييم</th><th>التعليق</th><th>الإجراءات</th></tr>`;
+            const querySnapshot = await getDocs(collection(db, "Reviews"));
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${data.name}</strong>`; 
+                row.insertCell(1).innerHTML = `<span style="color:#FFD700; font-size:18px;">${'★'.repeat(data.rating || 5)}${'☆'.repeat(5 - (data.rating || 5))}</span>`; 
+                row.insertCell(2).innerHTML = `<strong>${data.title}</strong><br><small>${data.text}</small>`; 
+                
+                const actionsCell = row.insertCell(3);
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف التقييم"; deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm("هل أنت متأكد من حذف هذا التقييم؟")) { await deleteDoc(doc(db, "Reviews", id)); loadAdminReviews(); } };
+                actionsCell.appendChild(deleteBtn);
+            });
+        }
+
+    </script>
+</body>
+</html>
