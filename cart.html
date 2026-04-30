@@ -10,6 +10,11 @@
 
     <style>
         body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh;}
+        body.dark-mode { background-color: #151515; color: #f3f3f3; }
+        body.dark-mode .cart-container { background: #222; color: #f3f3f3; border-color: #333; }
+        body.dark-mode .item-details h3, body.dark-mode .total-price { color: #f3f3f3; }
+        body.dark-mode .qty-controls { background: #181818; border-color: #444; }
+        body.dark-mode .qty-btn { background: #222; color: #f3f3f3; border-color: #555; }
         header { background-color: #000000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;}
         .header-logo { height: 60px; max-width: 180px; object-fit: contain; }
         
@@ -63,18 +68,22 @@
         <nav>
             <a href="index.html" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">home</span>
-                <span class="nav-text">الرئيسية</span>
+                <span class="nav-text" data-i18n="home">الرئيسية</span>
             </a>
             <a href="shop.html" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">storefront</span>
-                <span class="nav-text">المتجر</span>
+                <span class="nav-text" data-i18n="shop">المتجر</span>
+            </a>
+            <a class="nav-item" onclick="openSettings()">
+                <span class="material-symbols-outlined nav-icon">settings</span>
+                <span class="nav-text" data-i18n="settings">الإعدادات</span>
             </a>
         </nav>
     </header>
 
     <div class="container">
         <div class="page-title">
-            <h1>🛒 سلة المشتريات</h1>
+            <h1 data-i18n="cartTitle">🛒 سلة المشتريات</h1>
         </div>
 
         <div class="cart-container" id="cartWrapper">
@@ -99,6 +108,19 @@
         </div>
     </div>
 
+    <div id="settingsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center;">
+        <div class="cart-container" style="max-width:420px; width:90%; position:relative;">
+            <span onclick="closeSettings()" style="position:absolute; top:10px; right:18px; font-size:28px; cursor:pointer;">&times;</span>
+            <h2 data-i18n="settings">الإعدادات</h2>
+            <label data-i18n="theme">المظهر</label>
+            <select id="themeSelect"><option value="light" data-i18n="light">فاتح</option><option value="dark" data-i18n="dark">داكن</option></select>
+            <label data-i18n="language">اللغة</label>
+            <select id="langSelect"><option value="ar">العربية</option><option value="he">עברית</option><option value="en">English</option></select>
+            <label data-i18n="textSize">حجم الخط</label>
+            <select id="textSizeSelect"><option value="normal" data-i18n="normal">عادي</option><option value="large" data-i18n="large">كبير</option></select>
+        </div>
+    </div>
+
     <footer>
         <img src="assets/logo-white.png" class="footer-logo" alt="صالون توفيق">
         <p style="color: #ccc; margin-bottom: 25px; font-size: 15px;">الجمال الذي تستحقينه، بين يديك.</p>
@@ -115,7 +137,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
@@ -123,17 +145,49 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         let loggedInUserData = null;
+        let currentUserId = null;
         let cart = JSON.parse(localStorage.getItem('salonCart')) || [];
+
+        const uiText = {
+            ar: { home: "الرئيسية", shop: "المتجر", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", cartTitle: "🛒 سلة المشتريات" },
+            he: { home: "בית", shop: "חנות", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", cartTitle: "🛒 עגלת קניות" },
+            en: { home: "Home", shop: "Shop", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", cartTitle: "🛒 Shopping Cart" }
+        };
+        function applySettings() {
+            const theme = localStorage.getItem("salonTheme") || "light";
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const textSize = localStorage.getItem("salonTextSize") || "normal";
+            document.body.classList.toggle("dark-mode", theme === "dark");
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+            document.body.style.fontSize = textSize === "large" ? "18px" : "";
+            document.getElementById("themeSelect").value = theme;
+            document.getElementById("langSelect").value = lang;
+            document.getElementById("textSizeSelect").value = textSize;
+            document.querySelectorAll("[data-i18n]").forEach((element) => { const key = element.dataset.i18n; if (uiText[lang]?.[key]) element.textContent = uiText[lang][key]; });
+        }
+        window.openSettings = () => { document.getElementById("settingsModal").style.display = "flex"; };
+        window.closeSettings = () => { document.getElementById("settingsModal").style.display = "none"; };
+        ["themeSelect", "langSelect", "textSizeSelect"].forEach((id) => document.getElementById(id).addEventListener("change", () => {
+            localStorage.setItem("salonTheme", document.getElementById("themeSelect").value);
+            localStorage.setItem("salonLang", document.getElementById("langSelect").value);
+            localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
+            applySettings();
+        }));
+        applySettings();
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                currentUserId = user.uid;
                 const docSnap = await getDoc(doc(db, "Users", user.uid));
                 if (docSnap.exists()) {
-                    loggedInUserData = docSnap.data();
+                    loggedInUserData = { ...docSnap.data(), email: user.email };
                     document.getElementById("loginWarning").style.display = "none";
                     if(cart.length > 0) document.getElementById("checkoutBtn").style.display = "block";
                 }
             } else {
+                currentUserId = null;
+                loggedInUserData = null;
                 if(cart.length > 0) { document.getElementById("loginWarning").style.display = "block"; document.getElementById("checkoutBtn").style.display = "none"; }
             }
         });
@@ -163,6 +217,7 @@
                         <div class="item-details">
                             <h3>${product.name}</h3>
                             <p>${product.price} ₪ للقطعة</p>
+                            <small style="color:#666;">المتوفر: ${product.stock ?? 0}</small>
                         </div>
                     </div>
                     <div class="qty-controls">
@@ -180,7 +235,12 @@
 
         window.updateQuantity = function(index, change) {
             if (!cart[index].quantity) cart[index].quantity = 1;
-            cart[index].quantity += change;
+            const nextQuantity = cart[index].quantity + change;
+            if (change > 0 && nextQuantity > Number(cart[index].stock || 0)) {
+                alert(`لا يمكنك اختيار أكثر من الكمية المتوفرة: ${cart[index].stock || 0}`);
+                return;
+            }
+            cart[index].quantity = nextQuantity;
             if (cart[index].quantity < 1) cart[index].quantity = 1;
             localStorage.setItem('salonCart', JSON.stringify(cart)); renderCart();
         };
@@ -188,18 +248,47 @@
         window.removeItem = function(index) { cart.splice(index, 1); localStorage.setItem('salonCart', JSON.stringify(cart)); renderCart(); };
 
         document.getElementById("checkoutBtn").addEventListener("click", async () => {
-            if (!loggedInUserData) return;
+            if (!loggedInUserData || !currentUserId) return alert("يجب تسجيل الدخول قبل تأكيد الطلب.");
             document.getElementById("loader").style.display = "block"; document.getElementById("checkoutBtn").disabled = true;
 
             try {
+                const productUpdates = [];
+                for (const product of cart) {
+                    const productRef = doc(db, "Products", product.id);
+                    const productSnap = await getDoc(productRef);
+                    if (!productSnap.exists()) throw new Error(`${product.name} لم يعد متوفراً في المتجر.`);
+                    const productData = productSnap.data();
+                    const availableStock = Number(productData.stock || 0);
+                    const requestedQty = Number(product.quantity || 1);
+                    if (productData.isVisible === false) throw new Error(`${product.name} غير متاح للبيع حالياً.`);
+                    if (requestedQty > availableStock) throw new Error(`الكمية المتوفرة من ${product.name} هي ${availableStock} فقط.`);
+                    productUpdates.push({ ref: productRef, newStock: availableStock - requestedQty });
+                }
+
                 const productNames = cart.map(p => `${p.quantity || 1}x ${p.name}`).join(' + ');
                 const totalPrice = cart.reduce((sum, p) => sum + (Number(p.price) * (p.quantity || 1)), 0);
+                const batch = writeBatch(db);
+                const orderRef = doc(collection(db, "Orders"));
 
-                await addDoc(collection(db, "Orders"), { productName: productNames, price: totalPrice, customerName: loggedInUserData.firstName + " " + loggedInUserData.lastName, phone: loggedInUserData.phone, status: "طلب جديد (من السلة)" });
+                batch.set(orderRef, {
+                    userId: currentUserId,
+                    email: loggedInUserData.email || "",
+                    productName: productNames,
+                    price: totalPrice,
+                    customerName: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
+                    phone: loggedInUserData.phone || "",
+                    status: "طلب جديد (من السلة)"
+                });
+
+                productUpdates.forEach((productUpdate) => {
+                    batch.update(productUpdate.ref, { stock: productUpdate.newStock });
+                });
+
+                await batch.commit();
                 
                 localStorage.removeItem('salonCart'); cart = []; renderCart();
                 alert("✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.");
-            } catch (error) { console.error(error); alert("حدث خطأ أثناء إرسال الطلب، حاول مرة أخرى.");
+            } catch (error) { console.error(error); alert("حدث خطأ أثناء إرسال الطلب: " + error.message);
             } finally { document.getElementById("loader").style.display = "none"; document.getElementById("checkoutBtn").disabled = false; }
         });
 

@@ -9,6 +9,10 @@
     
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; display: flex; min-height: 100vh;}
+        body.dark-mode { background-color: #151515; color: #f3f3f3; }
+        body.dark-mode .main-content, body.dark-mode .add-box, body.dark-mode .pending-panel, body.dark-mode .calendar-panel, body.dark-mode .user-tools, body.dark-mode table { background-color: #202020; color: #f3f3f3; border-color: #333; }
+        body.dark-mode .calendar-day { background: #181818; border-color: #333; }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #181818; color: #f3f3f3; border-color: #444; }
         
         /* شاشة تسجيل الدخول للإدارة */
         #adminLoginSection { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f6f9; display: flex; justify-content: center; align-items: center; z-index: 1000;}
@@ -46,6 +50,45 @@
         .btn-delete { background-color: #ff4d4d; }
         .btn-update { background-color: #4CAF50; }
         .btn-sale { background-color: #FF9800; }
+        .nav-badge { background: #ff4d4d; color: white; border-radius: 999px; min-width: 22px; height: 22px; padding: 0 7px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: auto; }
+        .appointments-topbar { background: white; padding: 16px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .appointments-topbar label { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
+        .appointments-topbar input { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; }
+        .notification-btn { background: #000; color: white; border: none; padding: 11px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
+        .notification-btn span { background: #ff4d4d; min-width: 24px; height: 24px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; padding: 0 7px; }
+        .appointments-layout { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 18px; align-items: start; }
+        .pending-panel, .calendar-panel { background: white; padding: 18px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; }
+        .pending-panel h2, .calendar-panel h2, .sub-heading { margin-top: 0; font-size: 20px; color: #111; }
+        .booking-list { display: flex; flex-direction: column; gap: 12px; }
+        .booking-card { border: 1px solid #e5e7eb; border-right: 5px solid #111; border-radius: 8px; padding: 12px; background: #fff; text-align: right; }
+        .booking-card.pending { border-right-color: #ff9800; background: #fffaf0; }
+        .booking-card.accepted { border-right-color: #4CAF50; }
+        .booking-card.rejected { border-right-color: #ff4d4d; opacity: 0.85; }
+        .booking-card strong { display: block; color: #111; margin-bottom: 4px; }
+        .booking-card small { display: block; color: #666; line-height: 1.7; }
+        .booking-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .appointments-calendar { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; }
+        .calendar-day { min-height: 130px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; cursor: pointer; transition: 0.2s; }
+        .calendar-day:hover { border-color: #111; transform: translateY(-1px); }
+        .calendar-day.today { border-color: #111; box-shadow: inset 0 0 0 1px #111; }
+        .calendar-day.selected { background: #eef2ff; border-color: #4f46e5; box-shadow: inset 0 0 0 1px #4f46e5; }
+        .calendar-day-number { font-weight: bold; margin-bottom: 8px; color: #111; }
+        .calendar-booking { background: white; border: 1px solid #ddd; border-right: 4px solid #111; border-radius: 6px; padding: 7px; margin-bottom: 7px; font-size: 12px; cursor: pointer; }
+        .calendar-booking.pending { border-right-color: #ff9800; }
+        .calendar-booking.accepted { border-right-color: #4CAF50; }
+        .calendar-booking.rejected { border-right-color: #ff4d4d; }
+        .calendar-empty { color: #aaa; font-size: 12px; }
+        @media (max-width: 1100px) {
+            .appointments-layout { grid-template-columns: 1fr; }
+            .appointments-calendar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+        }
+        .user-tools { background: white; padding: 18px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .user-tools input { flex: 1; min-width: 260px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 15px; }
+        .users-count { color: #666; font-weight: bold; white-space: nowrap; }
+        .admin-user-input, .admin-user-select { width: 100%; min-width: 120px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; }
+        .admin-user-input[readonly] { background: #f3f4f6; color: #555; cursor: not-allowed; }
+        .admin-user-email { direction: ltr; text-align: left; min-width: 180px; }
+        .empty-row { color: #777; padding: 25px; }
         
         /* صندوق إضافة منتج */
         .add-box { background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd;}
@@ -60,6 +103,14 @@
         .featured-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #000;}
         .sale-badge { background: #ff4d4d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-right: 5px;}
         .old-price { text-decoration: line-through; color: #999; font-size: 13px; margin-left: 5px;}
+        .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1200; }
+        .settings-drawer-overlay.open { display: block; }
+        .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-sizing: border-box; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
+        .settings-drawer-overlay.open .settings-drawer { transform: translateX(0); }
+        body.dark-mode .settings-drawer { background: #202020; color: #f3f3f3; }
+        .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
+        .settings-row { margin: 16px 0; }
+        .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -81,36 +132,65 @@
                 <span style="font-size: 12px; color: #888;">Admin Panel</span>
             </div>
             
-            <a class="nav-link active" onclick="switchTab('appointments')"><span class="material-symbols-outlined">calendar_month</span> المواعيد</a>
-            <a class="nav-link" onclick="switchTab('orders')"><span class="material-symbols-outlined">shopping_cart</span> الطلبات المشتراة</a>
-            <a class="nav-link" onclick="switchTab('products')"><span class="material-symbols-outlined">inventory_2</span> المتجر والمنتجات</a>
-            <a class="nav-link" onclick="switchTab('accounts')"><span class="material-symbols-outlined">group</span> حسابات الزبائن</a>
-            <a class="nav-link" onclick="switchTab('reviews')"><span class="material-symbols-outlined">star</span> التقييمات</a>
+            <a class="nav-link active" onclick="switchTab('appointments')"><span class="material-symbols-outlined">calendar_month</span> <span data-i18n="appointments">المواعيد</span> <span id="pendingBookingsBadge" class="nav-badge" style="display:none;">0</span></a>
+            <a class="nav-link" onclick="switchTab('orders')"><span class="material-symbols-outlined">shopping_cart</span> <span data-i18n="orders">الطلبات المشتراة</span></a>
+            <a class="nav-link" onclick="switchTab('products')"><span class="material-symbols-outlined">inventory_2</span> <span data-i18n="products">المتجر والمنتجات</span></a>
+            <a class="nav-link" onclick="switchTab('accounts')"><span class="material-symbols-outlined">group</span> <span data-i18n="accounts">حسابات الزبائن</span></a>
+            <a class="nav-link" onclick="switchTab('reviews')"><span class="material-symbols-outlined">star</span> <span data-i18n="reviews">التقييمات</span></a>
+            <a class="nav-link" id="adminSettingsBtn"><span class="material-symbols-outlined">settings</span> <span data-i18n="settings">الإعدادات</span></a>
             
-            <div class="logout-btn" id="adminLogoutBtn"><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span> تسجيل الخروج</div>
+            <div class="logout-btn" id="adminLogoutBtn"><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span> <span data-i18n="logout">تسجيل الخروج</span></div>
         </div>
 
         <div class="main-content">
             
             <div id="appointments" class="admin-section active">
-                <h1>📅 إدارة المواعيد</h1>
-                <table id="appointmentsTable"></table>
+                <h1 data-i18n="appointmentsTitle">📅 إدارة المواعيد</h1>
+                <div class="appointments-topbar">
+                    <button id="pendingBookingsBtn" class="notification-btn">
+                        <span data-i18n="newBookings">حجوزات جديدة</span>
+                        <span id="pendingBookingsCount">0</span>
+                    </button>
+                    <label>
+                        <span data-i18n="monthView">عرض شهر:</span>
+                        <input type="month" id="appointmentsMonth">
+                    </label>
+                </div>
+                <div class="appointments-layout">
+                    <div class="pending-panel">
+                        <h2 data-i18n="pendingTitle">الحجوزات التي تحتاج موافقة</h2>
+                        <div id="pendingBookingsList" class="booking-list"></div>
+                    </div>
+                    <div class="calendar-panel">
+                        <h2 data-i18n="calendarTitle">تقويم الحجوزات</h2>
+                        <div id="appointmentsCalendar" class="appointments-calendar"></div>
+                    </div>
+                </div>
+                <h2 class="sub-heading" id="selectedDayTitle">حجوزات اليوم</h2>
+                <table id="selectedDayAppointmentsTable"></table>
             </div>
 
             <div id="orders" class="admin-section">
-                <h1>📦 إدارة طلبات الشراء</h1>
+                <h1 data-i18n="ordersTitle">📦 إدارة طلبات الشراء</h1>
                 <table id="ordersTable"></table>
             </div>
 
             <div id="products" class="admin-section">
-                <h1>🛍️ إدارة المتجر والمنتجات</h1>
+                <h1 data-i18n="productsTitle">🛍️ إدارة المتجر والمنتجات</h1>
                 
                 <div class="add-box">
-                    <h3>إضافة منتج جديد:</h3>
+                    <h3 data-i18n="addProductTitle">إضافة منتج جديد:</h3>
                     <div class="input-group">
                         <input type="text" id="productName" placeholder="اسم المنتج">
                         <input type="number" id="productPrice" placeholder="السعر (₪)">
+                        <input type="number" id="productStock" placeholder="الكمية المتوفرة">
                         <input type="url" id="productImageLink" placeholder="رابط صورة المنتج">
+                    </div>
+                    <div class="input-group">
+                        <label style="display:flex; align-items:center; gap:8px; font-weight:bold;">
+                            <input type="checkbox" id="productVisible" checked style="width:auto; min-width:0;">
+                            يظهر للزبائن في المتجر
+                        </label>
                     </div>
                     <div class="input-group">
                         <textarea id="productDescription" rows="2" placeholder="تفاصيل المنتج (الفوائد، طريقة الاستخدام...)"></textarea>
@@ -126,15 +206,39 @@
             </div>
 
             <div id="accounts" class="admin-section">
-                <h1>👥 حسابات الزبائن المسجلين</h1>
+                <h1 data-i18n="accountsTitle">👥 حسابات الزبائن المسجلين</h1>
+                <div class="user-tools">
+                    <input type="search" id="userSearchInput" placeholder="ابحث بالاسم، تاريخ الميلاد، رقم الهاتف، البريد أو الجنس">
+                    <span id="usersCount" class="users-count">0 زبائن</span>
+                    <small style="color:#777;">كلمة المرور غير قابلة للعرض، والبريد هنا للعرض فقط.</small>
+                </div>
                 <table id="usersTable"></table>
             </div>
 
             <div id="reviews" class="admin-section">
-                <h1>⭐ إدارة التقييمات</h1>
+                <h1 data-i18n="reviewsTitle">⭐ إدارة التقييمات</h1>
                 <table id="reviewsTable"></table>
             </div>
 
+        </div>
+    </div>
+
+    <div id="adminSettingsDrawer" class="settings-drawer-overlay">
+        <div class="settings-drawer">
+            <span id="closeAdminSettingsBtn" class="settings-close">&times;</span>
+            <h2 data-i18n="settings">الإعدادات</h2>
+            <div class="settings-row">
+                <label for="adminThemeSelect" data-i18n="theme">المظهر</label>
+                <select id="adminThemeSelect"><option value="light" data-i18n="light">فاتح</option><option value="dark" data-i18n="dark">داكن</option></select>
+            </div>
+            <div class="settings-row">
+                <label for="adminLangSelect" data-i18n="language">اللغة</label>
+                <select id="adminLangSelect"><option value="ar">العربية</option><option value="he">עברית</option><option value="en">English</option></select>
+            </div>
+            <div class="settings-row">
+                <label for="adminTextSizeSelect" data-i18n="textSize">حجم الخط</label>
+                <select id="adminTextSizeSelect"><option value="normal" data-i18n="normal">عادي</option><option value="large" data-i18n="large">كبير</option></select>
+            </div>
         </div>
     </div>
 
@@ -149,6 +253,46 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        let allUsers = [];
+        let allAppointments = [];
+        let selectedAppointmentDate = "";
+
+        const adminText = {
+            ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
+            he: { appointments: "תורים", orders: "הזמנות", products: "חנות ומוצרים", accounts: "חשבונות לקוחות", reviews: "ביקורות", settings: "הגדרות", logout: "יציאה", appointmentsTitle: "📅 ניהול תורים", ordersTitle: "📦 ניהול הזמנות", productsTitle: "🛍️ ניהול חנות ומוצרים", accountsTitle: "👥 חשבונות לקוחות", reviewsTitle: "⭐ ניהול ביקורות", newBookings: "תורים חדשים", monthView: "חודש:", pendingTitle: "תורים שממתינים לאישור", calendarTitle: "לוח תורים", addProductTitle: "הוספת מוצר חדש:", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול" },
+            en: { appointments: "Appointments", orders: "Orders", products: "Shop & Products", accounts: "Customer Accounts", reviews: "Reviews", settings: "Settings", logout: "Log out", appointmentsTitle: "📅 Appointment Management", ordersTitle: "📦 Order Management", productsTitle: "🛍️ Shop and Products", accountsTitle: "👥 Customer Accounts", reviewsTitle: "⭐ Review Management", newBookings: "New bookings", monthView: "Month:", pendingTitle: "Bookings awaiting approval", calendarTitle: "Booking Calendar", addProductTitle: "Add new product:", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large" }
+        };
+
+        function applyAdminSettings() {
+            const theme = localStorage.getItem("salonTheme") || "light";
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const textSize = localStorage.getItem("salonTextSize") || "normal";
+            document.body.classList.toggle("dark-mode", theme === "dark");
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+            document.body.style.fontSize = textSize === "large" ? "18px" : "";
+            document.getElementById("adminThemeSelect").value = theme;
+            document.getElementById("adminLangSelect").value = lang;
+            document.getElementById("adminTextSizeSelect").value = textSize;
+            document.querySelectorAll("[data-i18n]").forEach((element) => {
+                const key = element.dataset.i18n;
+                if (adminText[lang]?.[key]) element.textContent = adminText[lang][key];
+            });
+        }
+
+        const adminSettingsDrawer = document.getElementById("adminSettingsDrawer");
+        document.getElementById("adminSettingsBtn").addEventListener("click", () => adminSettingsDrawer.classList.add("open"));
+        document.getElementById("closeAdminSettingsBtn").addEventListener("click", () => adminSettingsDrawer.classList.remove("open"));
+        adminSettingsDrawer.addEventListener("click", (event) => { if (event.target === adminSettingsDrawer) adminSettingsDrawer.classList.remove("open"); });
+        ["adminThemeSelect", "adminLangSelect", "adminTextSizeSelect"].forEach((id) => {
+            document.getElementById(id).addEventListener("change", () => {
+                localStorage.setItem("salonTheme", document.getElementById("adminThemeSelect").value);
+                localStorage.setItem("salonLang", document.getElementById("adminLangSelect").value);
+                localStorage.setItem("salonTextSize", document.getElementById("adminTextSizeSelect").value);
+                applyAdminSettings();
+            });
+        });
+        applyAdminSettings();
 
         // نظام التبديل بين الأقسام
         window.switchTab = function(tabId) {
@@ -186,28 +330,221 @@
         }
 
         // ================= 1. المواعيد =================
+        function getAppointmentStatusClass(status) {
+            if ((status || "").includes("تأكيد")) return "accepted";
+            if ((status || "").includes("رفض")) return "rejected";
+            return "pending";
+        }
+
+        function isPendingAppointment(status) {
+            return !status || status.includes("انتظار") || status.includes("جديد");
+        }
+
+        function getMonthValue(dateValue) {
+            if (dateValue) return dateValue.substring(0, 7);
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+        }
+
+        function getTodayValue() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        }
+
         async function loadAppointments() {
-            const table = document.getElementById("appointmentsTable"); 
-            table.innerHTML = `<tr><th>الزبونة</th><th>الخدمة</th><th>التاريخ والوقت</th><th>الملاحظات</th><th>الحالة</th><th>الإجراءات</th></tr>`;
+            allAppointments = [];
             const querySnapshot = await getDocs(collection(db, "Appointments"));
             querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
-                row.insertCell(0).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
-                row.insertCell(1).innerHTML = data.service || "-"; 
-                row.insertCell(2).innerHTML = `${data.date}<br>${data.time}`; 
-                row.insertCell(3).innerHTML = data.notes || "-"; 
-                
-                let statusColor = data.status.includes('تأكيد') ? 'green' : (data.status.includes('رفض') ? 'red' : '#000');
-                row.insertCell(4).innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${data.status}</span>`;
-                
+                allAppointments.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            allAppointments.sort((a, b) => `${a.date || ""} ${a.time || ""}`.localeCompare(`${b.date || ""} ${b.time || ""}`));
+            if (!document.getElementById("appointmentsMonth").value) {
+                selectedAppointmentDate = getTodayValue();
+                document.getElementById("appointmentsMonth").value = getMonthValue(selectedAppointmentDate);
+            }
+            if (!selectedAppointmentDate) selectedAppointmentDate = getTodayValue();
+            renderAppointmentsDashboard();
+        }
+
+        function renderAppointmentActions(container, appointment) {
+            const acceptBtn = document.createElement("button");
+            acceptBtn.innerText = "قبول";
+            acceptBtn.className = "btn-action btn-update";
+            acceptBtn.onclick = () => acceptAppointment(appointment.id);
+
+            const editBtn = document.createElement("button");
+            editBtn.innerText = "تعديل";
+            editBtn.className = "btn-action btn-sale";
+            editBtn.onclick = () => editAppointment(appointment);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "حذف";
+            deleteBtn.className = "btn-action btn-delete";
+            deleteBtn.onclick = () => deleteAppointment(appointment.id);
+
+            container.appendChild(acceptBtn);
+            container.appendChild(editBtn);
+            container.appendChild(deleteBtn);
+        }
+
+        function renderAppointmentCard(appointment) {
+            const card = document.createElement("div");
+            card.className = `booking-card ${getAppointmentStatusClass(appointment.status)}`;
+            card.innerHTML = `
+                <strong>${appointment.customerName || "زبونة بدون اسم"}</strong>
+                <small dir="ltr">${appointment.phone || "-"}</small>
+                <small>${appointment.date || "-"} | ${appointment.time || "-"}</small>
+                <small>${appointment.service || "خدمة غير محددة"}</small>
+                <small>${appointment.notes || "لا توجد ملاحظات"}</small>
+                <small><b>${appointment.status || "قيد الانتظار"}</b></small>
+            `;
+            const actions = document.createElement("div");
+            actions.className = "booking-actions";
+            renderAppointmentActions(actions, appointment);
+            card.appendChild(actions);
+            return card;
+        }
+
+        function renderPendingBookings() {
+            const pendingList = document.getElementById("pendingBookingsList");
+            const pendingBookings = allAppointments.filter((appointment) => isPendingAppointment(appointment.status));
+            const badge = document.getElementById("pendingBookingsBadge");
+            document.getElementById("pendingBookingsCount").innerText = pendingBookings.length;
+            badge.innerText = pendingBookings.length;
+            badge.style.display = pendingBookings.length ? "inline-flex" : "none";
+            pendingList.innerHTML = "";
+
+            if (pendingBookings.length === 0) {
+                pendingList.innerHTML = `<div class="empty-row">لا توجد حجوزات جديدة الآن</div>`;
+                return;
+            }
+
+            pendingBookings.forEach((appointment) => pendingList.appendChild(renderAppointmentCard(appointment)));
+        }
+
+        function renderAppointmentsCalendar() {
+            const calendar = document.getElementById("appointmentsCalendar");
+            const selectedMonth = document.getElementById("appointmentsMonth").value || getMonthValue();
+            const [year, month] = selectedMonth.split("-").map(Number);
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const todayKey = new Date().toISOString().slice(0, 10);
+            calendar.innerHTML = "";
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const dayAppointments = allAppointments.filter((appointment) => appointment.date === dateKey);
+                const dayBox = document.createElement("div");
+                dayBox.className = `calendar-day ${dateKey === todayKey ? "today" : ""} ${dateKey === selectedAppointmentDate ? "selected" : ""}`;
+                dayBox.innerHTML = `<div class="calendar-day-number">${day}</div>`;
+                dayBox.onclick = () => selectAppointmentDate(dateKey);
+
+                if (dayAppointments.length === 0) {
+                    dayBox.innerHTML += `<div class="calendar-empty">لا حجوزات</div>`;
+                } else {
+                    dayAppointments.forEach((appointment) => {
+                        const item = document.createElement("div");
+                        item.className = `calendar-booking ${getAppointmentStatusClass(appointment.status)}`;
+                        item.innerHTML = `<b>${appointment.time || "-"}</b><br>${appointment.customerName || "-"}<br>${appointment.service || "-"}`;
+                        item.onclick = (event) => {
+                            event.stopPropagation();
+                            selectAppointmentDate(dateKey);
+                            editAppointment(appointment);
+                        };
+                        dayBox.appendChild(item);
+                    });
+                }
+
+                calendar.appendChild(dayBox);
+            }
+        }
+
+        function renderSelectedDayAppointments() {
+            const table = document.getElementById("selectedDayAppointmentsTable");
+            const selectedBookings = allAppointments.filter((appointment) => appointment.date === selectedAppointmentDate);
+            const formattedDate = selectedAppointmentDate || getTodayValue();
+            document.getElementById("selectedDayTitle").innerText = `حجوزات يوم ${formattedDate}`;
+            table.innerHTML = `<tr><th>الزبونة</th><th>الخدمة</th><th>التاريخ والوقت</th><th>الملاحظات</th><th>الحالة</th><th>الإجراءات</th></tr>`;
+
+            if (selectedBookings.length === 0) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 6;
+                cell.className = "empty-row";
+                cell.innerText = "لا توجد حجوزات في هذا اليوم";
+                return;
+            }
+
+            selectedBookings.forEach((appointment) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${appointment.customerName || "-"}</strong><br><small dir="ltr">${appointment.phone || "-"}</small>`; 
+                row.insertCell(1).innerHTML = appointment.service || "-"; 
+                row.insertCell(2).innerHTML = `${appointment.date || "-"}<br>${appointment.time || "-"}`; 
+                row.insertCell(3).innerHTML = appointment.notes || "-"; 
+                const statusColor = getAppointmentStatusClass(appointment.status) === "accepted" ? "green" : (getAppointmentStatusClass(appointment.status) === "rejected" ? "red" : "#FF9800");
+                row.insertCell(4).innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${appointment.status || "قيد الانتظار"}</span>`;
                 const actionsCell = row.insertCell(5);
-                const updateBtn = document.createElement("button"); updateBtn.innerText = "تعديل"; updateBtn.className = "btn-action btn-update";
-                updateBtn.onclick = async () => { const newStatus = prompt("الحالة الجديدة (مثال: تم التأكيد):", data.status); if (newStatus) { await updateDoc(doc(db, "Appointments", id), { status: newStatus }); loadAppointments(); } };
-                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف"; deleteBtn.className = "btn-action btn-delete";
-                deleteBtn.onclick = async () => { if (confirm("تأكيد الحذف؟")) { await deleteDoc(doc(db, "Appointments", id)); loadAppointments(); } };
-                actionsCell.appendChild(updateBtn); actionsCell.appendChild(deleteBtn);
+                renderAppointmentActions(actionsCell, appointment);
             });
         }
+
+        function renderAppointmentsDashboard() {
+            renderPendingBookings();
+            renderAppointmentsCalendar();
+            renderSelectedDayAppointments();
+        }
+
+        window.selectAppointmentDate = function(dateKey) {
+            selectedAppointmentDate = dateKey;
+            const monthInput = document.getElementById("appointmentsMonth");
+            const selectedMonth = getMonthValue(dateKey);
+            if (monthInput.value !== selectedMonth) monthInput.value = selectedMonth;
+            renderAppointmentsCalendar();
+            renderSelectedDayAppointments();
+            document.getElementById("selectedDayTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        window.acceptAppointment = async function(appointmentId) {
+            await updateDoc(doc(db, "Appointments", appointmentId), { status: "تم التأكيد" });
+            loadAppointments();
+        }
+
+        window.editAppointment = async function(appointment) {
+            const newDate = prompt("تاريخ الموعد الجديد:", appointment.date || "");
+            if (newDate === null) return;
+            const newTime = prompt("وقت الموعد الجديد:", appointment.time || "");
+            if (newTime === null) return;
+            const newService = prompt("الخدمة المطلوبة:", appointment.service || "");
+            if (newService === null) return;
+            const newStatus = prompt("الحالة:", appointment.status || "قيد الانتظار");
+            if (newStatus === null) return;
+            const newNotes = prompt("الملاحظات:", appointment.notes || "");
+            if (newNotes === null) return;
+
+            await updateDoc(doc(db, "Appointments", appointment.id), {
+                date: newDate.trim(),
+                time: newTime.trim(),
+                service: newService.trim(),
+                status: newStatus.trim(),
+                notes: newNotes.trim()
+            });
+            loadAppointments();
+        }
+
+        window.deleteAppointment = async function(appointmentId) {
+            if (!confirm("هل تريد حذف هذا الحجز؟")) return;
+            await deleteDoc(doc(db, "Appointments", appointmentId));
+            loadAppointments();
+        }
+
+        document.getElementById("appointmentsMonth").addEventListener("change", () => {
+            const selectedMonth = document.getElementById("appointmentsMonth").value;
+            selectedAppointmentDate = `${selectedMonth}-01`;
+            renderAppointmentsCalendar();
+            renderSelectedDayAppointments();
+        });
+        document.getElementById("pendingBookingsBtn").addEventListener("click", () => {
+            document.getElementById("pendingBookingsList").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
 
         // ================= 2. الطلبات =================
         async function loadOrders() {
@@ -265,17 +602,36 @@
             }
         }
 
+        window.updateProductStock = async function(productId, currentStock) {
+            const newStock = prompt("أدخل الكمية المتوفرة:", currentStock || 0);
+            if (newStock === null) return;
+            if (Number(newStock) < 0) return alert("الكمية لا يمكن أن تكون أقل من صفر.");
+            await updateDoc(doc(db, "Products", productId), { stock: Number(newStock) });
+            loadProducts();
+        }
+
+        window.toggleProductVisibility = async function(productId, currentVisibility) {
+            const nextVisibility = !currentVisibility;
+            if (nextVisibility) {
+                await updateDoc(doc(db, "Products", productId), { isVisible: true });
+            } else {
+                await updateDoc(doc(db, "Products", productId), { isVisible: false, isFeatured: false });
+            }
+            loadProducts();
+        }
+
         async function loadProducts() {
             const table = document.getElementById("productsTable");
-            table.innerHTML = `<tr><th>للصئيسية</th><th>الصورة</th><th>المنتج</th><th>السعر</th><th>الإجراءات</th></tr>`;
+            table.innerHTML = `<tr><th>للرئيسية</th><th>الصورة</th><th>المنتج</th><th>السعر</th><th>الكمية</th><th>الظهور</th><th>الإجراءات</th></tr>`;
             const querySnapshot = await getDocs(collection(db, "Products"));
             
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
+                const isVisible = data.isVisible !== false;
                 
                 // مربع اختيار العرض في الرئيسية
-                const isChecked = data.isFeatured ? "checked" : "";
-                row.insertCell(0).innerHTML = `<input type="checkbox" class="featured-checkbox" onchange="toggleFeatured(this, '${id}')" ${isChecked}>`;
+                const isChecked = data.isFeatured && isVisible ? "checked" : "";
+                row.insertCell(0).innerHTML = `<input type="checkbox" class="featured-checkbox" onchange="toggleFeatured(this, '${id}')" ${isChecked} ${isVisible ? "" : "disabled"}>`;
                 
                 const imgUrl = data.imageUrl ? data.imageUrl : 'https://via.placeholder.com/60?text=No+Image';
                 row.insertCell(1).innerHTML = `<img src="${imgUrl}" class="product-img-preview">`;
@@ -288,7 +644,10 @@
                     row.insertCell(3).innerHTML = `<strong>${data.price} ₪</strong>`;
                 }
 
-                const actionsCell = row.insertCell(4);
+                row.insertCell(4).innerHTML = `<strong>${data.stock ?? 0}</strong>`;
+                row.insertCell(5).innerHTML = isVisible ? `<span style="color:green; font-weight:bold;">ظاهر للزبائن</span>` : `<span style="color:#b45309; font-weight:bold;">للاستخدام داخل الصالون</span>`;
+
+                const actionsCell = row.insertCell(6);
                 
                 // زر التخفيضات
                 const saleBtn = document.createElement("button"); 
@@ -303,47 +662,215 @@
 
                 const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف ❌"; deleteBtn.className = "btn-action btn-delete";
                 deleteBtn.onclick = async () => { if (confirm("تأكيد حذف المنتج من المتجر؟")) { await deleteDoc(doc(db, "Products", id)); loadProducts(); } };
+
+                const stockBtn = document.createElement("button"); stockBtn.innerText = "تعديل الكمية"; stockBtn.className = "btn-action btn-update";
+                stockBtn.onclick = () => updateProductStock(id, data.stock ?? 0);
+
+                const visibilityBtn = document.createElement("button"); visibilityBtn.innerText = isVisible ? "إخفاء عن الزبائن" : "إظهار للزبائن"; visibilityBtn.className = "btn-action btn-sale";
+                visibilityBtn.onclick = () => toggleProductVisibility(id, isVisible);
                 
-                actionsCell.appendChild(saleBtn); actionsCell.appendChild(deleteBtn);
+                actionsCell.appendChild(saleBtn); actionsCell.appendChild(stockBtn); actionsCell.appendChild(visibilityBtn); actionsCell.appendChild(deleteBtn);
             });
         }
 
         document.getElementById("addProductBtn").addEventListener("click", async () => {
             const nameVal = document.getElementById("productName").value; 
             const priceVal = document.getElementById("productPrice").value;
+            const stockVal = document.getElementById("productStock").value;
             const imgVal = document.getElementById("productImageLink").value; 
             const descVal = document.getElementById("productDescription").value; 
+            const visibleVal = document.getElementById("productVisible").checked;
 
-            if (!nameVal || !priceVal) return alert("أدخل اسم المنتج والسعر!");
+            if (!nameVal || !priceVal || stockVal === "") return alert("أدخل اسم المنتج والسعر والكمية!");
             
             await addDoc(collection(db, "Products"), { 
                 name: nameVal, 
                 price: Number(priceVal),
+                stock: Number(stockVal),
                 imageUrl: imgVal,
                 description: descVal,
                 isFeatured: false, // افتراضياً لا يظهر في الرئيسية
+                isVisible: visibleVal,
                 originalPrice: null
             });
             
             document.getElementById("productName").value = ""; document.getElementById("productPrice").value = ""; 
+            document.getElementById("productStock").value = "";
             document.getElementById("productImageLink").value = ""; document.getElementById("productDescription").value = ""; 
+            document.getElementById("productVisible").checked = true;
             loadProducts();
         });
 
         // ================= 4. الحسابات =================
+        function safeText(value) {
+            return String(value || "").replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[char]));
+        }
+
+        function genderLabel(value) {
+            if (value === "female") return "أنثى";
+            if (value === "male") return "ذكر";
+            if (value === "other") return "آخر";
+            return "غير محدد";
+        }
+
         async function loadUsers() {
-            const table = document.getElementById("usersTable"); 
-            table.innerHTML = `<tr><th>الاسم</th><th>البريد الإلكتروني</th><th>الهاتف</th></tr>`;
+            allUsers = [];
             const querySnapshot = await getDocs(collection(db, "Users"));
             querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data(); 
+                const data = docSnap.data();
                 if(data.email === THE_ADMIN_EMAIL) return; // لا تعرض حساب الإدارة
+                allUsers.push({ id: docSnap.id, ...data });
+            });
+            renderUsersTable();
+        }
+
+        function renderUsersTable() {
+            const table = document.getElementById("usersTable");
+            const searchValue = document.getElementById("userSearchInput").value.trim().toLowerCase();
+            const filteredUsers = allUsers.filter((user) => {
+                const searchableText = [
+                    user.firstName,
+                    user.lastName,
+                    `${user.firstName || ""} ${user.lastName || ""}`,
+                    user.email,
+                    user.phone,
+                    user.birthDate,
+                    genderLabel(user.gender),
+                    user.gender,
+                    user.id
+                ].join(" ").toLowerCase();
+                return searchableText.includes(searchValue);
+            });
+
+            document.getElementById("usersCount").innerText = `${filteredUsers.length} زبائن`;
+            table.innerHTML = `<tr><th>الاسم الأول</th><th>اسم العائلة</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>تاريخ الميلاد</th><th>الجنس</th><th>الإجراءات</th></tr>`;
+
+            if (filteredUsers.length === 0) {
                 const row = table.insertRow();
-                row.insertCell(0).innerHTML = `<strong>${data.firstName} ${data.lastName || ''}</strong>`; 
-                row.insertCell(1).innerHTML = data.email; 
-                row.insertCell(2).innerHTML = `<span dir="ltr">${data.phone || 'غير متوفر'}</span>`; 
+                const cell = row.insertCell(0);
+                cell.colSpan = 7;
+                cell.className = "empty-row";
+                cell.innerText = "لا توجد حسابات مطابقة للبحث";
+                return;
+            }
+
+            filteredUsers.forEach((user) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<input class="admin-user-input" id="userFirstName-${user.id}" value="${safeText(user.firstName)}">`;
+                row.insertCell(1).innerHTML = `<input class="admin-user-input" id="userLastName-${user.id}" value="${safeText(user.lastName)}">`;
+                row.insertCell(2).innerHTML = `<input class="admin-user-input admin-user-email" id="userEmail-${user.id}" type="email" value="${safeText(user.email)}" readonly>`;
+                row.insertCell(3).innerHTML = `<input class="admin-user-input" id="userPhone-${user.id}" type="tel" value="${safeText(user.phone)}" dir="ltr">`;
+                row.insertCell(4).innerHTML = `<input class="admin-user-input" id="userBirthDate-${user.id}" type="date" value="${safeText(user.birthDate)}">`;
+                row.insertCell(5).innerHTML = `
+                    <select class="admin-user-select" id="userGender-${user.id}">
+                        <option value="" ${!user.gender ? "selected" : ""}>غير محدد</option>
+                        <option value="female" ${user.gender === "female" ? "selected" : ""}>أنثى</option>
+                        <option value="male" ${user.gender === "male" ? "selected" : ""}>ذكر</option>
+                        <option value="other" ${user.gender === "other" ? "selected" : ""}>آخر</option>
+                    </select>
+                `;
+                const actionsCell = row.insertCell(6);
+                const saveBtn = document.createElement("button");
+                saveBtn.innerText = "حفظ التعديل";
+                saveBtn.className = "btn-action btn-update";
+                saveBtn.onclick = () => updateUser(user.id);
+                const deleteBtn = document.createElement("button");
+                deleteBtn.innerText = "حذف الحساب";
+                deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = () => deleteUser(user.id, `${user.firstName || ""} ${user.lastName || ""}`.trim(), user.firstName || "", user.phone || "", user.email || "");
+                actionsCell.appendChild(saveBtn);
+                actionsCell.appendChild(deleteBtn);
             });
         }
+
+        window.updateUser = async function(userId) {
+            const updatedUser = {
+                firstName: document.getElementById(`userFirstName-${userId}`).value.trim(),
+                lastName: document.getElementById(`userLastName-${userId}`).value.trim(),
+                email: document.getElementById(`userEmail-${userId}`).value.trim(),
+                phone: document.getElementById(`userPhone-${userId}`).value.trim(),
+                birthDate: document.getElementById(`userBirthDate-${userId}`).value,
+                gender: document.getElementById(`userGender-${userId}`).value
+            };
+
+            if (!updatedUser.firstName || !updatedUser.lastName || !updatedUser.email || !updatedUser.phone) {
+                alert("الرجاء تعبئة الاسم، البريد الإلكتروني، ورقم الهاتف قبل الحفظ.");
+                return;
+            }
+
+            await updateDoc(doc(db, "Users", userId), updatedUser);
+            alert("تم تحديث بيانات الزبون بنجاح!");
+            loadUsers();
+        }
+
+        window.deleteUser = async function(userId, userName, firstName, phone, email) {
+            const displayName = userName || "هذا الزبون";
+            const today = getTodayValue();
+            const futureAppointments = [];
+            const userOrders = [];
+
+            const matchesUser = (item) => item.userId === userId || item.phone === phone || item.customerName === userName || item.email === email;
+
+            const appointmentsSnapshot = await getDocs(collection(db, "Appointments"));
+            appointmentsSnapshot.forEach((appointmentDoc) => {
+                const appointment = appointmentDoc.data();
+                if (matchesUser(appointment) && appointment.date >= today) {
+                    futureAppointments.push({ id: appointmentDoc.id, ...appointment });
+                }
+            });
+
+            const ordersSnapshot = await getDocs(collection(db, "Orders"));
+            ordersSnapshot.forEach((orderDoc) => {
+                const order = orderDoc.data();
+                if (matchesUser(order)) {
+                    userOrders.push({ id: orderDoc.id, ...order });
+                }
+            });
+
+            let confirmMessage = `هل أنت متأكد من حذف حساب ${displayName}؟\n\n`;
+            confirmMessage += "الحجوزات القديمة ستبقى محفوظة.\n";
+            if (futureAppointments.length) {
+                confirmMessage += `\nسيتم حذف ${futureAppointments.length} حجز قادم:\n`;
+                confirmMessage += futureAppointments.slice(0, 6).map((appointment) => `- ${appointment.date || "-"} ${appointment.time || "-"} | ${appointment.service || "-"}`).join("\n");
+                if (futureAppointments.length > 6) confirmMessage += `\n- و ${futureAppointments.length - 6} حجوزات أخرى`;
+            }
+            if (userOrders.length) {
+                confirmMessage += `\n\nهذا الحساب لديه ${userOrders.length} طلب شراء وسيتم حذفه:\n`;
+                confirmMessage += userOrders.slice(0, 6).map((order) => `- ${order.productName || "طلب"} | ${order.price || "-"} ₪ | ${order.status || "-"}`).join("\n");
+                if (userOrders.length > 6) confirmMessage += `\n- و ${userOrders.length - 6} طلبات أخرى`;
+            }
+            confirmMessage += "\n\nهل تريد المتابعة؟";
+
+            if (!confirm(confirmMessage)) return;
+
+            for (const appointment of futureAppointments) {
+                await deleteDoc(doc(db, "Appointments", appointment.id));
+            }
+
+            for (const order of userOrders) {
+                await deleteDoc(doc(db, "Orders", order.id));
+            }
+
+            const reviewsSnapshot = await getDocs(collection(db, "Reviews"));
+            for (const reviewDoc of reviewsSnapshot.docs) {
+                const review = reviewDoc.data();
+                if (review.name === firstName || review.name === userName || review.email === email || review.phone === phone) {
+                    await deleteDoc(doc(db, "Reviews", reviewDoc.id));
+                }
+            }
+
+            await deleteDoc(doc(db, "Users", userId));
+            alert("تم حذف الحساب. الحجوزات القديمة بقيت محفوظة، وتم حذف الحجوزات القادمة والطلبات والتقييمات المرتبطة به.");
+            loadUsers(); loadAppointments(); loadOrders(); loadAdminReviews();
+        }
+
+        document.getElementById("userSearchInput").addEventListener("input", renderUsersTable);
 
         // ================= 5. التقييمات =================
         async function loadAdminReviews() {

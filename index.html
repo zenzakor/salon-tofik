@@ -10,6 +10,11 @@
 
     <style>
         body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; color: #333; }
+        body.dark-mode { background-color: #151515; color: #f3f3f3; }
+        body.dark-mode .section-box, body.dark-mode .modal-content, body.dark-mode .product-card, body.dark-mode .review-slider-container { background-color: #222; color: #f3f3f3; border-color: #333; }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .about-text, body.dark-mode .review-slide p { color: #ddd; }
+        body.dark-mode .appointment-item { background: #1d1d1d; border-color: #333; }
         .container { padding: 20px; max-width: 1000px; margin: auto; }
         .section-box { background-color: white; padding: 40px; margin-bottom: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eaeaea; }
         
@@ -62,6 +67,16 @@
         .modal-content { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #666; transition: 0.3s;}
         .close-modal:hover { color: #000; }
+        .settings-row { text-align: right; margin: 16px 0; }
+        .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .btn-danger { background-color: #d32f2f; border-color: #d32f2f; }
+        .btn-danger:hover { background-color: #fff; color: #d32f2f; }
+        .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
+        .settings-drawer-overlay.open { display: block; }
+        .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-sizing: border-box; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
+        .settings-drawer-overlay.open .settings-drawer { transform: translateX(0); }
+        body.dark-mode .settings-drawer { background: #202020; color: #f3f3f3; }
+        .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
 
         .products-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;}
         .product-card { position: relative; background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; width: 250px; text-align: center; transition: box-shadow 0.3s;}
@@ -90,24 +105,28 @@
         <nav>
             <a href="#home" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">home</span>
-                <span class="nav-text">الرئيسية</span>
+                <span class="nav-text" data-i18n="home">الرئيسية</span>
             </a>
             <a href="book.html" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">calendar_month</span>
-                <span class="nav-text">حجز دور</span>
+                <span class="nav-text" data-i18n="book">حجز دور</span>
             </a>
             <a href="shop.html" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">storefront</span>
-                <span class="nav-text">المتجر</span>
+                <span class="nav-text" data-i18n="shop">المتجر</span>
             </a>
             <a href="#reviews" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">star</span>
-                <span class="nav-text">التقييمات</span>
+                <span class="nav-text" data-i18n="reviews">التقييمات</span>
             </a>
             <div id="profileBtn" class="nav-item">
                 <span class="material-symbols-outlined nav-icon">person</span>
-                <span id="profileName" class="nav-text">حسابي</span>
+                <span id="profileName" class="nav-text" data-i18n-default="account">حسابي</span>
             </div>
+            <a id="settingsBtn" class="nav-item">
+                <span class="material-symbols-outlined nav-icon">settings</span>
+                <span class="nav-text" data-i18n="settings">الإعدادات</span>
+            </a>
         </nav>
     </header>
 
@@ -116,18 +135,27 @@
             <span id="closeModalBtn" class="close-modal">&times;</span>
             <div id="loginForm">
                 <h2>تسجيل الدخول</h2>
-                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
-                <input type="password" id="loginPassword" placeholder="كلمة المرور">
+                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" data-i18n-placeholder="email">
+                <input type="password" id="loginPassword" placeholder="كلمة المرور" data-i18n-placeholder="password">
                 <br>
                 <button id="loginBtn" class="btn" style="width: 100%;">دخول لحسابي</button>
                 <p>ليس لديك حساب؟ <span class="auth-toggle" id="showSignup">أنشئ حساباً جديداً</span></p>
             </div>
             <div id="signupForm" style="display: none;">
                 <h2>إنشاء حساب جديد</h2>
-                <input type="text" id="regFirstName" placeholder="الاسم الأول">
-                <input type="text" id="regLastName" placeholder="اسم العائلة">
-                <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-                <input type="password" id="regPassword" placeholder="كلمة المرور">
+                <input type="text" id="regFirstName" placeholder="الاسم الأول" data-i18n-placeholder="firstName">
+                <input type="text" id="regLastName" placeholder="اسم العائلة" data-i18n-placeholder="lastName">
+                <input type="email" id="regEmail" placeholder="البريد الإلكتروني" data-i18n-placeholder="email">
+                <input type="tel" id="regPhone" placeholder="رقم الهاتف" data-i18n-placeholder="phone">
+                <input type="date" id="regBirthDate" title="تاريخ الميلاد">
+                <select id="regGender">
+                    <option value="">الجنس</option>
+                    <option value="female">أنثى</option>
+                    <option value="male">ذكر</option>
+                    <option value="other">آخر</option>
+                </select>
+                <input type="password" id="regPassword" placeholder="كلمة المرور" data-i18n-placeholder="password">
+                <input type="password" id="regConfirmPassword" placeholder="تأكيد كلمة المرور" data-i18n-placeholder="confirmPassword">
                 <br>
                 <button id="signupBtn" class="btn" style="width: 100%;">إنشاء الحساب</button>
                 <p>لديك حساب بالفعل؟ <span class="auth-toggle" id="showLogin">تسجيل الدخول</span></p>
@@ -144,36 +172,66 @@
         </div>
     </div>
 
+    <div id="settingsModal" class="settings-drawer-overlay">
+        <div class="settings-drawer">
+            <span id="closeSettingsBtn" class="settings-close">&times;</span>
+            <h2 data-i18n="settings">الإعدادات</h2>
+            <div class="settings-row">
+                <label for="themeSelect" data-i18n="theme">المظهر</label>
+                <select id="themeSelect">
+                    <option value="light" data-i18n="light">فاتح</option>
+                    <option value="dark" data-i18n="dark">داكن</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="langSelect" data-i18n="language">اللغة</label>
+                <select id="langSelect">
+                    <option value="ar">العربية</option>
+                    <option value="he">עברית</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="textSizeSelect" data-i18n="textSize">حجم الخط</label>
+                <select id="textSizeSelect">
+                    <option value="normal" data-i18n="normal">عادي</option>
+                    <option value="large" data-i18n="large">كبير</option>
+                </select>
+            </div>
+            <button id="deleteAccountBtn" class="btn btn-danger" style="width: 100%;" data-i18n="deleteAccount">حذف حسابي</button>
+        </div>
+    </div>
+
     <div class="container" id="home">
         <div class="hero-section">
-            <h1>صالون توفيق للأناقة والجمال</h1>
-            <p>وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.</p>
-            <a href="book.html" class="btn-large">احجزي موعدك الآن 📅</a>
+            <h1 data-i18n="heroTitle">صالون توفيق للأناقة والجمال</h1>
+            <p data-i18n="heroCopy">وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.</p>
+            <a href="book.html" class="btn-large" data-i18n="bookNow">احجزي موعدك الآن 📅</a>
         </div>
 
         <div id="myAppointmentsSection" class="section-box" style="display: none;">
-            <h2>📅 مواعيدي القادمة</h2>
+            <h2 data-i18n="myAppointments">📅 مواعيدي القادمة</h2>
             <div id="myAppointmentsList">جاري التحميل...</div>
         </div>
 
         <div id="shopPreview" class="section-box">
-            <h2 style="text-align: center;">🛍️ تشكيلة من منتجاتنا</h2>
-            <p style="text-align: center;">اكتشفي أفضل منتجات العناية المتوفرة لدينا.</p>
+            <h2 style="text-align: center;" data-i18n="featuredProducts">🛍️ تشكيلة من منتجاتنا</h2>
+            <p style="text-align: center;" data-i18n="featuredProductsCopy">اكتشفي أفضل منتجات العناية المتوفرة لدينا.</p>
             <div id="productsContainer" class="products-grid">جاري تحميل المنتجات...</div>
             <div style="text-align: center; margin-top: 30px;">
-                <button onclick="window.location.href='shop.html'" class="btn" style="padding: 12px 30px;">عرض كل المنتجات وشراؤها 🛒</button>
+                <button onclick="window.location.href='shop.html'" class="btn" style="padding: 12px 30px;" data-i18n="viewProducts">عرض كل المنتجات وشراؤها 🛒</button>
             </div>
         </div>
 
         <div id="about" class="section-box">
-            <h2 style="text-align: center;">✨ عن صالون توفيق</h2>
-            <p class="about-text">
+            <h2 style="text-align: center;" data-i18n="aboutTitle">✨ عن صالون توفيق</h2>
+            <p class="about-text" data-i18n="aboutCopy">
                 تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا المكون من أمهر الخبراء والمصففين يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.
             </p>
         </div>
 
         <div id="reviews" class="section-box">
-            <h2 style="text-align: center;">⭐ ماذا يقول زبائننا عنّا</h2>
+            <h2 style="text-align: center;" data-i18n="reviewsTitle">⭐ ماذا يقول زبائننا عنّا</h2>
             
             <div class="review-slider-container" id="reviewsSliderContainer">
                 <div style="color: #888;">جاري تحميل التقييمات...</div>
@@ -182,7 +240,7 @@
             <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
             <div style="background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
-                <h3 style="margin-top: 0;">أضفي تقييمك الخاص بنا:</h3>
+                <h3 style="margin-top: 0;" data-i18n="addReviewTitle">أضفي تقييمك الخاص بنا:</h3>
                 
                 <div class="star-rating" id="starRating">
                     <span class="star" data-value="5">★</span>
@@ -192,8 +250,8 @@
                     <span class="star" data-value="1">★</span>
                 </div>
                 
-                <input type="text" id="reviewTitle" placeholder="عنوان التقييم (مثال: تجربة رائعة!)" style="text-align: center;">
-                <textarea id="reviewText" placeholder="اكتبي تفاصيل تجربتك معنا هنا..." rows="4"></textarea>
+                <input type="text" id="reviewTitle" placeholder="عنوان التقييم (مثال: تجربة رائعة!)" style="text-align: center;" data-i18n-placeholder="reviewTitlePlaceholder">
+                <textarea id="reviewText" placeholder="اكتبي تفاصيل تجربتك معنا هنا..." rows="4" data-i18n-placeholder="reviewTextPlaceholder"></textarea>
                 <br>
                 <button id="addReviewBtn" class="btn" style="width: 50%;">نشر التقييم</button>
             </div>
@@ -216,8 +274,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser as deleteAuthUser } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -234,6 +292,42 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         let loggedInUserData = null; 
+        let currentUserId = null;
+
+        const uiText = {
+            ar: { home: "الرئيسية", book: "حجز دور", shop: "المتجر", reviews: "التقييمات", settings: "الإعدادات", account: "حسابي", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", deleteAccount: "حذف حسابي", email: "البريد الإلكتروني", password: "كلمة المرور", firstName: "الاسم الأول", lastName: "اسم العائلة", phone: "رقم الهاتف", confirmPassword: "تأكيد كلمة المرور", reviewTitlePlaceholder: "عنوان التقييم (مثال: تجربة رائعة!)", reviewTextPlaceholder: "اكتبي تفاصيل تجربتك معنا هنا...", heroTitle: "صالون توفيق للأناقة والجمال", heroCopy: "وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.", bookNow: "احجزي موعدك الآن 📅", myAppointments: "📅 مواعيدي القادمة", featuredProducts: "🛍️ تشكيلة من منتجاتنا", featuredProductsCopy: "اكتشفي أفضل منتجات العناية المتوفرة لدينا.", viewProducts: "عرض كل المنتجات وشراؤها 🛒", aboutTitle: "✨ عن صالون توفيق", aboutCopy: "تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.", reviewsTitle: "⭐ ماذا يقول زبائننا عنّا", addReviewTitle: "أضفي تقييمك الخاص بنا:" },
+            he: { home: "בית", book: "הזמנת תור", shop: "חנות", reviews: "ביקורות", settings: "הגדרות", account: "החשבון שלי", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", deleteAccount: "מחיקת החשבון שלי", email: "אימייל", password: "סיסמה", firstName: "שם פרטי", lastName: "שם משפחה", phone: "מספר טלפון", confirmPassword: "אישור סיסמה", reviewTitlePlaceholder: "כותרת הביקורת", reviewTextPlaceholder: "כתבי כאן את החוויה שלך...", heroTitle: "סלון תופיק ליופי וסטייל", heroCopy: "המקום שלך לטיפוח, יופי וסטייל עם צוות מקצועי ושירות מוקפד.", bookNow: "הזמיני תור עכשיו 📅", myAppointments: "📅 התורים הקרובים שלי", featuredProducts: "🛍️ מבחר מהמוצרים שלנו", featuredProductsCopy: "גלי את מוצרי הטיפוח הזמינים אצלנו.", viewProducts: "לכל המוצרים וקנייה 🛒", aboutTitle: "✨ על סלון תופיק", aboutCopy: "סלון תופיק נועד לתת חוויית טיפוח נוחה, מקצועית ואלגנטית עם תשומת לב לפרטים.", reviewsTitle: "⭐ מה הלקוחות אומרות עלינו", addReviewTitle: "הוסיפי ביקורת:" },
+            en: { home: "Home", book: "Book", shop: "Shop", reviews: "Reviews", settings: "Settings", account: "Account", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", deleteAccount: "Delete my account", email: "Email", password: "Password", firstName: "First name", lastName: "Last name", phone: "Phone number", confirmPassword: "Confirm password", reviewTitlePlaceholder: "Review title", reviewTextPlaceholder: "Write your experience here...", heroTitle: "Salon Tofik for Style and Beauty", heroCopy: "Your place for elegant care, beauty, and professional salon service.", bookNow: "Book now 📅", myAppointments: "📅 My Upcoming Appointments", featuredProducts: "🛍️ Featured Products", featuredProductsCopy: "Discover selected care products available at the salon.", viewProducts: "View and buy products 🛒", aboutTitle: "✨ About Salon Tofik", aboutCopy: "Salon Tofik is built for comfortable, elegant, and professional beauty care with close attention to every detail.", reviewsTitle: "⭐ What our customers say", addReviewTitle: "Add your review:" }
+        };
+
+        function getTodayValue() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        }
+
+        function applySettings() {
+            const theme = localStorage.getItem("salonTheme") || "light";
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const textSize = localStorage.getItem("salonTextSize") || "normal";
+            document.body.classList.toggle("dark-mode", theme === "dark");
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+            document.body.style.fontSize = textSize === "large" ? "18px" : "";
+            document.getElementById("themeSelect").value = theme;
+            document.getElementById("langSelect").value = lang;
+            document.getElementById("textSizeSelect").value = textSize;
+            document.querySelectorAll("[data-i18n]").forEach((element) => {
+                const key = element.dataset.i18n;
+                if (uiText[lang] && uiText[lang][key]) element.textContent = uiText[lang][key];
+            });
+            document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+                const key = element.dataset.i18nPlaceholder;
+                if (uiText[lang] && uiText[lang][key]) element.placeholder = uiText[lang][key];
+            });
+            if (!loggedInUserData) document.getElementById("profileName").innerText = uiText[lang].account;
+        }
+
+        applySettings();
 
         window.openInfoModal = function(name, desc, img) {
             document.getElementById('infoTitle').innerText = name;
@@ -242,6 +336,18 @@
             document.getElementById('productInfoModal').style.display = 'flex';
         }
         window.closeInfoModal = function() { document.getElementById('productInfoModal').style.display = 'none'; }
+
+        const settingsModal = document.getElementById("settingsModal");
+        document.getElementById("settingsBtn").addEventListener("click", () => { settingsModal.classList.add("open"); });
+        document.getElementById("closeSettingsBtn").addEventListener("click", () => { settingsModal.classList.remove("open"); });
+        ["themeSelect", "langSelect", "textSizeSelect"].forEach((id) => {
+            document.getElementById(id).addEventListener("change", () => {
+                localStorage.setItem("salonTheme", document.getElementById("themeSelect").value);
+                localStorage.setItem("salonLang", document.getElementById("langSelect").value);
+                localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
+                applySettings();
+            });
+        });
 
         const authModal = document.getElementById('authModal');
         document.getElementById('profileBtn').addEventListener('click', () => {
@@ -256,18 +362,63 @@
         window.addEventListener('click', (event) => { 
             if (event.target === authModal) authModal.style.display = 'none'; 
             if (event.target === document.getElementById('productInfoModal')) closeInfoModal();
+            if (event.target === settingsModal) settingsModal.classList.remove('open');
+        });
+
+        document.getElementById("deleteAccountBtn").addEventListener("click", async () => {
+            const user = auth.currentUser;
+            if (!user || !currentUserId || !loggedInUserData) return alert("يجب تسجيل الدخول أولاً.");
+            if (!confirm("هل أنت متأكد؟ سيتم حذف حسابك وحذف حجوزاتك القادمة وطلباتك وتقييماتك. الحجوزات القديمة ستبقى محفوظة.")) return;
+            try {
+                const today = getTodayValue();
+                const fullName = `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim();
+                const matchesUser = (item) => item.userId === currentUserId || item.email === loggedInUserData.email || item.phone === loggedInUserData.phone || item.customerName === fullName;
+
+                const appointmentsSnapshot = await getDocs(collection(db, "Appointments"));
+                for (const appointmentDoc of appointmentsSnapshot.docs) {
+                    const appointment = appointmentDoc.data();
+                    if (matchesUser(appointment) && appointment.date >= today) await deleteDoc(doc(db, "Appointments", appointmentDoc.id));
+                }
+
+                const ordersSnapshot = await getDocs(collection(db, "Orders"));
+                for (const orderDoc of ordersSnapshot.docs) {
+                    const order = orderDoc.data();
+                    if (matchesUser(order)) await deleteDoc(doc(db, "Orders", orderDoc.id));
+                }
+
+                const reviewsSnapshot = await getDocs(collection(db, "Reviews"));
+                for (const reviewDoc of reviewsSnapshot.docs) {
+                    const review = reviewDoc.data();
+                    if (review.userId === currentUserId || review.email === loggedInUserData.email || review.phone === loggedInUserData.phone || review.name === loggedInUserData.firstName || review.name === fullName) await deleteDoc(doc(db, "Reviews", reviewDoc.id));
+                }
+
+                await deleteDoc(doc(db, "Users", currentUserId));
+                await deleteAuthUser(user);
+                localStorage.removeItem("salonCart");
+                alert("تم حذف الحساب بنجاح.");
+                window.location.reload();
+            } catch (error) {
+                alert("تعذر حذف الحساب: " + error.message + " إذا ظهرت رسالة تسجيل الدخول، سجّل خروج وادخل مرة أخرى ثم حاول.");
+            }
         });
 
         document.getElementById("showSignup").onclick = () => { document.getElementById("loginForm").style.display = "none"; document.getElementById("signupForm").style.display = "block"; };
         document.getElementById("showLogin").onclick = () => { document.getElementById("signupForm").style.display = "none"; document.getElementById("loginForm").style.display = "block"; };
 
         document.getElementById("signupBtn").addEventListener("click", async () => {
-            const fName = document.getElementById("regFirstName").value; const lName = document.getElementById("regLastName").value;
-            const email = document.getElementById("regEmail").value; const pass = document.getElementById("regPassword").value;
-            if (!fName || !email || !pass) return alert("الرجاء تعبئة البيانات!");
+            const fName = document.getElementById("regFirstName").value.trim();
+            const lName = document.getElementById("regLastName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const phone = document.getElementById("regPhone").value.trim();
+            const birthDate = document.getElementById("regBirthDate").value;
+            const gender = document.getElementById("regGender").value;
+            const pass = document.getElementById("regPassword").value;
+            const confirmPass = document.getElementById("regConfirmPassword").value;
+            if (!fName || !lName || !email || !phone || !birthDate || !gender || !pass || !confirmPass) return alert("الرجاء تعبئة جميع البيانات!");
+            if (pass !== confirmPass) return alert("كلمة المرور وتأكيد كلمة المرور غير متطابقين!");
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "Users", userCredential.user.uid), { firstName: fName, lastName: lName, email: email });
+                await setDoc(doc(db, "Users", userCredential.user.uid), { firstName: fName, lastName: lName, email: email, phone: phone, birthDate: birthDate, gender: gender });
                 alert("تم إنشاء الحساب بنجاح!"); authModal.style.display = 'none';
             } catch (error) { alert("حدث خطأ: " + error.message); }
         });
@@ -283,26 +434,37 @@
                 if (user.email === THE_ADMIN_EMAIL) { window.location.href = "admin.html"; return; }
                 const docSnap = await getDoc(doc(db, "Users", user.uid));
                 if (docSnap.exists()) {
-                    loggedInUserData = docSnap.data();
+                    currentUserId = user.uid;
+                    loggedInUserData = { ...docSnap.data(), email: user.email };
                     document.getElementById("profileName").innerText = loggedInUserData.firstName; 
                     loadMyAppointments();
                 }
-            } else { loggedInUserData = null; document.getElementById("profileName").innerText = "حسابي"; document.getElementById("myAppointmentsSection").style.display = "none"; }
+            } else { currentUserId = null; loggedInUserData = null; document.getElementById("profileName").innerText = "حسابي"; document.getElementById("myAppointmentsSection").style.display = "none"; }
         });
 
         async function loadMyAppointments() {
             if (!loggedInUserData) return;
             const container = document.getElementById("myAppointmentsList");
             const qSnap = await getDocs(collection(db, "Appointments"));
-            container.innerHTML = ""; let hasAppointments = false;
-            qSnap.forEach(doc => {
-                const data = doc.data();
-                if (data.phone === loggedInUserData.phone) {
-                    hasAppointments = true;
-                    container.innerHTML += `<div class="appointment-item"><div><strong>الخدمة:</strong> ${data.service || 'غير محدد'}<br><span style="color: #666; font-size: 14px;">📅 ${data.date} | ⏰ الساعة: ${data.time || 'غير محدد'}</span></div><div><span style="background: #eee; padding: 5px 10px; border-radius: 4px; font-size: 13px;">${data.status}</span></div></div>`;
-                }
+            const today = new Date().toISOString().slice(0, 10);
+            const myAppointments = [];
+            qSnap.forEach((docSnap) => {
+                const data = docSnap.data();
+                const sameUser = data.userId === currentUserId || data.email === loggedInUserData.email || (!!data.phone && data.phone === loggedInUserData.phone);
+                if (sameUser && data.date >= today) myAppointments.push(data);
             });
-            if (hasAppointments) { document.getElementById("myAppointmentsSection").style.display = "block"; }
+
+            myAppointments.sort((a, b) => `${a.date || ""} ${a.time || ""}`.localeCompare(`${b.date || ""} ${b.time || ""}`));
+            container.innerHTML = "";
+            if (myAppointments.length === 0) {
+                document.getElementById("myAppointmentsSection").style.display = "none";
+                return;
+            }
+
+            myAppointments.forEach((data) => {
+                container.innerHTML += `<div class="appointment-item"><div><strong>الخدمة:</strong> ${data.service || 'غير محدد'}<br><span style="color: #666; font-size: 14px;">📅 ${data.date} | ⏰ الساعة: ${data.time || 'غير محدد'}</span></div><div><span style="background: #eee; padding: 5px 10px; border-radius: 4px; font-size: 13px;">${data.status || 'قيد الانتظار'}</span></div></div>`;
+            });
+            document.getElementById("myAppointmentsSection").style.display = "block";
         }
 
         async function loadShopPreview() {
@@ -316,7 +478,7 @@
                 const data = documentSnap.data();
                 
                 // === التعديل هنا: جلب المنتجات المميزة (Featured) فقط ===
-                if (data.isFeatured) {
+                if (data.isFeatured && data.isVisible !== false && Number(data.stock || 0) > 0) {
                     hasFeatured = true;
                     const imgUrl = data.imageUrl ? data.imageUrl : 'https://via.placeholder.com/250x150?text=No+Image';
                     const safeName = data.name ? data.name.replace(/'/g, "\\'").replace(/"/g, '&quot;') : '';
