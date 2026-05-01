@@ -1,10 +1,13 @@
 /*
  * Routes visitors between the desktop domain and the m. subdomain.
+ * GitHub Pages cannot use https://m.username.github.io safely, so it
+ * automatically falls back to same-host mobile mode with ?view=mobile.
  * Optional production override:
  * window.SALON_DEVICE_ROUTING_CONFIG = {
  *   mainHost: "mydomain.com",
  *   mobileHost: "m.mydomain.com",
- *   cookieDomain: ".mydomain.com"
+ *   cookieDomain: ".mydomain.com",
+ *   sameHostMobile: false
  * };
  */
 (function () {
@@ -37,17 +40,51 @@
             hostname.endsWith(".local");
     }
 
+    function getGitHubPagesHost(hostname) {
+        if (/^m\.[^.]+\.github\.io$/.test(hostname)) {
+            return hostname.slice(2);
+        }
+
+        if (/^[^.]+\.github\.io$/.test(hostname)) {
+            return hostname;
+        }
+
+        return null;
+    }
+
+    function shouldUseSameHostMobile(hostname) {
+        if (typeof CONFIG.sameHostMobile === "boolean") {
+            return CONFIG.sameHostMobile;
+        }
+
+        return Boolean(getGitHubPagesHost(hostname));
+    }
+
     function getHosts() {
         var currentHost = normalizeHost(window.location.hostname);
         var configuredMain = normalizeHost(CONFIG.mainHost);
         var configuredMobile = normalizeHost(CONFIG.mobileHost);
+        var githubPagesHost = getGitHubPagesHost(currentHost);
+
+        if (shouldUseSameHostMobile(currentHost)) {
+            var sameHostMain = configuredMain || githubPagesHost || currentHost.replace(/^m\./, "");
+
+            return {
+                main: sameHostMain,
+                mobile: sameHostMain,
+                current: currentHost,
+                isMobileHost: false,
+                sameHostMobile: true
+            };
+        }
 
         if (configuredMain && configuredMobile) {
             return {
                 main: configuredMain,
                 mobile: configuredMobile,
                 current: currentHost,
-                isMobileHost: currentHost === configuredMobile
+                isMobileHost: currentHost === configuredMobile,
+                sameHostMobile: false
             };
         }
 
@@ -56,7 +93,8 @@
                 main: currentHost.slice(2),
                 mobile: currentHost,
                 current: currentHost,
-                isMobileHost: true
+                isMobileHost: true,
+                sameHostMobile: false
             };
         }
 
@@ -64,7 +102,8 @@
             main: currentHost,
             mobile: "m." + currentHost.replace(/^www\./, ""),
             current: currentHost,
-            isMobileHost: false
+            isMobileHost: false,
+            sameHostMobile: false
         };
     }
 
@@ -275,12 +314,13 @@
     function getUrlForView(view, includeViewParam) {
         var hosts = getHosts();
         var targetHost = view === "mobile" ? hosts.mobile : hosts.main;
+        var shouldIncludeViewParam = includeViewParam || hosts.sameHostMobile;
 
         if (isLocalHost(hosts.current)) {
             targetHost = hosts.current;
         }
 
-        return buildUrl(targetHost, { view: includeViewParam ? view : null });
+        return buildUrl(targetHost, { view: shouldIncludeViewParam ? view : null });
     }
 
     function getEffectiveView(preferredView) {
@@ -309,7 +349,7 @@
     function redirectIfNeeded(preferredView, passPreferenceToTarget) {
         var hosts = getHosts();
 
-        if (isLocalHost(hosts.current)) {
+        if (isLocalHost(hosts.current) || hosts.sameHostMobile) {
             return false;
         }
 
@@ -347,6 +387,20 @@
         link.setAttribute("href", href);
     }
 
+    function removeLink(rel, media) {
+        var selector = 'link[rel="' + rel + '"]';
+
+        if (media) {
+            selector += '[media="' + media + '"]';
+        }
+
+        var link = document.head.querySelector(selector);
+
+        if (link) {
+            link.remove();
+        }
+    }
+
     function applySeoLinks() {
         var hosts = getHosts();
 
@@ -355,6 +409,12 @@
         }
 
         upsertLink("canonical", buildUrl(hosts.main, { dropHash: true }));
+
+        if (hosts.sameHostMobile) {
+            removeLink("alternate", MOBILE_MEDIA);
+            return;
+        }
+
         upsertLink("alternate", buildUrl(hosts.mobile, { dropHash: true }), MOBILE_MEDIA);
     }
 
