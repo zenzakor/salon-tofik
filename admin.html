@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="assets/device-routing.js"></script>
     <title>لوحة تحكم الإدارة | صالون توفيق</title>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
@@ -148,8 +149,10 @@
         .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; box-sizing: border-box; font-family: inherit; text-align: right; }
         body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
     </style>
+    <link rel="stylesheet" href="assets/mobile-layout.css">
+    <link rel="stylesheet" href="assets/admin-mobile.css">
 </head>
-<body>
+<body class="admin-page">
 
     <div id="adminLoginSection">
         <div class="login-box">
@@ -161,8 +164,21 @@
     </div>
 
     <div id="adminContent" style="display: none;">
+        <div class="admin-mobile-topbar">
+            <button id="adminMenuToggle" class="admin-menu-toggle" type="button" aria-label="Open admin menu" aria-controls="adminSidebar" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="admin-mobile-brand">
+                <strong>SALON TOFIK</strong>
+                <small data-admin-text="adminPanelLabel">Admin Panel</small>
+            </div>
+            <span aria-hidden="true"></span>
+        </div>
+        <div id="adminSidebarBackdrop" class="admin-sidebar-backdrop"></div>
         
-        <div class="sidebar">
+        <div class="sidebar" id="adminSidebar">
             <div class="sidebar-logo">
                 <h2 style="margin:0; color:white; font-family:serif; letter-spacing: 2px;">SALON TOFIK</h2>
                 <span style="font-size: 12px; color: #888;" data-admin-text="adminPanelLabel">Admin Panel</span>
@@ -174,7 +190,9 @@
             <a class="nav-link" onclick="switchTab('accounts')"><span class="material-symbols-outlined">group</span> <span data-i18n="accounts">حسابات الزبائن</span></a>
             <a class="nav-link" onclick="switchTab('reviews')"><span class="material-symbols-outlined">star</span> <span data-i18n="reviews">التقييمات</span></a>
             <a class="nav-link" id="adminSettingsBtn"><span class="material-symbols-outlined">settings</span> <span data-i18n="settings">الإعدادات</span></a>
-            
+            <div class="admin-device-switch">
+                <a href="#" class="nav-link" data-device-switch><span class="material-symbols-outlined">devices</span> <span>Mobile Version</span></a>
+            </div>
             <div class="logout-btn" id="adminLogoutBtn"><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span> <span data-i18n="logout">تسجيل الخروج</span></div>
         </div>
 
@@ -559,8 +577,33 @@
             });
         }
 
+        const adminContentElement = document.getElementById("adminContent");
+        const adminMenuToggle = document.getElementById("adminMenuToggle");
+        const adminSidebarBackdrop = document.getElementById("adminSidebarBackdrop");
+
+        function setAdminSidebar(open) {
+            adminContentElement.classList.toggle("sidebar-open", open);
+            adminMenuToggle?.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.style.overflow = open ? "hidden" : "";
+        }
+
+        function closeAdminSidebar() {
+            setAdminSidebar(false);
+        }
+
+        adminMenuToggle?.addEventListener("click", () => {
+            setAdminSidebar(!adminContentElement.classList.contains("sidebar-open"));
+        });
+        adminSidebarBackdrop?.addEventListener("click", closeAdminSidebar);
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeAdminSidebar();
+        });
+
         const adminSettingsDrawer = document.getElementById("adminSettingsDrawer");
-        document.getElementById("adminSettingsBtn").addEventListener("click", () => adminSettingsDrawer.classList.add("open"));
+        document.getElementById("adminSettingsBtn").addEventListener("click", () => {
+            closeAdminSidebar();
+            adminSettingsDrawer.classList.add("open");
+        });
         document.getElementById("closeAdminSettingsBtn").addEventListener("click", () => adminSettingsDrawer.classList.remove("open"));
         adminSettingsDrawer.addEventListener("click", (event) => { if (event.target === adminSettingsDrawer) adminSettingsDrawer.classList.remove("open"); });
         ["adminThemeSelect", "adminLangSelect", "adminTextSizeSelect"].forEach((id) => {
@@ -576,11 +619,13 @@
 
         // نظام التبديل بين الأقسام
         window.switchTab = function(tabId) {
+            const trigger = window.event?.currentTarget;
             document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            if (trigger) trigger.classList.add('active');
+            closeAdminSidebar();
         }
 
         // تسجيل الدخول والخروج
@@ -590,6 +635,7 @@
                 document.getElementById("adminContent").style.display = "flex";
                 loadAllData();
             } else {
+                closeAdminSidebar();
                 document.getElementById("adminLoginSection").style.display = "flex"; 
                 document.getElementById("adminContent").style.display = "none";
             }
@@ -813,13 +859,29 @@
 
             selectedBookings.forEach((appointment) => {
                 const row = table.insertRow();
-                row.insertCell(0).innerHTML = `<strong>${appointment.customerName || "-"}</strong><br><small dir="ltr">${appointment.phone || "-"}</small>`; 
-                row.insertCell(1).innerHTML = appointment.service || "-"; 
-                row.insertCell(2).innerHTML = `${appointment.date || "-"}<br>${appointment.time || "-"}`; 
-                row.insertCell(3).innerHTML = appointment.notes || "-"; 
+                const customerCell = row.insertCell(0);
+                customerCell.dataset.label = adminT("customerHeader", "Customer");
+                customerCell.innerHTML = `<strong>${appointment.customerName || "-"}</strong><br><small dir="ltr">${appointment.phone || "-"}</small>`;
+
+                const serviceCell = row.insertCell(1);
+                serviceCell.dataset.label = adminT("serviceHeader", "Service");
+                serviceCell.innerHTML = appointment.service || "-";
+
+                const dateTimeCell = row.insertCell(2);
+                dateTimeCell.dataset.label = adminT("dateTimeHeader", "Date and time");
+                dateTimeCell.innerHTML = `${appointment.date || "-"}<br>${appointment.time || "-"}`;
+
+                const notesCell = row.insertCell(3);
+                notesCell.dataset.label = adminT("notesHeader", "Notes");
+                notesCell.innerHTML = appointment.notes || "-";
+
                 const statusColor = getAppointmentStatusClass(appointment.status) === "accepted" ? "green" : (getAppointmentStatusClass(appointment.status) === "rejected" ? "red" : "#FF9800");
-                row.insertCell(4).innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span>`;
+                const statusCell = row.insertCell(4);
+                statusCell.dataset.label = adminT("statusHeader", "Status");
+                statusCell.innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span>`;
+
                 const actionsCell = row.insertCell(5);
+                actionsCell.dataset.label = adminT("actionsHeader", "Actions");
                 renderAppointmentActions(actionsCell, appointment);
             });
         }

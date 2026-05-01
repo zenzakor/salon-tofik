@@ -1,0 +1,496 @@
+html.mobile-view body.admin-page {
+    display: block;
+    padding-bottom: 0;
+    overflow-x: hidden;
+}
+
+.admin-mobile-topbar,
+.admin-sidebar-backdrop {
+    display: none;
+}
+
+.admin-device-switch {
+    margin-top: auto;
+    border-top: 1px solid #262626;
+    padding: 12px 14px;
+}
+
+.admin-device-switch + .logout-btn {
+    margin-top: 0;
+}
+
+.admin-device-switch a {
+    color: #fff;
+    text-decoration: none;
+}
+
+html.mobile-view .admin-mobile-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1300;
+    min-height: 66px;
+    display: grid;
+    grid-template-columns: 48px 1fr 48px;
+    align-items: center;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    background: #000;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+
+html.mobile-view .admin-menu-toggle {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+html.mobile-view .admin-menu-toggle span {
+    width: 22px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+}
+
+html.mobile-view .admin-mobile-brand {
+    text-align: center;
+    min-width: 0;
+}
+
+html.mobile-view .admin-mobile-brand strong {
+    display: block;
+    font-family: Georgia, serif;
+    letter-spacing: 1.5px;
+    font-size: 18px;
+    line-height: 1.1;
+}
+
+html.mobile-view .admin-mobile-brand small {
+    display: block;
+    margin-top: 3px;
+    color: #aaa;
+    font-size: 11px;
+}
+
+html.mobile-view #adminContent {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+html.mobile-view .admin-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1390;
+    background: rgba(0, 0, 0, 0.42);
+}
+
+html.mobile-view #adminContent.sidebar-open .admin-sidebar-backdrop {
+    display: block;
+}
+
+html.mobile-view .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1400;
+    width: min(84vw, 330px);
+    max-width: 330px;
+    height: 100dvh;
+    padding-top: 22px;
+    box-sizing: border-box;
+    transform: translateX(105%);
+    transition: transform 0.25s ease;
+    box-shadow: -12px 0 30px rgba(0, 0, 0, 0.28);
+    overflow-y: auto;
+}
+
+html.mobile-view #adminContent.sidebar-open .sidebar {
+    transform: translateX(0);
+}
+
+html.mobile-view .sidebar-logo {
+    margin-bottom: 18px;
+    padding: 0 14px 14px;
+}
+
+html.mobile-view .nav-link {
+    min-height: 58px;
+    padding: 12px 18px;
+    font-size: 16px;
+}
+
+html.mobile-view .nav-link .material-symbols-outlined {
+    font-size: 27px;
+}
+
+html.mobile-view .admin-device-switch {
+    margin-top: auto;
+    padding: 14px 16px;
+}
+
+html.mobile-view .admin-device-switch .nav-link {
+    border: 1px solid #2c2c2c;
+    border-radius: 10px;
+    justify-content: center;
+    color: #fff;
+    background: #181818;
+}
+
+html.mobile-view .logout-btn {
+    margin-top: 0;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+html.mobile-view .main-content {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    padding: 84px 12px 26px;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+html.mobile-view .main-content h1 {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    font-size: 25px;
+    line-height: 1.3;
+}
+
+html.mobile-view .appointments-topbar,
+html.mobile-view .user-tools,
+html.mobile-view .input-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+html.mobile-view .appointments-topbar label,
+html.mobile-view .notification-btn,
+html.mobile-view .user-tools input,
+html.mobile-view .input-group input,
+html.mobile-view .input-group textarea {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+html.mobile-view .appointments-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+html.mobile-view .pending-panel,
+html.mobile-view .calendar-panel,
+html.mobile-view .admin-booking-panel,
+html.mobile-view .add-box,
+html.mobile-view .user-tools,
+html.mobile-view .product-note {
+    padding: 16px;
+    border-radius: 10px;
+}
+
+html.mobile-view .admin-booking-grid,
+html.mobile-view .admin-create-user-grid {
+    grid-template-columns: 1fr;
+}
+
+html.mobile-view .admin-booking-grid .wide,
+html.mobile-view .admin-create-user-grid .wide {
+    grid-column: auto;
+}
+
+html.mobile-view .appointments-calendar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+html.mobile-view .calendar-day {
+    min-height: 112px;
+    padding: 9px;
+}
+
+html.mobile-view .calendar-booking {
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+html.mobile-view table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+html.mobile-view th,
+html.mobile-view td {
+    padding: 10px;
+}
+
+html.mobile-view .btn-action {
+    min-height: 38px;
+    padding: 8px 11px;
+    margin: 3px;
+}
+
+html.mobile-view .admin-user-input,
+html.mobile-view .admin-user-select {
+    min-width: 150px;
+}
+
+html.mobile-view #adminLoginSection {
+    position: fixed;
+    min-height: 100dvh;
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+html.mobile-view .login-box {
+    width: min(100%, 360px);
+    padding: 28px 18px;
+}
+
+html.mobile-view #appointments.admin-section {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+}
+
+html.mobile-view #appointments.admin-section.active {
+    display: flex;
+}
+
+html.mobile-view #appointments > h1 {
+    order: 1;
+}
+
+html.mobile-view #appointments > .appointments-topbar {
+    order: 2;
+}
+
+html.mobile-view #appointments > .admin-booking-panel {
+    order: 3;
+}
+
+html.mobile-view #appointments > .appointments-layout {
+    display: contents;
+}
+
+html.mobile-view #appointments .pending-panel {
+    order: 4;
+}
+
+html.mobile-view #selectedDayTitle {
+    order: 5;
+    margin: 4px 0 -4px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    font-size: 18px;
+}
+
+html.mobile-view #selectedDayAppointmentsTable {
+    order: 6;
+    display: block;
+    overflow: visible;
+    margin: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    white-space: normal;
+}
+
+html.mobile-view #appointments .calendar-panel {
+    order: 7;
+}
+
+html.mobile-view #appointments .calendar-panel h2 {
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+html.mobile-view #selectedDayAppointmentsTable tbody,
+html.mobile-view #selectedDayAppointmentsTable tr,
+html.mobile-view #selectedDayAppointmentsTable td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+html.mobile-view #selectedDayAppointmentsTable tr:first-child {
+    display: none;
+}
+
+html.mobile-view #selectedDayAppointmentsTable tr {
+    margin-bottom: 10px;
+    padding: 14px;
+    border: 1px solid #e6e6e6;
+    border-right: 5px solid #111;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+html.mobile-view body.dark-mode #selectedDayAppointmentsTable tr {
+    background: #202020;
+    border-color: #333;
+    border-right-color: #fff;
+}
+
+html.mobile-view #selectedDayAppointmentsTable td {
+    display: grid;
+    grid-template-columns: minmax(78px, 34%) 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 8px 0;
+    border: 0;
+    text-align: start;
+}
+
+html.mobile-view #selectedDayAppointmentsTable td::before {
+    content: attr(data-label);
+    color: #666;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+html.mobile-view body.dark-mode #selectedDayAppointmentsTable td::before {
+    color: #cfcfcf;
+}
+
+html.mobile-view #selectedDayAppointmentsTable td:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 12px;
+}
+
+html.mobile-view #selectedDayAppointmentsTable td:last-child::before {
+    width: 100%;
+    flex-basis: 100%;
+}
+
+html.mobile-view #selectedDayAppointmentsTable .empty-row {
+    display: block;
+    padding: 18px;
+    text-align: center;
+}
+
+html.mobile-view #selectedDayAppointmentsTable .empty-row::before {
+    content: none;
+}
+
+html.mobile-view .appointments-calendar {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 5px;
+}
+
+html.mobile-view .calendar-day {
+    min-height: 0;
+    aspect-ratio: 1;
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 2px;
+    overflow: hidden;
+}
+
+html.mobile-view .calendar-day:hover {
+    transform: none;
+}
+
+html.mobile-view .calendar-day-number {
+    width: 100%;
+    margin: 0 0 1px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1;
+}
+
+html.mobile-view .calendar-empty {
+    display: none;
+}
+
+html.mobile-view .calendar-booking {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    margin: 1px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #111;
+    font-size: 0;
+    line-height: 0;
+}
+
+html.mobile-view .calendar-booking.pending {
+    background: #ff9800;
+}
+
+html.mobile-view .calendar-booking.accepted {
+    background: #4CAF50;
+}
+
+html.mobile-view .calendar-booking.rejected {
+    background: #ff4d4d;
+}
+
+html.mobile-view .pending-panel .booking-card {
+    padding: 12px;
+    border-radius: 10px;
+}
+
+html.mobile-view .booking-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+html.mobile-view .booking-actions .btn-action {
+    width: 100%;
+}
+
+html.mobile-view .admin-booking-panel h2,
+html.mobile-view .pending-panel h2 {
+    font-size: 18px;
+}
+
+html.mobile-view .admin-booking-grid input,
+html.mobile-view .admin-booking-grid select,
+html.mobile-view .admin-booking-grid button {
+    min-height: 46px;
+}
+
+@media (max-width: 390px) {
+    html.mobile-view .appointments-calendar {
+        gap: 4px;
+    }
+
+    html.mobile-view .calendar-day-number {
+        font-size: 11px;
+    }
+}
