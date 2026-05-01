@@ -36,6 +36,13 @@
         
         h1 { color: #000; text-align: center; margin-bottom: 5px;}
         .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 15px;}
+        .prepayment-panel { display: none; align-items: flex-start; gap: 14px; margin: 0 0 24px; padding: 18px; border: 1px solid rgba(212,175,55,0.45); border-radius: 12px; background: linear-gradient(135deg, #111827, #1f2937); color: #f8fafc; box-shadow: 0 16px 40px rgba(15,23,42,0.18); text-align: right; }
+        .prepayment-panel.active { display: flex; }
+        .prepayment-panel .material-symbols-outlined { color: #d4af37; font-size: 28px; }
+        .prepayment-panel strong { display: block; margin-bottom: 5px; font-size: 17px; }
+        .prepayment-panel p { margin: 0 0 8px; color: #e5e7eb; line-height: 1.6; }
+        .prepayment-panel small { color: #cbd5e1; line-height: 1.5; }
+        body.dark-mode .prepayment-panel { background: linear-gradient(135deg, #0f172a, #111827); border-color: rgba(212,175,55,0.58); }
         
         label { font-weight: bold; display: block; margin-top: 20px; margin-bottom: 8px; color: #222;}
         input, select, textarea { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 16px; box-sizing: border-box; background-color: #fafafa; transition: 0.3s; cursor: pointer;}
@@ -92,6 +99,15 @@
             <h1 data-i18n="bookTitle">📅 احجزي موعدك</h1>
             <p class="subtitle" data-i18n="bookSubtitle">حددي تفاصيل حجزك بدقة لنتمكن من خدمتك بأفضل شكل.</p>
             
+            <div id="prepaymentPanel" class="prepayment-panel" aria-live="polite">
+                <span class="material-symbols-outlined">workspace_premium</span>
+                <div>
+                    <strong data-i18n="prepaymentTitle">Partial deposit required</strong>
+                    <p data-i18n="prepaymentText">A partial prepayment is required before booking your next appointment.</p>
+                    <small data-i18n="prepaymentFuture">Payment gateway is prepared for Stripe or PayPal integration in the next phase.</small>
+                </div>
+            </div>
+
             <label data-i18n="serviceLabel">نوع الخدمة المطلوبة:</label>
             <select id="serviceType">
                 <option value="" disabled selected data-i18n="servicePlaceholder">-- اضغطي لاختيار الخدمة --</option>
@@ -196,6 +212,11 @@
         const auth = getAuth(app);
         let loggedInUserData = null;
         let currentUserId = null;
+        const paymentGatewayPlan = {
+            depositPercent: 30,
+            providers: ["stripe", "paypal"],
+            status: "prepared"
+        };
 
         const uiText = {
             ar: { home: "الرئيسية", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", bookTitle: "📅 احجزي موعدك", bookSubtitle: "حددي تفاصيل حجزك بدقة لنتمكن من خدمتك بأفضل شكل.", serviceLabel: "نوع الخدمة المطلوبة:", dateLabel: "تاريخ الموعد:", datePlaceholder: "📅 اضغطي لاختيار التاريخ...", timeLabel: "الوقت المفضل (أوقات العمل 9 ص - 7 م):", notesLabel: "ملاحظات إضافية أو طلب خاص (اختياري):", notesPlaceholder: "مثال: أريد صبغة بلون أشقر رمادي...", submitBook: "تأكيد الحجز", bookingLoader: "جاري التحقق من توفر الموعد... ⏳", loginRequiredTitle: "🔒 يرجى تسجيل الدخول أولاً", loginRequiredText: "يجب عليك تسجيل الدخول من الصفحة الرئيسية لتتمكني من حجز موعد.", backHome: "العودة للصفحة الرئيسية" },
@@ -205,6 +226,9 @@
         Object.assign(uiText.ar, { servicePlaceholder: "-- اضغطي لاختيار الخدمة --", serviceHaircut: "قص شعر", serviceColor: "صبغة شعر", serviceStyle: "تسريحة", serviceMakeup: "مكياج", serviceSkin: "عناية بالبشرة", serviceOther: "خدمة أخرى", minutePlaceholder: "الدقيقة", hourPlaceholder: "الساعة", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي" });
         Object.assign(uiText.he, { servicePlaceholder: "-- בחרי שירות --", serviceHaircut: "תספורת", serviceColor: "צבע שיער", serviceStyle: "תסרוקת", serviceMakeup: "איפור", serviceSkin: "טיפוח עור", serviceOther: "שירות אחר", minutePlaceholder: "דקה", hourPlaceholder: "שעה", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי" });
         Object.assign(uiText.en, { servicePlaceholder: "-- Choose a service --", serviceHaircut: "Haircut", serviceColor: "Hair color", serviceStyle: "Hair styling", serviceMakeup: "Makeup", serviceSkin: "Skin care", serviceOther: "Other service", minutePlaceholder: "Minute", hourPlaceholder: "Hour", oldBookingsButton: "Old bookings", accountInfoButton: "My account info" });
+        Object.assign(uiText.ar, { prepaymentTitle: "مطلوب دفعة مسبقة جزئية", prepaymentText: "بسبب سجل الغياب، يجب دفع عربون جزئي قبل حجز الموعد القادم.", prepaymentFuture: "النظام جاهز للربط لاحقاً مع Stripe أو PayPal لإتمام الدفع.", prepaymentAlert: "هذا الحساب يحتاج دفعة مسبقة قبل إنشاء حجز جديد. سيتم تفعيل الدفع الإلكتروني قريباً." });
+        Object.assign(uiText.he, { prepaymentTitle: "נדרשת מקדמה חלקית", prepaymentText: "בגלל היסטוריית היעדרויות, יש לשלם מקדמה חלקית לפני הזמנת התור הבא.", prepaymentFuture: "המערכת מוכנה לחיבור עתידי ל-Stripe או PayPal.", prepaymentAlert: "החשבון הזה דורש מקדמה לפני יצירת תור חדש. תשלום אונליין יופעל בקרוב." });
+        Object.assign(uiText.en, { prepaymentTitle: "Partial deposit required", prepaymentText: "Because of missed appointments, a partial deposit is required before booking the next appointment.", prepaymentFuture: "The system is ready for a future Stripe or PayPal payment gateway.", prepaymentAlert: "This account requires a partial deposit before a new booking. Online payment will be enabled soon." });
 
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
@@ -219,6 +243,27 @@
             document.getElementById("textSizeSelect").value = textSize;
             document.querySelectorAll("[data-i18n]").forEach((element) => { const key = element.dataset.i18n; if (uiText[lang]?.[key]) element.textContent = uiText[lang][key]; });
             document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { const key = element.dataset.i18nPlaceholder; if (uiText[lang]?.[key]) element.placeholder = uiText[lang][key]; });
+        }
+
+        function uiT(key, fallback) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            return uiText[lang]?.[key] || fallback;
+        }
+
+        function getPenaltyPoints(profile) {
+            return Math.max(0, Number(profile?.penaltyPoints || 0));
+        }
+
+        function requiresPartialPrepayment(profile) {
+            return !!profile && (getPenaltyPoints(profile) >= 3 || !!profile.manualPrepaymentRequired || !!profile.partialPrepaymentRequired);
+        }
+
+        function renderPrepaymentState() {
+            const panel = document.getElementById("prepaymentPanel");
+            if (!panel) return;
+            panel.classList.toggle("active", requiresPartialPrepayment(loggedInUserData));
+            panel.dataset.paymentProviders = paymentGatewayPlan.providers.join(",");
+            panel.dataset.depositPercent = String(paymentGatewayPlan.depositPercent);
         }
         window.openSettings = () => { document.getElementById("settingsModal").classList.add("open"); };
         window.closeSettings = () => { document.getElementById("settingsModal").classList.remove("open"); };
@@ -241,12 +286,14 @@
                     loggedInUserData = { ...docSnap.data(), email: user.email };
                     document.getElementById("loginWarning").style.display = "none";
                     document.getElementById("bookingFormContainer").style.display = "block";
+                    renderPrepaymentState();
                 }
             } else {
                 currentUserId = null;
                 loggedInUserData = null;
                 document.getElementById("loginWarning").style.display = "block";
                 document.getElementById("bookingFormContainer").style.display = "none";
+                renderPrepaymentState();
             }
         });
 
@@ -258,6 +305,10 @@
             const notes = document.getElementById("notes").value;
 
             if (!loggedInUserData || !currentUserId) return alert("يجب تسجيل الدخول قبل الحجز.");
+            if (requiresPartialPrepayment(loggedInUserData)) {
+                renderPrepaymentState();
+                return alert(uiT("prepaymentAlert", "This account requires a partial deposit before a new booking."));
+            }
             if (!service || !date || !hour || !minute) return alert("الرجاء تعبئة نوع الخدمة، التاريخ، والساعة والدقيقة!");
             if (hour === "19" && minute !== "00") return alert("أوقات العمل تنتهي الساعة 7:00 مساءً تماماً. الرجاء اختيار وقت أبكر.");
 

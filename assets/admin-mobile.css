@@ -278,6 +278,26 @@ html.mobile-view .btn-action {
     margin: 3px;
 }
 
+html.mobile-view .booking-card.no-show::after {
+    inset: 12px;
+    width: auto;
+    height: auto;
+    border-radius: 16px;
+    font-size: 116px;
+}
+
+html.mobile-view .calendar-booking.no-show::after {
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+}
+
+html.mobile-view .toast-stack {
+    top: 12px;
+    inset-inline: 12px;
+    width: auto;
+}
+
 html.mobile-view #reviewsTable {
     display: table;
     table-layout: fixed;
@@ -354,6 +374,28 @@ html.mobile-view .admin-mini-modal {
 html.mobile-view .admin-user-input,
 html.mobile-view .admin-user-select {
     min-width: 150px;
+}
+
+html.mobile-view .user-name-cell {
+    align-items: stretch;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+html.mobile-view .customer-risk-btn {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 10px;
+}
+
+html.mobile-view .penalty-controls {
+    min-width: 0;
+    width: 100%;
+}
+
+html.mobile-view .penalty-stepper,
+html.mobile-view .prepay-toggle {
+    justify-content: flex-start;
 }
 
 html.mobile-view #adminLoginSection {
@@ -487,6 +529,12 @@ html.mobile-view #selectedDayAppointmentsTable td:last-child {
 html.mobile-view #selectedDayAppointmentsTable td:last-child::before {
     width: 100%;
     flex-basis: 100%;
+}
+
+html.mobile-view #selectedDayAppointmentsTable .appointment-no-show-row::after {
+    inset: 10px 16px;
+    border-radius: 16px;
+    font-size: 124px;
 }
 
 html.mobile-view #selectedDayAppointmentsTable .empty-row {

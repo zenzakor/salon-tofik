@@ -20,6 +20,10 @@
         body.dark-mode .calendar-day-number, body.dark-mode .booking-card strong { color: #f3f3f3; }
         body.dark-mode .booking-card small, body.dark-mode .calendar-empty, body.dark-mode .empty-row { color: #cfcfcf; }
         body.dark-mode .admin-field label, body.dark-mode .admin-time-separator { color: #f3f3f3; }
+        body.dark-mode .appointment-no-show-row td { background: #1f2937; color: #cbd5e1; }
+        body.dark-mode .penalty-stepper span, body.dark-mode .prepay-toggle { color: #d1d5db; }
+        body.dark-mode .deposit-badge { background: #181818; color: #d1d5db; border-color: #444; }
+        body.dark-mode .deposit-badge.active { background: #111; color: #f8fafc; border-color: #d4af37; }
         body.dark-mode table small, body.dark-mode .product-description-preview, body.dark-mode .users-count + small { color: #cfcfcf !important; }
         body.dark-mode th, body.dark-mode td { border-bottom-color: #3a3a3a; }
         body.dark-mode .login-box { background: #202020; color: #f3f3f3; border-color: #555; }
@@ -63,6 +67,40 @@
         .btn-delete { background-color: #ff4d4d; }
         .btn-update { background-color: #4CAF50; }
         .btn-sale { background-color: #FF9800; }
+        .btn-restore { background: linear-gradient(135deg, #64748b, #334155); }
+        .btn-absent { background: linear-gradient(135deg, #334155, #0f172a); border-radius: 999px; box-shadow: 0 8px 18px rgba(15,23,42,0.18); }
+        .btn-absent:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,0.24); }
+        .booking-card.no-show, .calendar-booking.no-show { position: relative; overflow: hidden; opacity: 0.88; filter: grayscale(0.28); border-right-color: #64748b; background: linear-gradient(135deg, #f8fafc, #f1f5f9); transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease, background 0.35s ease; }
+        .booking-card.no-show::after, .calendar-booking.no-show::after { content: "×"; position: absolute; inset: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(100,116,139,0.18); border-radius: 18px; background: rgba(255,255,255,0.18); color: rgba(51,65,85,0.38); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.32); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); font-size: clamp(82px, 18vw, 150px); font-weight: 200; line-height: 1; pointer-events: none; z-index: 2; }
+        .calendar-booking.no-show::after { inset-block-start: 5px; inset-inline-end: 5px; width: 22px; height: 22px; font-size: 18px; }
+        .booking-card.no-show > * { position: relative; z-index: 1; }
+        .appointment-no-show-row td { background: linear-gradient(135deg, #f8fafc, #f1f5f9); color: #64748b; transition: background 0.35s ease, color 0.35s ease; }
+        .appointment-no-show-row { position: relative; }
+        .appointment-no-show-row::after { content: "×"; position: absolute; inset: 12px 28px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(100,116,139,0.16); border-radius: 18px; background: rgba(255,255,255,0.16); color: rgba(51,65,85,0.36); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); font-size: clamp(92px, 14vw, 170px); font-weight: 200; line-height: 1; pointer-events: none; z-index: 2; }
+        .appointment-no-show-row td { position: relative; z-index: 1; }
+        body.dark-mode .booking-card.no-show, body.dark-mode .calendar-booking.no-show { background: linear-gradient(135deg, #111827, #1f2937); border-color: #334155; color: #cbd5e1; }
+        body.dark-mode .booking-card.no-show::after, body.dark-mode .calendar-booking.no-show::after, body.dark-mode .appointment-no-show-row::after { background: rgba(15,23,42,0.2); border-color: rgba(148,163,184,0.2); color: rgba(226,232,240,0.34); }
+        .user-name-cell { display: flex; flex-direction: column; align-items: stretch; gap: 6px; min-width: 170px; }
+        .penalty-badge, .deposit-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; min-height: 24px; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+        .penalty-badge { background: #111827; color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); }
+        .penalty-badge.warning { background: linear-gradient(135deg, #92400e, #b45309); color: #fff7ed; }
+        .deposit-badge { background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; margin-top: 6px; }
+        .deposit-badge.active { background: #111827; color: #f8fafc; border-color: #c9a227; }
+        .customer-risk-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #111827; color: #fff; border: 1px solid #111827; border-radius: 999px; padding: 8px 12px; font-weight: 800; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .customer-risk-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,0.18); }
+        .customer-risk-btn .material-symbols-outlined { font-size: 18px; }
+        .penalty-controls { display: grid; gap: 7px; min-width: 178px; }
+        .penalty-stepper { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .penalty-stepper button { width: 30px; height: 30px; border: 0; border-radius: 999px; background: #111827; color: #fff; cursor: pointer; font-weight: bold; }
+        .penalty-stepper span { color: #334155; font-size: 12px; font-weight: bold; }
+        .prepay-toggle { display: flex; align-items: center; justify-content: center; gap: 7px; color: #475569; font-size: 12px; font-weight: bold; }
+        .prepay-toggle input { width: auto; min-width: 0; accent-color: #111827; }
+        .toast-stack { position: fixed; top: 18px; inset-inline-end: 18px; z-index: 1800; display: grid; gap: 10px; width: min(360px, calc(100vw - 32px)); pointer-events: none; }
+        .toast { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.42); border-radius: 14px; background: rgba(17,24,39,0.86); color: #f8fafc; box-shadow: 0 18px 45px rgba(15,23,42,0.22); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); animation: toastIn 0.3s ease; }
+        .toast .material-symbols-outlined { color: #d4af37; font-size: 22px; }
+        .toast strong { display: block; margin-bottom: 3px; }
+        .toast small { color: #dbe2ea; line-height: 1.45; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         .review-status-badge { display: inline-flex; align-items: center; justify-content: center; margin-top: 6px; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: bold; background: #eef2ff; color: #3730a3; }
         .review-status-badge.pending { background: #fff7ed; color: #c2410c; }
         .review-status-badge.published { background: #ecfdf5; color: #047857; }
@@ -77,6 +115,15 @@
         .review-modal-stars { color: #FFD700; font-size: 26px; margin: 10px 0; }
         .review-modal-title { margin: 8px 0; color: #111; }
         .review-modal-text { margin: 14px 0 0; padding: 15px; border: 1px solid #eee; border-radius: 10px; background: #fafafa; color: #444; text-align: start; white-space: pre-wrap; line-height: 1.8; }
+        .customer-risk-modal { width: min(390px, 100%); }
+        .risk-modal-summary { display: grid; gap: 10px; margin: 16px 0; padding: 18px; border-radius: 14px; background: linear-gradient(135deg, #111827, #1f2937); color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(212,175,55,0.24); }
+        .risk-modal-points { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .risk-modal-points .material-symbols-outlined { color: #d4af37; font-size: 28px; }
+        .risk-modal-points strong { font-size: 34px; line-height: 1; }
+        .risk-modal-summary small { color: #dbe2ea; font-weight: bold; }
+        .customer-risk-modal .penalty-stepper { margin: 14px 0; }
+        .customer-risk-modal .penalty-stepper button { width: 42px; height: 42px; font-size: 20px; }
+        .customer-risk-modal .prepay-toggle { justify-content: center; margin-top: 12px; padding: 12px; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; }
         body.dark-mode .review-comment-preview { color: #ddd; }
         body.dark-mode .review-more-btn { background: #181818; color: #f3f3f3; border-color: #444; }
         body.dark-mode .review-more-btn:hover { background: #fff; color: #111; border-color: #fff; }
@@ -84,6 +131,7 @@
         body.dark-mode .review-modal-title { color: #f3f3f3; }
         body.dark-mode .review-modal-text { background: #181818; color: #ddd; border-color: #333; }
         body.dark-mode .review-status-badge.hidden { background: #303030; color: #ddd; }
+        body.dark-mode .customer-risk-modal .prepay-toggle { background: #181818; border-color: #333; }
         .nav-badge { background: #ff4d4d; color: white; border-radius: 999px; min-width: 22px; height: 22px; padding: 0 7px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: auto; }
         .appointments-topbar { background: white; padding: 16px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
         .appointments-topbar label { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
@@ -361,6 +409,8 @@
         </div>
     </div>
 
+    <div id="toastStack" class="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
     <div id="reviewDetailsModal" class="admin-modal-overlay">
         <div class="admin-mini-modal" role="dialog" aria-modal="true" aria-labelledby="reviewDetailsTitle">
             <button id="closeReviewDetailsBtn" class="admin-mini-close" type="button">&times;</button>
@@ -369,6 +419,31 @@
             <div id="reviewDetailsStars" class="review-modal-stars"></div>
             <h4 id="reviewDetailsHeading" class="review-modal-title"></h4>
             <p id="reviewDetailsText" class="review-modal-text"></p>
+        </div>
+    </div>
+
+    <div id="customerPenaltyModal" class="admin-modal-overlay">
+        <div class="admin-mini-modal customer-risk-modal" role="dialog" aria-modal="true" aria-labelledby="customerPenaltyTitle">
+            <button id="closeCustomerPenaltyBtn" class="admin-mini-close" type="button">&times;</button>
+            <h2 id="customerPenaltyTitle" data-admin-text="customerRiskTitle">إدارة النقاط والدفعة</h2>
+            <h3 id="customerPenaltyName" class="review-modal-title"></h3>
+            <div class="risk-modal-summary">
+                <div class="risk-modal-points">
+                    <span class="material-symbols-outlined">verified_user</span>
+                    <strong id="customerPenaltyPoints">0</strong>
+                </div>
+                <small id="customerPenaltyLabel">Penalty points</small>
+                <span id="customerDepositState" class="deposit-badge"></span>
+            </div>
+            <div class="penalty-stepper">
+                <button id="customerPenaltyMinus" type="button" aria-label="Decrease penalty">-</button>
+                <span id="customerPenaltyStepperLabel"></span>
+                <button id="customerPenaltyPlus" type="button" aria-label="Increase penalty">+</button>
+            </div>
+            <label class="prepay-toggle">
+                <input id="customerPrepayToggle" type="checkbox">
+                <span id="customerPrepayLabel">Deposit</span>
+            </label>
         </div>
     </div>
 
@@ -405,6 +480,7 @@
         let allUsers = [];
         let allAppointments = [];
         let selectedAppointmentDate = "";
+        let selectedPenaltyUserId = "";
 
         const adminText = {
             ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
@@ -603,6 +679,55 @@
             reviewHidden: "Unpublished"
         });
 
+        Object.assign(adminDynamicText.ar, {
+            markAbsent: "تسجيل غياب",
+            absentConfirm: "هل أنت متأكد من تسجيل هذا الحجز كغياب؟ سيتم إضافة نقطة مخالفة للزبون.",
+            cancelAbsence: "إلغاء الغياب",
+            cancelAbsenceConfirm: "هل تريد إلغاء اختيار الغياب لهذا الحجز؟ سيتم تقليل نقطة واحدة إذا كانت أضيفت من هذا الحجز.",
+            customerRiskButton: "النقاط والدفعة",
+            customerRiskTitle: "إدارة النقاط والدفعة",
+            noShowStatus: "غائب",
+            penaltyLabel: "نقاط",
+            prepayToggle: "دفعة مسبقة",
+            prepayRequired: "دفعة مطلوبة",
+            prepayNotRequired: "بدون دفعة",
+            penaltyToastTitle: "تنبيه موثوقية",
+            penaltyToastBody: "وصل الزبون إلى 3 نقاط غياب. الحجوزات القادمة ستحتاج دفعة مسبقة.",
+            missedTurns: "غيابات"
+        });
+        Object.assign(adminDynamicText.he, {
+            markAbsent: "סימון כהיעדרות",
+            absentConfirm: "בטוח לסמן את התור הזה כהיעדרות? תתווסף נקודת אזהרה ללקוח.",
+            cancelAbsence: "ביטול היעדרות",
+            cancelAbsenceConfirm: "לבטל את סימון ההיעדרות לתור הזה? נקודה אחת תרד אם נוספה מהתור הזה.",
+            customerRiskButton: "נקודות ומקדמה",
+            customerRiskTitle: "ניהול נקודות ומקדמה",
+            noShowStatus: "לא הגיע/ה",
+            penaltyLabel: "נקודות",
+            prepayToggle: "מקדמה",
+            prepayRequired: "נדרשת מקדמה",
+            prepayNotRequired: "ללא מקדמה",
+            penaltyToastTitle: "התראת אמינות",
+            penaltyToastBody: "הלקוח הגיע ל-3 נקודות היעדרות. תורים עתידיים ידרשו מקדמה.",
+            missedTurns: "היעדרויות"
+        });
+        Object.assign(adminDynamicText.en, {
+            markAbsent: "Mark absent",
+            absentConfirm: "Are you sure you want to mark this booking as absent? This will add one penalty point to the customer.",
+            cancelAbsence: "Cancel absence",
+            cancelAbsenceConfirm: "Cancel the absence mark for this booking? One point will be removed if this booking added it.",
+            customerRiskButton: "Points & deposit",
+            customerRiskTitle: "Points and deposit",
+            noShowStatus: "No-show",
+            penaltyLabel: "points",
+            prepayToggle: "Deposit",
+            prepayRequired: "Deposit required",
+            prepayNotRequired: "No deposit",
+            penaltyToastTitle: "Reliability alert",
+            penaltyToastBody: "This customer reached 3 no-show points. Future bookings now require a deposit.",
+            missedTurns: "Missed turns"
+        });
+
         Object.assign(adminText.ar, { adminBookDate: "تاريخ الحجز" });
         Object.assign(adminText.he, { adminBookDate: "תאריך התור" });
         Object.assign(adminText.en, { adminBookDate: "Booking date" });
@@ -620,6 +745,7 @@
         }
 
         function displayAppointmentStatus(status) {
+            if (isNoShowStatus(status)) return adminT("noShowStatus", "No-show");
             const value = String(status || "").toLowerCase();
             if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return adminT("confirmedStatus", "تم التأكيد");
             if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return adminT("rejectedStatus", "تم الرفض");
@@ -640,6 +766,142 @@
         function isPendingAppointment(status) {
             const value = String(status || "").toLowerCase();
             return !status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין");
+        }
+
+        function isNoShowStatus(status) {
+            const value = String(status || "").toLowerCase();
+            return value === "no_show" || value.includes("no-show") || value.includes("no show") || value.includes("absent") || value.includes("missing") || value.includes("غائب") || value.includes("לא הגיע");
+        }
+
+        function isNoShowAppointment(appointment) {
+            return !!appointment?.noShow || isNoShowStatus(appointment?.status);
+        }
+
+        function getPenaltyPoints(user) {
+            return Math.max(0, Number(user?.penaltyPoints || 0));
+        }
+
+        function requiresPartialPrepayment(user) {
+            return !!user && (getPenaltyPoints(user) >= 3 || !!user.manualPrepaymentRequired || !!user.partialPrepaymentRequired);
+        }
+
+        function sameCleanText(a, b) {
+            return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+        }
+
+        function findUserForAppointment(appointment) {
+            if (!appointment) return null;
+            return allUsers.find((user) => (
+                (appointment.userId && user.id === appointment.userId) ||
+                (appointment.phone && user.phone && sameCleanText(appointment.phone, user.phone)) ||
+                (appointment.email && user.email && sameCleanText(appointment.email, user.email)) ||
+                (appointment.customerName && sameCleanText(appointment.customerName, getUserFullName(user)))
+            )) || null;
+        }
+
+        function renderCustomerNameWithPenalty(appointment) {
+            const customer = findUserForAppointment(appointment);
+            const displayName = safeText(appointment?.customerName || adminT("unnamedCustomer", "Customer"));
+            if (!customer || isNoShowAppointment(appointment)) return displayName;
+            const points = getPenaltyPoints(customer);
+            return `${displayName} <span class="penalty-badge ${points >= 3 ? "warning" : ""}" title="${adminT("penaltyLabel", "points")}">${points}</span>`;
+        }
+
+        function showAdminToast(title, body) {
+            const stack = document.getElementById("toastStack");
+            if (!stack) return;
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.innerHTML = `
+                <span class="material-symbols-outlined">warning</span>
+                <div>
+                    <strong>${title}</strong>
+                    <small>${body}</small>
+                </div>
+            `;
+            stack.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(-8px)";
+                setTimeout(() => toast.remove(), 260);
+            }, 4600);
+        }
+
+        async function setCustomerPenalty(userId, nextPoints, options = {}) {
+            const user = allUsers.find((item) => item.id === userId);
+            if (!user) return;
+            const previousPoints = getPenaltyPoints(user);
+            const safePoints = Math.max(0, Number(nextPoints || 0));
+            const manualPrepaymentRequired = !!user.manualPrepaymentRequired;
+            const partialPrepaymentRequired = safePoints >= 3 || manualPrepaymentRequired;
+            await updateDoc(doc(db, "Users", userId), {
+                penaltyPoints: safePoints,
+                partialPrepaymentRequired
+            });
+            user.penaltyPoints = safePoints;
+            user.partialPrepaymentRequired = partialPrepaymentRequired;
+            if (safePoints >= 3 && previousPoints < 3 && options.toast !== false) {
+                showAdminToast(adminT("penaltyToastTitle", "Deposit required"), adminT("penaltyToastBody", "This customer reached 3 penalty points. Future bookings require a partial deposit."));
+            }
+            renderUsersTable();
+            renderCustomerPenaltyModal();
+        }
+
+        async function changeCustomerPenalty(userId, delta) {
+            const user = allUsers.find((item) => item.id === userId);
+            if (!user) return;
+            await setCustomerPenalty(userId, getPenaltyPoints(user) + delta);
+        }
+
+        async function toggleCustomerPrepayment(userId, checked) {
+            const user = allUsers.find((item) => item.id === userId);
+            if (!user) return;
+            const partialPrepaymentRequired = checked || getPenaltyPoints(user) >= 3;
+            await updateDoc(doc(db, "Users", userId), {
+                manualPrepaymentRequired: checked,
+                partialPrepaymentRequired
+            });
+            user.manualPrepaymentRequired = checked;
+            user.partialPrepaymentRequired = partialPrepaymentRequired;
+            renderUsersTable();
+            renderCustomerPenaltyModal();
+        }
+
+        function getSelectedPenaltyUser() {
+            return allUsers.find((user) => user.id === selectedPenaltyUserId) || null;
+        }
+
+        function renderCustomerPenaltyModal() {
+            const modal = document.getElementById("customerPenaltyModal");
+            if (!modal?.classList.contains("open")) return;
+            const user = getSelectedPenaltyUser();
+            if (!user) {
+                closeCustomerPenaltyModal();
+                return;
+            }
+            const points = getPenaltyPoints(user);
+            const prepaymentRequired = requiresPartialPrepayment(user);
+            document.getElementById("customerPenaltyTitle").textContent = adminT("customerRiskTitle", "Points and deposit");
+            document.getElementById("customerPenaltyName").textContent = getUserFullName(user);
+            document.getElementById("customerPenaltyPoints").textContent = points;
+            document.getElementById("customerPenaltyLabel").textContent = adminT("penaltyLabel", "points");
+            document.getElementById("customerPenaltyStepperLabel").textContent = adminT("penaltyLabel", "points");
+            document.getElementById("customerPrepayLabel").textContent = adminT("prepayToggle", "Deposit");
+            const depositState = document.getElementById("customerDepositState");
+            depositState.textContent = prepaymentRequired ? adminT("prepayRequired", "Deposit required") : adminT("prepayNotRequired", "No deposit");
+            depositState.classList.toggle("active", prepaymentRequired);
+            document.getElementById("customerPrepayToggle").checked = !!user.manualPrepaymentRequired;
+        }
+
+        function openCustomerPenaltyModal(userId) {
+            selectedPenaltyUserId = userId;
+            document.getElementById("customerPenaltyModal").classList.add("open");
+            renderCustomerPenaltyModal();
+        }
+
+        function closeCustomerPenaltyModal() {
+            document.getElementById("customerPenaltyModal").classList.remove("open");
+            selectedPenaltyUserId = "";
         }
 
         function formatUsersCount(count) {
@@ -760,6 +1022,7 @@
 
         // ================= 1. المواعيد =================
         function getAppointmentStatusClass(status) {
+            if (isNoShowStatus(status)) return "no-show";
             if (isConfirmedAppointment(status)) return "accepted";
             if (isRejectedAppointment(status)) return "rejected";
             return "pending";
@@ -878,6 +1141,67 @@
             renderAppointmentsDashboard();
         }
 
+        async function markAppointmentAbsent(appointment) {
+            if (!appointment || isNoShowAppointment(appointment)) return;
+            const customerName = appointment.customerName || adminT("unnamedCustomer", "Customer");
+            if (!confirm(`${adminT("absentConfirm", "Are you sure you want to mark this booking as absent? This will add one penalty point to the customer.")}\n\n${customerName}`)) return;
+            const markedAbsentAt = new Date().toISOString();
+            const shouldApplyPenalty = !appointment.penaltyApplied;
+            await updateDoc(doc(db, "Appointments", appointment.id), {
+                status: "no_show",
+                noShow: true,
+                markedAbsentAt,
+                penaltyApplied: true
+            });
+
+            if (!allUsers.length) await loadUsers();
+            const customer = findUserForAppointment(appointment);
+            if (customer && shouldApplyPenalty) {
+                const previousPoints = getPenaltyPoints(customer);
+                const nextPoints = previousPoints + 1;
+                const manualPrepaymentRequired = !!customer.manualPrepaymentRequired;
+                const partialPrepaymentRequired = nextPoints >= 3 || manualPrepaymentRequired;
+                await updateDoc(doc(db, "Users", customer.id), {
+                    penaltyPoints: nextPoints,
+                    partialPrepaymentRequired,
+                    lastNoShowAt: markedAbsentAt
+                });
+                customer.penaltyPoints = nextPoints;
+                customer.partialPrepaymentRequired = partialPrepaymentRequired;
+                customer.lastNoShowAt = markedAbsentAt;
+                if (nextPoints >= 3 && previousPoints < 3) {
+                    showAdminToast(adminT("penaltyToastTitle", "Deposit required"), adminT("penaltyToastBody", "This customer reached 3 penalty points. Future bookings require a partial deposit."));
+                }
+            }
+
+            await loadAppointments();
+            await loadUsers();
+        }
+
+        async function cancelAppointmentAbsence(appointment) {
+            if (!appointment || !isNoShowAppointment(appointment)) return;
+            if (!confirm(adminT("cancelAbsenceConfirm", "Cancel the absence mark for this booking?"))) return;
+            if (!allUsers.length) await loadUsers();
+            const customer = findUserForAppointment(appointment);
+            if (customer && appointment.penaltyApplied) {
+                const nextPoints = Math.max(0, getPenaltyPoints(customer) - 1);
+                const partialPrepaymentRequired = nextPoints >= 3 || !!customer.manualPrepaymentRequired;
+                await updateDoc(doc(db, "Users", customer.id), {
+                    penaltyPoints: nextPoints,
+                    partialPrepaymentRequired
+                });
+            }
+            await updateDoc(doc(db, "Appointments", appointment.id), {
+                status: "تم التأكيد",
+                noShow: false,
+                penaltyApplied: false,
+                markedAbsentAt: null,
+                absenceCanceledAt: new Date().toISOString()
+            });
+            await loadAppointments();
+            await loadUsers();
+        }
+
         function renderAppointmentActions(container, appointment) {
             if (isPendingAppointment(appointment.status)) {
                 const acceptBtn = document.createElement("button");
@@ -887,17 +1211,36 @@
                 container.appendChild(acceptBtn);
             }
 
-            const editBtn = document.createElement("button");
-            editBtn.innerText = adminT("edit", "تعديل");
-            editBtn.className = "btn-action btn-sale";
-            editBtn.onclick = () => editAppointment(appointment);
+            if (!isNoShowAppointment(appointment) && isConfirmedAppointment(appointment.status)) {
+                const absentBtn = document.createElement("button");
+                absentBtn.innerText = adminT("markAbsent", "Mark absent");
+                absentBtn.className = "btn-action btn-absent";
+                absentBtn.onclick = () => markAppointmentAbsent(appointment);
+                container.appendChild(absentBtn);
+            }
+
+            if (isNoShowAppointment(appointment)) {
+                const cancelAbsentBtn = document.createElement("button");
+                cancelAbsentBtn.innerText = adminT("cancelAbsence", "Cancel absence");
+                cancelAbsentBtn.className = "btn-action btn-restore";
+                cancelAbsentBtn.onclick = () => cancelAppointmentAbsence(appointment);
+                container.appendChild(cancelAbsentBtn);
+            }
+
+            let editBtn = null;
+            if (!isNoShowAppointment(appointment)) {
+                editBtn = document.createElement("button");
+                editBtn.innerText = adminT("edit", "تعديل");
+                editBtn.className = "btn-action btn-sale";
+                editBtn.onclick = () => editAppointment(appointment);
+            }
 
             const deleteBtn = document.createElement("button");
             deleteBtn.innerText = adminT("delete", "حذف");
             deleteBtn.className = "btn-action btn-delete";
             deleteBtn.onclick = () => deleteAppointment(appointment.id);
 
-            container.appendChild(editBtn);
+            if (editBtn) container.appendChild(editBtn);
             container.appendChild(deleteBtn);
         }
 
@@ -905,7 +1248,7 @@
             const card = document.createElement("div");
             card.className = `booking-card ${getAppointmentStatusClass(appointment.status)}`;
             card.innerHTML = `
-                <strong>${appointment.customerName || adminT("unnamedCustomer", "زبونة بدون اسم")}</strong>
+                <strong>${renderCustomerNameWithPenalty(appointment)}</strong>
                 <small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>
                 <small>${appointment.date || "-"} | ${appointment.time || "-"}</small>
                 <small>${appointment.service || adminT("unspecifiedService", "خدمة غير محددة")}</small>
@@ -958,7 +1301,7 @@
                     dayAppointments.forEach((appointment) => {
                         const item = document.createElement("div");
                         item.className = `calendar-booking ${getAppointmentStatusClass(appointment.status)}`;
-                        item.innerHTML = `<b>${appointment.time || "-"}</b><br>${appointment.customerName || "-"}<br>${appointment.service || "-"}`;
+                        item.innerHTML = `<b>${appointment.time || "-"}</b><br>${renderCustomerNameWithPenalty(appointment)}<br>${appointment.service || "-"}`;
                         item.onclick = (event) => {
                             event.stopPropagation();
                             selectAppointmentDate(dateKey);
@@ -989,10 +1332,12 @@
             }
 
             selectedBookings.forEach((appointment) => {
+                const statusClass = getAppointmentStatusClass(appointment.status);
                 const row = table.insertRow();
+                if (isNoShowAppointment(appointment)) row.classList.add("appointment-no-show-row");
                 const customerCell = row.insertCell(0);
                 customerCell.dataset.label = adminT("customerHeader", "Customer");
-                customerCell.innerHTML = `<strong>${appointment.customerName || "-"}</strong><br><small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>`;
+                customerCell.innerHTML = `<strong>${renderCustomerNameWithPenalty(appointment)}</strong><br><small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>`;
 
                 const serviceCell = row.insertCell(1);
                 serviceCell.dataset.label = adminT("serviceHeader", "Service");
@@ -1006,7 +1351,7 @@
                 notesCell.dataset.label = adminT("notesHeader", "Notes");
                 notesCell.innerHTML = appointment.notes || "-";
 
-                const statusColor = getAppointmentStatusClass(appointment.status) === "accepted" ? "green" : (getAppointmentStatusClass(appointment.status) === "rejected" ? "red" : "#FF9800");
+                const statusColor = statusClass === "accepted" ? "green" : (statusClass === "rejected" ? "red" : (statusClass === "no-show" ? "#64748b" : "#FF9800"));
                 const statusCell = row.insertCell(4);
                 statusCell.dataset.label = adminT("statusHeader", "Status");
                 statusCell.innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span>`;
@@ -1320,7 +1665,10 @@
                     phoneVerified: false,
                     emailVerified: false,
                     createdByAdmin: true,
-                    authProvider: "admin"
+                    authProvider: "admin",
+                    penaltyPoints: 0,
+                    manualPrepaymentRequired: false,
+                    partialPrepaymentRequired: false
                 });
                 await signOut(secondaryAuth).catch(() => {});
                 clearAdminCreateUserForm();
@@ -1348,6 +1696,7 @@
             });
             renderAdminBookingUsers();
             renderUsersTable();
+            if (allAppointments.length) renderAppointmentsDashboard();
         }
 
         function renderUsersTable() {
@@ -1381,8 +1730,14 @@
             }
 
             filteredUsers.forEach((user) => {
+                const prepaymentRequired = requiresPartialPrepayment(user);
                 const row = table.insertRow();
-                row.insertCell(0).innerHTML = `<input class="admin-user-input" id="userFirstName-${user.id}" value="${safeText(user.firstName)}">`;
+                row.insertCell(0).innerHTML = `
+                    <div class="user-name-cell">
+                        <input class="admin-user-input" id="userFirstName-${user.id}" value="${safeText(user.firstName)}">
+                        ${prepaymentRequired ? `<span class="deposit-badge active">${adminT("prepayRequired", "Deposit required")}</span>` : ""}
+                    </div>
+                `;
                 row.insertCell(1).innerHTML = `<input class="admin-user-input" id="userLastName-${user.id}" value="${safeText(user.lastName)}">`;
                 row.insertCell(2).innerHTML = `<input class="admin-user-input admin-user-email" id="userEmail-${user.id}" type="email" value="${safeText(user.email)}" readonly>`;
                 row.insertCell(3).innerHTML = `<input class="admin-user-input" id="userPhone-${user.id}" type="tel" value="${safeText(user.phone)}" dir="ltr">`;
@@ -1396,6 +1751,11 @@
                     </select>
                 `;
                 const actionsCell = row.insertCell(6);
+                const riskBtn = document.createElement("button");
+                riskBtn.className = "customer-risk-btn";
+                riskBtn.type = "button";
+                riskBtn.innerHTML = `<span class="material-symbols-outlined">tune</span><span>${adminT("customerRiskButton", "Points & deposit")}</span>`;
+                riskBtn.onclick = () => openCustomerPenaltyModal(user.id);
                 const saveBtn = document.createElement("button");
                 saveBtn.innerText = adminT("save", "حفظ التعديل");
                 saveBtn.className = "btn-action btn-update";
@@ -1404,6 +1764,7 @@
                 deleteBtn.innerText = adminT("deleteAccount", "حذف الحساب");
                 deleteBtn.className = "btn-action btn-delete";
                 deleteBtn.onclick = () => deleteUser(user.id, `${user.firstName || ""} ${user.lastName || ""}`.trim(), user.firstName || "", user.phone || "", user.email || "");
+                actionsCell.appendChild(riskBtn);
                 actionsCell.appendChild(saveBtn);
                 actionsCell.appendChild(deleteBtn);
             });
@@ -1533,6 +1894,19 @@
         document.getElementById("closeReviewDetailsBtn").addEventListener("click", closeReviewDetails);
         document.getElementById("reviewDetailsModal").addEventListener("click", (event) => {
             if (event.target === document.getElementById("reviewDetailsModal")) closeReviewDetails();
+        });
+        document.getElementById("closeCustomerPenaltyBtn").addEventListener("click", closeCustomerPenaltyModal);
+        document.getElementById("customerPenaltyModal").addEventListener("click", (event) => {
+            if (event.target === document.getElementById("customerPenaltyModal")) closeCustomerPenaltyModal();
+        });
+        document.getElementById("customerPenaltyMinus").addEventListener("click", () => {
+            if (selectedPenaltyUserId) changeCustomerPenalty(selectedPenaltyUserId, -1);
+        });
+        document.getElementById("customerPenaltyPlus").addEventListener("click", () => {
+            if (selectedPenaltyUserId) changeCustomerPenalty(selectedPenaltyUserId, 1);
+        });
+        document.getElementById("customerPrepayToggle").addEventListener("change", (event) => {
+            if (selectedPenaltyUserId) toggleCustomerPrepayment(selectedPenaltyUserId, event.target.checked);
         });
 
         async function setReviewPublication(id, status) {

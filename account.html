@@ -41,6 +41,18 @@
         .btn.secondary:hover { background: #000; color: #fff; }
         body.dark-mode .btn.secondary { background: #181818; color: #f3f3f3; border-color: #555; }
         .status-box { margin-top: 20px; padding: 18px; background: #fafafa; border: 1px solid #e6e6e6; border-radius: 8px; text-align: center; display: none; }
+        .profile-risk-card { display: none; margin-top: 22px; padding: 20px; border: 1px solid rgba(212,175,55,0.42); border-radius: 12px; background: linear-gradient(135deg, #111827, #1f2937); color: #f8fafc; box-shadow: 0 16px 38px rgba(15,23,42,0.14); text-align: right; }
+        .profile-risk-card.active { display: block; }
+        .risk-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .risk-summary strong { font-size: 18px; }
+        .risk-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+        .risk-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px; background: rgba(255,255,255,0.1); color: #f8fafc; border: 1px solid rgba(255,255,255,0.18); font-size: 13px; font-weight: bold; }
+        .risk-badge.gold { border-color: rgba(212,175,55,0.65); color: #fde68a; }
+        .missed-history-list { display: grid; gap: 9px; margin-top: 12px; }
+        .missed-item { padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); }
+        .missed-item strong { display: block; margin-bottom: 4px; }
+        .missed-item small { color: #d1d5db; }
+        body.dark-mode .profile-risk-card { background: linear-gradient(135deg, #0f172a, #111827); }
         #profileRecaptcha { display: flex; justify-content: center; margin: 12px 0; }
         .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
         .settings-drawer-overlay.open { display: block; }
@@ -159,6 +171,16 @@
                         </select>
                     </div>
                 </div>
+                <div id="profileRiskCard" class="profile-risk-card">
+                    <div class="risk-summary">
+                        <strong data-i18n="missedTurnsTitle">Missed turns</strong>
+                        <div class="risk-badges">
+                            <span id="profilePenaltyBadge" class="risk-badge">0</span>
+                            <span id="profileDepositBadge" class="risk-badge gold"></span>
+                        </div>
+                    </div>
+                    <div id="missedTurnsList" class="missed-history-list"></div>
+                </div>
                 <div class="actions">
                     <button id="sendProfileSmsBtn" class="btn" type="button" data-i18n="sendProfileSms">إرسال كود SMS وحفظ التعديل</button>
                     <button id="passwordResetBtn" class="btn secondary" type="button" data-i18n="passwordReset">تغيير كلمة المرور بالبريد</button>
@@ -194,6 +216,9 @@
             he: { home: "בית", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", oldBookingsButton: "תורים ישנים", accountInfoTitle: "פרטי החשבון שלי", accountInfoSubtitle: "כאן אפשר לראות ולעדכן את הפרטים. לפני שמירה נבקש אימות SMS, ושינוי סיסמה מתבצע דרך אימייל.", loginRequiredTitle: "צריך להתחבר קודם", loginRequiredText: "התחברי מהעמוד הראשי כדי לערוך את פרטי החשבון.", backHome: "חזרה לעמוד הראשי", firstName: "שם פרטי", lastName: "שם משפחה", email: "אימייל", phone: "טלפון", birthDate: "תאריך לידה", gender: "מין", genderUnknown: "לא מוגדר", genderFemale: "נקבה", genderMale: "זכר", genderOther: "אחר", sendProfileSms: "שליחת קוד SMS ושמירת שינוי", passwordReset: "שינוי סיסמה באימייל", profileSmsSent: "שלחנו קוד SMS. הזיני אותו כדי להשלים שמירה.", verifyAndSave: "אימות ושמירה", pendingEmailNote: "ממתין לאישור האימייל החדש:" },
             en: { home: "Home", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", oldBookingsButton: "Old bookings", accountInfoTitle: "My account info", accountInfoSubtitle: "You can view and edit your details here. Before saving changes we ask for SMS confirmation, and password changes are handled by email.", loginRequiredTitle: "Please log in first", loginRequiredText: "Log in from the home page to edit your account details.", backHome: "Back to home page", firstName: "First name", lastName: "Last name", email: "Email", phone: "Phone number", birthDate: "Birth date", gender: "Gender", genderUnknown: "Not specified", genderFemale: "Female", genderMale: "Male", genderOther: "Other", sendProfileSms: "Send SMS code and save changes", passwordReset: "Change password by email", profileSmsSent: "We sent an SMS code. Enter it to finish saving.", verifyAndSave: "Verify and save", pendingEmailNote: "Waiting for new email confirmation:" }
         };
+        Object.assign(uiText.ar, { missedTurnsTitle: "سجل المواعيد الفائتة", noMissedTurns: "لا توجد مواعيد فائتة في حسابك.", penaltyPoints: "نقاط المخالفة", depositRequired: "دفعة مسبقة مطلوبة", depositNotRequired: "لا توجد دفعة مطلوبة" });
+        Object.assign(uiText.he, { missedTurnsTitle: "היסטוריית תורים שלא הגיעו", noMissedTurns: "אין תורים שהוחמצו בחשבון שלך.", penaltyPoints: "נקודות אזהרה", depositRequired: "נדרשת מקדמה", depositNotRequired: "לא נדרשת מקדמה" });
+        Object.assign(uiText.en, { missedTurnsTitle: "Missed turns history", noMissedTurns: "No missed turns on your account.", penaltyPoints: "Penalty points", depositRequired: "Deposit required", depositNotRequired: "No deposit required" });
 
         function uiT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -276,6 +301,72 @@
             const note = document.getElementById("emailNote");
             if (!note || !currentProfile) return;
             note.textContent = currentProfile.pendingEmail ? `${uiT("pendingEmailNote", "بانتظار تأكيد البريد الجديد:")} ${currentProfile.pendingEmail}` : "";
+        }
+
+        function safeText(value) {
+            return String(value || "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+        }
+
+        function getPenaltyPoints(profile) {
+            return Math.max(0, Number(profile?.penaltyPoints || 0));
+        }
+
+        function requiresPartialPrepayment(profile) {
+            return !!profile && (getPenaltyPoints(profile) >= 3 || !!profile.manualPrepaymentRequired || !!profile.partialPrepaymentRequired);
+        }
+
+        function isNoShowAppointment(appointment) {
+            const value = String(appointment?.status || "").toLowerCase();
+            return !!appointment?.noShow || value === "no_show" || value.includes("no-show") || value.includes("no show") || value.includes("absent") || value.includes("missing") || value.includes("غائب") || value.includes("לא הגיע");
+        }
+
+        function sameCleanText(a, b) {
+            return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+        }
+
+        function appointmentBelongsToProfile(appointment) {
+            const fullName = `${currentProfile?.firstName || ""} ${currentProfile?.lastName || ""}`.trim();
+            return (
+                (currentUser?.uid && appointment.userId === currentUser.uid) ||
+                (currentProfile?.phone && appointment.phone && sameCleanText(appointment.phone, currentProfile.phone)) ||
+                (currentProfile?.email && appointment.email && sameCleanText(appointment.email, currentProfile.email)) ||
+                (fullName && appointment.customerName && sameCleanText(appointment.customerName, fullName))
+            );
+        }
+
+        function renderRiskProfile(missedTurns = []) {
+            const card = document.getElementById("profileRiskCard");
+            const penaltyBadge = document.getElementById("profilePenaltyBadge");
+            const depositBadge = document.getElementById("profileDepositBadge");
+            const list = document.getElementById("missedTurnsList");
+            if (!card || !currentProfile) return;
+            const penaltyPoints = getPenaltyPoints(currentProfile);
+            const depositRequired = requiresPartialPrepayment(currentProfile);
+            card.classList.add("active");
+            penaltyBadge.textContent = `${penaltyPoints} ${uiT("penaltyPoints", "Penalty points")}`;
+            depositBadge.textContent = depositRequired ? uiT("depositRequired", "Deposit required") : uiT("depositNotRequired", "No deposit required");
+            if (!missedTurns.length) {
+                list.innerHTML = `<div class="missed-item"><small>${uiT("noMissedTurns", "No missed turns on your account.")}</small></div>`;
+                return;
+            }
+            list.innerHTML = missedTurns.map((appointment) => `
+                <div class="missed-item">
+                    <strong>${safeText(appointment.service || "-")}</strong>
+                    <small>${safeText(appointment.date || "-")} | ${safeText(appointment.time || "-")}</small>
+                </div>
+            `).join("");
+        }
+
+        async function loadMissedTurns() {
+            if (!currentUser || !currentProfile) return;
+            const appointmentsSnapshot = await getDocs(collection(db, "Appointments"));
+            const missedTurns = [];
+            appointmentsSnapshot.forEach((appointmentDoc) => {
+                const appointment = { id: appointmentDoc.id, ...appointmentDoc.data() };
+                if (isNoShowAppointment(appointment) && appointmentBelongsToProfile(appointment)) missedTurns.push(appointment);
+            });
+            missedTurns.sort((a, b) => `${b.date || ""} ${b.time || ""}`.localeCompare(`${a.date || ""} ${a.time || ""}`));
+            renderRiskProfile(missedTurns);
         }
 
         function fillProfileForm(data) {
@@ -365,6 +456,7 @@
                 await setDoc(doc(db, "Users", currentUser.uid), saveData, { merge: true });
                 currentProfile = { ...currentProfile, ...saveData };
                 fillProfileForm(currentProfile);
+                loadMissedTurns();
                 resetProfileSms();
                 alert("Account details saved successfully.");
             } catch (error) {
@@ -395,6 +487,7 @@
             localStorage.setItem("salonLang", document.getElementById("langSelect").value);
             localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
             applySettings();
+            if (currentProfile) loadMissedTurns();
         }));
         document.getElementById("sendProfileSmsBtn").addEventListener("click", sendProfileSms);
         document.getElementById("verifyProfileSmsBtn").addEventListener("click", verifyProfileSmsAndSave);
@@ -407,6 +500,7 @@
             if (!user) {
                 document.getElementById("loginRequired").style.display = "block";
                 document.getElementById("accountForm").style.display = "none";
+                document.getElementById("profileRiskCard")?.classList.remove("active");
                 return;
             }
 
@@ -428,6 +522,7 @@
             document.getElementById("loginRequired").style.display = "none";
             document.getElementById("accountForm").style.display = "block";
             fillProfileForm(currentProfile);
+            loadMissedTurns();
 
         });
     </script>

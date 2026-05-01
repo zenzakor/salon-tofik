@@ -410,6 +410,9 @@
         Object.assign(uiText.ar, { reviewPendingAlert: "تم إرسال تقييمك للإدارة. سيظهر للزبائن بعد الموافقة عليه." });
         Object.assign(uiText.he, { reviewPendingAlert: "הביקורת נשלחה לאישור ההנהלה ותופיע לאחר אישור." });
         Object.assign(uiText.en, { reviewPendingAlert: "Your review was sent for admin approval and will appear after it is approved." });
+        Object.assign(uiText.ar, { noShowStatus: "غائب" });
+        Object.assign(uiText.he, { noShowStatus: "לא הגיע/ה" });
+        Object.assign(uiText.en, { noShowStatus: "No-show" });
 
         function uiT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -418,6 +421,7 @@
 
         function displayAppointmentStatus(status) {
             const value = String(status || "").toLowerCase();
+            if (value === "no_show" || value.includes("no-show") || value.includes("no show") || value.includes("absent") || value.includes("غائب") || value.includes("לא הגיע")) return uiT("noShowStatus", "No-show");
             if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return uiT("confirmedStatus", "تم التأكيد");
             if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return uiT("rejectedStatus", "تم الرفض");
             if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return uiT("pendingStatus", "قيد الانتظار");
@@ -815,7 +819,10 @@
                             phone: signupData.phone,
                             birthDate: signupData.birthDate,
                             gender: signupData.gender,
-                            phoneVerified: true
+                            phoneVerified: true,
+                            penaltyPoints: 0,
+                            manualPrepaymentRequired: false,
+                            partialPrepaymentRequired: false
                         });
                         currentUserId = userCredential.user.uid;
                         loggedInUserData = {
@@ -825,7 +832,10 @@
                             phone: signupData.phone,
                             birthDate: signupData.birthDate,
                             gender: signupData.gender,
-                            phoneVerified: true
+                            phoneVerified: true,
+                            penaltyPoints: 0,
+                            manualPrepaymentRequired: false,
+                            partialPrepaymentRequired: false
                         };
                         document.getElementById("profileName").innerText = loggedInUserData.firstName;
                         loadMyAppointments();
