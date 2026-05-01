@@ -10,9 +10,20 @@
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; display: flex; min-height: 100vh;}
         body.dark-mode { background-color: #151515; color: #f3f3f3; }
-        body.dark-mode .main-content, body.dark-mode .add-box, body.dark-mode .pending-panel, body.dark-mode .calendar-panel, body.dark-mode .user-tools, body.dark-mode table { background-color: #202020; color: #f3f3f3; border-color: #333; }
-        body.dark-mode .calendar-day { background: #181818; border-color: #333; }
+        body.dark-mode .main-content, body.dark-mode .add-box, body.dark-mode .appointments-topbar, body.dark-mode .pending-panel, body.dark-mode .calendar-panel, body.dark-mode .admin-booking-panel, body.dark-mode .user-tools, body.dark-mode .product-note, body.dark-mode table { background-color: #202020; color: #f3f3f3; border-color: #333; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode .sub-heading, body.dark-mode .pending-panel h2, body.dark-mode .calendar-panel h2, body.dark-mode .admin-booking-panel h2, body.dark-mode .appointments-topbar label, body.dark-mode .admin-booking-grid label, body.dark-mode .users-count { color: #f3f3f3; }
+        body.dark-mode tr:hover { background-color: #252525; }
+        body.dark-mode .calendar-day, body.dark-mode .booking-card, body.dark-mode .calendar-booking { background: #181818; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .calendar-day.selected { background: #1d1d2c; border-color: #7c7cff; box-shadow: inset 0 0 0 1px #7c7cff; }
+        body.dark-mode .booking-card.pending { background: #2b2415; }
+        body.dark-mode .calendar-day-number, body.dark-mode .booking-card strong { color: #f3f3f3; }
+        body.dark-mode .booking-card small, body.dark-mode .calendar-empty, body.dark-mode .empty-row { color: #cfcfcf; }
+        body.dark-mode table small, body.dark-mode .product-description-preview, body.dark-mode .users-count + small { color: #cfcfcf !important; }
+        body.dark-mode th, body.dark-mode td { border-bottom-color: #3a3a3a; }
+        body.dark-mode .login-box { background: #202020; color: #f3f3f3; border-color: #555; }
+        body.dark-mode #adminLoginSection { background: #151515; }
         body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .admin-user-input[readonly] { background: #2a2a2a; color: #cfcfcf; }
         
         /* شاشة تسجيل الدخول للإدارة */
         #adminLoginSection { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f6f9; display: flex; justify-content: center; align-items: center; z-index: 1000;}
@@ -59,6 +70,13 @@
         .appointments-layout { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 18px; align-items: start; }
         .pending-panel, .calendar-panel { background: white; padding: 18px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; }
         .pending-panel h2, .calendar-panel h2, .sub-heading { margin-top: 0; font-size: 20px; color: #111; }
+        .admin-booking-panel { background: white; padding: 18px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; }
+        .admin-booking-panel h2 { margin-top: 0; font-size: 20px; color: #111; }
+        .admin-booking-grid { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; align-items: end; }
+        .admin-booking-grid label { display: block; font-weight: bold; color: #444; margin-bottom: 6px; }
+        .admin-booking-grid input, .admin-booking-grid select { width: 100%; min-width: 0; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .admin-booking-grid .wide { grid-column: span 2; }
+        .admin-booking-grid .full { grid-column: 1 / -1; }
         .booking-list { display: flex; flex-direction: column; gap: 12px; }
         .booking-card { border: 1px solid #e5e7eb; border-right: 5px solid #111; border-radius: 8px; padding: 12px; background: #fff; text-align: right; }
         .booking-card.pending { border-right-color: #ff9800; background: #fffaf0; }
@@ -81,10 +99,25 @@
         @media (max-width: 1100px) {
             .appointments-layout { grid-template-columns: 1fr; }
             .appointments-calendar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+            .admin-booking-grid { grid-template-columns: 1fr 1fr; }
+            .admin-booking-grid .wide { grid-column: 1 / -1; }
+        }
+        @media (max-width: 720px) {
+            .admin-booking-grid { grid-template-columns: 1fr; }
+            .admin-booking-grid .wide { grid-column: auto; }
         }
         .user-tools { background: white; padding: 18px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         .user-tools input { flex: 1; min-width: 260px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 15px; }
         .users-count { color: #666; font-weight: bold; white-space: nowrap; }
+        .admin-create-user-grid { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)); gap: 12px; align-items: end; }
+        .admin-create-user-grid input, .admin-create-user-grid select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 15px; box-sizing: border-box; }
+        .admin-create-user-grid .wide { grid-column: span 2; }
+        .admin-create-user-help { display: block; color: #777; margin: 8px 0 14px; }
+        body.dark-mode .admin-create-user-help { color: #cfcfcf; }
+        @media (max-width: 900px) {
+            .admin-create-user-grid { grid-template-columns: 1fr; }
+            .admin-create-user-grid .wide { grid-column: auto; }
+        }
         .admin-user-input, .admin-user-select { width: 100%; min-width: 120px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; }
         .admin-user-input[readonly] { background: #f3f4f6; color: #555; cursor: not-allowed; }
         .admin-user-email { direction: ltr; text-align: left; min-width: 180px; }
@@ -96,6 +129,7 @@
         .input-group { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;}
         .input-group input, .input-group textarea { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;}
         .btn-add { background-color: #000; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;}
+        .product-note { background: #eef2ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c7d2fe; }
         
         .product-img-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
         
@@ -109,18 +143,20 @@
         .settings-drawer-overlay.open .settings-drawer { transform: translateX(0); }
         body.dark-mode .settings-drawer { background: #202020; color: #f3f3f3; }
         .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
-        .settings-row { margin: 16px 0; }
+        .settings-row { text-align: right; margin: 16px 0; }
         .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; box-sizing: border-box; font-family: inherit; text-align: right; }
+        body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
     </style>
 </head>
 <body>
 
     <div id="adminLoginSection">
         <div class="login-box">
-            <h2 style="margin-top: 0;">🔒 الإدارة السريّة</h2>
-            <input type="email" id="adminEmail" placeholder="البريد الإلكتروني للإدارة">
-            <input type="password" id="adminPassword" placeholder="كلمة المرور السريّة">
-            <button id="adminLoginBtn" class="btn-login">دخول للوحة التحكم</button>
+            <h2 style="margin-top: 0;" data-admin-text="adminLoginTitle">🔒 الإدارة السريّة</h2>
+            <input type="email" id="adminEmail" placeholder="البريد الإلكتروني للإدارة" data-admin-placeholder="adminEmailPlaceholder">
+            <input type="password" id="adminPassword" placeholder="كلمة المرور السريّة" data-admin-placeholder="adminPasswordPlaceholder">
+            <button id="adminLoginBtn" class="btn-login" data-admin-text="adminLoginButton">دخول للوحة التحكم</button>
         </div>
     </div>
 
@@ -129,7 +165,7 @@
         <div class="sidebar">
             <div class="sidebar-logo">
                 <h2 style="margin:0; color:white; font-family:serif; letter-spacing: 2px;">SALON TOFIK</h2>
-                <span style="font-size: 12px; color: #888;">Admin Panel</span>
+                <span style="font-size: 12px; color: #888;" data-admin-text="adminPanelLabel">Admin Panel</span>
             </div>
             
             <a class="nav-link active" onclick="switchTab('appointments')"><span class="material-symbols-outlined">calendar_month</span> <span data-i18n="appointments">المواعيد</span> <span id="pendingBookingsBadge" class="nav-badge" style="display:none;">0</span></a>
@@ -156,6 +192,34 @@
                         <input type="month" id="appointmentsMonth">
                     </label>
                 </div>
+                <div class="admin-booking-panel">
+                    <h2 data-i18n="adminBookTitle">حجز موعد لزبون مسجل</h2>
+                    <div class="admin-booking-grid">
+                        <div class="wide">
+                            <label for="adminBookingUser" data-i18n="adminBookCustomer">الزبون</label>
+                            <select id="adminBookingUser"></select>
+                        </div>
+                        <div>
+                            <label for="adminBookingService" data-i18n="adminBookService">الخدمة</label>
+                            <input type="text" id="adminBookingService" placeholder="قص شعر / صبغة / مكياج" data-i18n-placeholder="adminBookServicePlaceholder">
+                        </div>
+                        <div>
+                            <label for="adminBookingDate" data-i18n="adminBookDate">التاريخ</label>
+                            <input type="date" id="adminBookingDate">
+                        </div>
+                        <div>
+                            <label for="adminBookingTime" data-i18n="adminBookTime">الوقت</label>
+                            <input type="time" id="adminBookingTime" min="09:00" max="19:00" step="900">
+                        </div>
+                        <div class="wide">
+                            <label for="adminBookingNotes" data-i18n="adminBookNotes">ملاحظات</label>
+                            <input type="text" id="adminBookingNotes" placeholder="ملاحظة اختيارية" data-i18n-placeholder="adminBookNotesPlaceholder">
+                        </div>
+                        <div>
+                            <button id="adminCreateBookingBtn" class="notification-btn" style="width:100%; justify-content:center;" data-i18n="adminBookButton">إضافة الحجز</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="appointments-layout">
                     <div class="pending-panel">
                         <h2 data-i18n="pendingTitle">الحجوزات التي تحتاج موافقة</h2>
@@ -181,25 +245,26 @@
                 <div class="add-box">
                     <h3 data-i18n="addProductTitle">إضافة منتج جديد:</h3>
                     <div class="input-group">
-                        <input type="text" id="productName" placeholder="اسم المنتج">
-                        <input type="number" id="productPrice" placeholder="السعر (₪)">
-                        <input type="number" id="productStock" placeholder="الكمية المتوفرة">
-                        <input type="url" id="productImageLink" placeholder="رابط صورة المنتج">
+                        <input type="text" id="productName" placeholder="اسم المنتج" data-admin-placeholder="productNamePlaceholder">
+                        <input type="number" id="productPrice" placeholder="السعر (₪)" data-admin-placeholder="productPricePlaceholder">
+                        <input type="number" id="productStock" placeholder="الكمية المتوفرة" data-admin-placeholder="productStockPlaceholder">
+                        <input type="url" id="productImageLink" placeholder="رابط صورة المنتج" data-admin-placeholder="productImagePlaceholder">
                     </div>
                     <div class="input-group">
                         <label style="display:flex; align-items:center; gap:8px; font-weight:bold;">
                             <input type="checkbox" id="productVisible" checked style="width:auto; min-width:0;">
-                            يظهر للزبائن في المتجر
+                            <span data-admin-text="productVisibleLabel">يظهر للزبائن في المتجر</span>
                         </label>
                     </div>
                     <div class="input-group">
-                        <textarea id="productDescription" rows="2" placeholder="تفاصيل المنتج (الفوائد، طريقة الاستخدام...)"></textarea>
+                        <textarea id="productDescription" rows="2" placeholder="تفاصيل المنتج (الفوائد، طريقة الاستخدام...)" data-admin-placeholder="productDescriptionPlaceholder"></textarea>
                     </div>
-                    <button id="addProductBtn" class="btn-add">إضافة للمتجر ➕</button>
+                    <button id="addProductBtn" class="btn-add" data-admin-text="addProductButton">إضافة للمتجر +</button>
                 </div>
                 
-                <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c7d2fe;">
-                    <strong>ملاحظة هامة 📌:</strong> يمكنك وضع علامة (✔) بجانب <b>3 منتجات فقط</b> لعرضها كعينة تشويقية في الصفحة الرئيسية.
+                <div class="product-note">
+                    <strong data-admin-text="productNoteTitle">ملاحظة هامة:</strong>
+                    <span data-admin-text="productNoteText">يمكنك وضع علامة بجانب 3 منتجات فقط لعرضها كعينة تشويقية في الصفحة الرئيسية.</span>
                 </div>
                 
                 <table id="productsTable"></table>
@@ -207,10 +272,29 @@
 
             <div id="accounts" class="admin-section">
                 <h1 data-i18n="accountsTitle">👥 حسابات الزبائن المسجلين</h1>
+                <div class="add-box admin-create-user-panel">
+                    <h3 data-admin-text="addUserTitle">إضافة زبون جديد</h3>
+                    <small class="admin-create-user-help" data-admin-text="addUserHelp">الحساب يضاف مباشرة بدون SMS أو تأكيد بريد. أعطِ كلمة المرور للزبون بعد الإنشاء.</small>
+                    <div class="admin-create-user-grid">
+                        <input type="text" id="adminNewFirstName" placeholder="الاسم الأول" data-admin-placeholder="firstNameHeader">
+                        <input type="text" id="adminNewLastName" placeholder="اسم العائلة" data-admin-placeholder="lastNameHeader">
+                        <input type="email" id="adminNewEmail" placeholder="البريد الإلكتروني" data-admin-placeholder="emailHeader" dir="ltr">
+                        <input type="tel" id="adminNewPhone" placeholder="+972..." data-admin-placeholder="phoneHeader" dir="ltr">
+                        <input type="date" id="adminNewBirthDate">
+                        <select id="adminNewGender">
+                            <option value="" data-admin-text="genderUnknown">غير محدد</option>
+                            <option value="female" data-admin-text="genderFemale">أنثى</option>
+                            <option value="male" data-admin-text="genderMale">ذكر</option>
+                            <option value="other" data-admin-text="genderOther">آخر</option>
+                        </select>
+                        <input type="password" id="adminNewPassword" class="wide" placeholder="كلمة المرور" data-admin-placeholder="newUserPasswordPlaceholder">
+                        <button id="adminCreateUserBtn" class="btn-add" data-admin-text="addUserButton">إضافة الزبون</button>
+                    </div>
+                </div>
                 <div class="user-tools">
-                    <input type="search" id="userSearchInput" placeholder="ابحث بالاسم، تاريخ الميلاد، رقم الهاتف، البريد أو الجنس">
+                    <input type="search" id="userSearchInput" placeholder="ابحث بالاسم، تاريخ الميلاد، رقم الهاتف، البريد أو الجنس" data-admin-placeholder="usersSearchPlaceholder">
                     <span id="usersCount" class="users-count">0 زبائن</span>
-                    <small style="color:#777;">كلمة المرور غير قابلة للعرض، والبريد هنا للعرض فقط.</small>
+                    <small style="color:#777;" data-admin-text="usersPrivacyNote">كلمة المرور غير قابلة للعرض، والبريد هنا للعرض فقط.</small>
                 </div>
                 <table id="usersTable"></table>
             </div>
@@ -243,9 +327,9 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, setDoc, query, where } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword, deleteUser as deleteAuthUser, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const THE_ADMIN_EMAIL = "admin@tofik.com"; 
 
@@ -258,10 +342,193 @@
         let selectedAppointmentDate = "";
 
         const adminText = {
-            ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
-            he: { appointments: "תורים", orders: "הזמנות", products: "חנות ומוצרים", accounts: "חשבונות לקוחות", reviews: "ביקורות", settings: "הגדרות", logout: "יציאה", appointmentsTitle: "📅 ניהול תורים", ordersTitle: "📦 ניהול הזמנות", productsTitle: "🛍️ ניהול חנות ומוצרים", accountsTitle: "👥 חשבונות לקוחות", reviewsTitle: "⭐ ניהול ביקורות", newBookings: "תורים חדשים", monthView: "חודש:", pendingTitle: "תורים שממתינים לאישור", calendarTitle: "לוח תורים", addProductTitle: "הוספת מוצר חדש:", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול" },
-            en: { appointments: "Appointments", orders: "Orders", products: "Shop & Products", accounts: "Customer Accounts", reviews: "Reviews", settings: "Settings", logout: "Log out", appointmentsTitle: "📅 Appointment Management", ordersTitle: "📦 Order Management", productsTitle: "🛍️ Shop and Products", accountsTitle: "👥 Customer Accounts", reviewsTitle: "⭐ Review Management", newBookings: "New bookings", monthView: "Month:", pendingTitle: "Bookings awaiting approval", calendarTitle: "Booking Calendar", addProductTitle: "Add new product:", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large" }
+            ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
+            he: { appointments: "תורים", orders: "הזמנות", products: "חנות ומוצרים", accounts: "חשבונות לקוחות", reviews: "ביקורות", settings: "הגדרות", logout: "יציאה", appointmentsTitle: "📅 ניהול תורים", ordersTitle: "📦 ניהול הזמנות", productsTitle: "🛍️ ניהול חנות ומוצרים", accountsTitle: "👥 חשבונות לקוחות", reviewsTitle: "⭐ ניהול ביקורות", newBookings: "תורים חדשים", monthView: "חודש:", pendingTitle: "תורים שממתינים לאישור", calendarTitle: "לוח תורים", addProductTitle: "הוספת מוצר חדש:", adminBookTitle: "קביעת תור ללקוח רשום", adminBookCustomer: "לקוח", adminBookService: "שירות", adminBookServicePlaceholder: "תספורת / צבע / איפור", adminBookDate: "תאריך", adminBookTime: "שעה", adminBookNotes: "הערות", adminBookNotesPlaceholder: "הערה לא חובה", adminBookButton: "הוספת תור", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול" },
+            en: { appointments: "Appointments", orders: "Orders", products: "Shop & Products", accounts: "Customer Accounts", reviews: "Reviews", settings: "Settings", logout: "Log out", appointmentsTitle: "📅 Appointment Management", ordersTitle: "📦 Order Management", productsTitle: "🛍️ Shop and Products", accountsTitle: "👥 Customer Accounts", reviewsTitle: "⭐ Review Management", newBookings: "New bookings", monthView: "Month:", pendingTitle: "Bookings awaiting approval", calendarTitle: "Booking Calendar", addProductTitle: "Add new product:", adminBookTitle: "Book for a registered customer", adminBookCustomer: "Customer", adminBookService: "Service", adminBookServicePlaceholder: "Haircut / color / makeup", adminBookDate: "Date", adminBookTime: "Time", adminBookNotes: "Notes", adminBookNotesPlaceholder: "Optional note", adminBookButton: "Add booking", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large" }
         };
+        const adminDynamicText = {
+            ar: {
+                accept: "قبول", edit: "تعديل", update: "تعديل", delete: "حذف", save: "حفظ التعديل", deleteAccount: "حذف الحساب",
+                adminLoginTitle: "🔒 الإدارة السريّة", adminEmailPlaceholder: "البريد الإلكتروني للإدارة", adminPasswordPlaceholder: "كلمة المرور السريّة", adminLoginButton: "دخول للوحة التحكم",
+                productNamePlaceholder: "اسم المنتج", productPricePlaceholder: "السعر (₪)", productStockPlaceholder: "الكمية المتوفرة", productImagePlaceholder: "رابط صورة المنتج", productDescriptionPlaceholder: "تفاصيل المنتج (الفوائد، طريقة الاستخدام...)", productVisibleLabel: "يظهر للزبائن في المتجر", addProductButton: "إضافة للمتجر +",
+                usersSearchPlaceholder: "ابحث بالاسم، تاريخ الميلاد، رقم الهاتف، البريد أو الجنس", usersPrivacyNote: "كلمة المرور غير قابلة للعرض، والبريد هنا للعرض فقط.",
+                chooseRegisteredCustomer: "اختر زبوناً مسجلاً", noRegisteredCustomers: "لا يوجد زبائن مسجلون بعد", selectCustomerAlert: "اختر زبوناً مسجلاً أولاً.", fillBookingAlert: "اختر الخدمة والتاريخ والوقت قبل إضافة الحجز.", bookingAddedAlert: "تمت إضافة الحجز بنجاح.",
+                unnamedCustomer: "زبونة بدون اسم", unspecifiedService: "خدمة غير محددة", noNotes: "لا توجد ملاحظات", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", noPending: "لا توجد حجوزات جديدة الآن", noBookings: "لا حجوزات", dayBookings: "حجوزات يوم", noBookingsThisDay: "لا توجد حجوزات في هذا اليوم",
+                customerHeader: "الزبونة", serviceHeader: "الخدمة", dateTimeHeader: "التاريخ والوقت", notesHeader: "الملاحظات", statusHeader: "الحالة", actionsHeader: "الإجراءات",
+                orderHeader: "الطلب", amountHeader: "المبلغ", productHeader: "المنتج", priceHeader: "السعر", quantityHeader: "الكمية", visibilityHeader: "الظهور", featuredHeader: "للرئيسية", imageHeader: "الصورة",
+                firstNameHeader: "الاسم الأول", lastNameHeader: "اسم العائلة", emailHeader: "البريد الإلكتروني", phoneHeader: "الهاتف", birthDateHeader: "تاريخ الميلاد", genderHeader: "الجنس", ratingHeader: "التقييم", commentHeader: "التعليق",
+                cancelSale: "إلغاء الخصم", sale: "تخفيض", saleBadge: "خصم", updateStock: "تعديل الكمية", hideProduct: "إخفاء عن الزبائن", showProduct: "إظهار للزبائن", visibleToCustomers: "ظاهر للزبائن", salonOnly: "للاستخدام داخل الصالون", deleteProduct: "حذف", deleteReview: "حذف التقييم",
+                genderFemale: "أنثى", genderMale: "ذكر", genderOther: "آخر", genderUnknown: "غير محدد", noUsersSearch: "لا توجد حسابات مطابقة للبحث", usersCount: "زبائن"
+            },
+            he: {
+                accept: "אישור", edit: "עריכה", update: "עריכה", delete: "מחיקה", save: "שמירת שינוי", deleteAccount: "מחיקת חשבון",
+                adminLoginTitle: "🔒 ניהול סודי", adminEmailPlaceholder: "אימייל מנהל", adminPasswordPlaceholder: "סיסמת מנהל", adminLoginButton: "כניסה ללוח הניהול",
+                productNamePlaceholder: "שם מוצר", productPricePlaceholder: "מחיר (₪)", productStockPlaceholder: "כמות זמינה", productImagePlaceholder: "קישור לתמונת המוצר", productDescriptionPlaceholder: "פרטי המוצר (יתרונות, אופן שימוש...)", productVisibleLabel: "מוצג ללקוחות בחנות", addProductButton: "הוספה לחנות +",
+                usersSearchPlaceholder: "חיפוש לפי שם, תאריך לידה, טלפון, אימייל או מין", usersPrivacyNote: "לא ניתן להציג סיסמאות, והאימייל כאן לתצוגה בלבד.",
+                chooseRegisteredCustomer: "בחרי לקוח רשום", noRegisteredCustomers: "עדיין אין לקוחות רשומים", selectCustomerAlert: "בחרי קודם לקוח רשום.", fillBookingAlert: "בחרי שירות, תאריך ושעה לפני הוספת התור.", bookingAddedAlert: "התור נוסף בהצלחה.",
+                unnamedCustomer: "לקוחה ללא שם", unspecifiedService: "שירות לא מוגדר", noNotes: "אין הערות", pendingStatus: "ממתין לאישור", confirmedStatus: "אושר", rejectedStatus: "נדחה", noPending: "אין תורים חדשים כרגע", noBookings: "אין תורים", dayBookings: "תורים ליום", noBookingsThisDay: "אין תורים ביום הזה",
+                customerHeader: "לקוחה", serviceHeader: "שירות", dateTimeHeader: "תאריך ושעה", notesHeader: "הערות", statusHeader: "סטטוס", actionsHeader: "פעולות",
+                orderHeader: "הזמנה", amountHeader: "סכום", productHeader: "מוצר", priceHeader: "מחיר", quantityHeader: "כמות", visibilityHeader: "תצוגה", featuredHeader: "ראשי", imageHeader: "תמונה",
+                firstNameHeader: "שם פרטי", lastNameHeader: "שם משפחה", emailHeader: "אימייל", phoneHeader: "טלפון", birthDateHeader: "תאריך לידה", genderHeader: "מין", ratingHeader: "דירוג", commentHeader: "תגובה",
+                cancelSale: "ביטול הנחה", sale: "הנחה", saleBadge: "הנחה", updateStock: "עדכון כמות", hideProduct: "הסתרה מלקוחות", showProduct: "הצגה ללקוחות", visibleToCustomers: "מוצג ללקוחות", salonOnly: "לשימוש בתוך הסלון", deleteProduct: "מחיקה", deleteReview: "מחיקת ביקורת",
+                genderFemale: "נקבה", genderMale: "זכר", genderOther: "אחר", genderUnknown: "לא מוגדר", noUsersSearch: "אין חשבונות שמתאימים לחיפוש", usersCount: "לקוחות"
+            },
+            en: {
+                accept: "Accept", edit: "Edit", update: "Edit", delete: "Delete", save: "Save changes", deleteAccount: "Delete account",
+                adminLoginTitle: "🔒 Private Admin", adminEmailPlaceholder: "Admin email", adminPasswordPlaceholder: "Admin password", adminLoginButton: "Enter admin panel",
+                productNamePlaceholder: "Product name", productPricePlaceholder: "Price (₪)", productStockPlaceholder: "Available quantity", productImagePlaceholder: "Product image link", productDescriptionPlaceholder: "Product details (benefits, usage...)", productVisibleLabel: "Visible to customers in the shop", addProductButton: "Add to shop +",
+                usersSearchPlaceholder: "Search by name, birth date, phone, email, or gender", usersPrivacyNote: "Passwords cannot be shown, and email is read-only here.",
+                chooseRegisteredCustomer: "Choose a registered customer", noRegisteredCustomers: "No registered customers yet", selectCustomerAlert: "Choose a registered customer first.", fillBookingAlert: "Choose service, date, and time before adding the booking.", bookingAddedAlert: "Booking added successfully.",
+                unnamedCustomer: "Customer without a name", unspecifiedService: "Unspecified service", noNotes: "No notes", pendingStatus: "Pending", confirmedStatus: "Confirmed", rejectedStatus: "Rejected", noPending: "No new bookings right now", noBookings: "No bookings", dayBookings: "Bookings for", noBookingsThisDay: "No bookings on this day",
+                customerHeader: "Customer", serviceHeader: "Service", dateTimeHeader: "Date and time", notesHeader: "Notes", statusHeader: "Status", actionsHeader: "Actions",
+                orderHeader: "Order", amountHeader: "Amount", productHeader: "Product", priceHeader: "Price", quantityHeader: "Quantity", visibilityHeader: "Visibility", featuredHeader: "Home", imageHeader: "Image",
+                firstNameHeader: "First name", lastNameHeader: "Last name", emailHeader: "Email", phoneHeader: "Phone", birthDateHeader: "Birth date", genderHeader: "Gender", ratingHeader: "Rating", commentHeader: "Comment",
+                cancelSale: "Cancel sale", sale: "Sale", saleBadge: "Sale", updateStock: "Edit quantity", hideProduct: "Hide from customers", showProduct: "Show to customers", visibleToCustomers: "Visible to customers", salonOnly: "Salon use only", deleteProduct: "Delete", deleteReview: "Delete review",
+                genderFemale: "Female", genderMale: "Male", genderOther: "Other", genderUnknown: "Not specified", noUsersSearch: "No accounts match your search", usersCount: "customers"
+            }
+        };
+
+        Object.assign(adminDynamicText.ar, {
+            productNoteTitle: "ملاحظة هامة:",
+            productNoteText: "يمكنك وضع علامة بجانب 3 منتجات فقط لعرضها كعينة تشويقية في الصفحة الرئيسية.",
+            adminPanelLabel: "لوحة الإدارة",
+            adminLoginMissing: "الرجاء إدخال البريد وكلمة المرور.",
+            adminLoginInvalid: "البيانات غير صحيحة!",
+            deleteUserDoneAlert: "تم حذف الحساب. الحجوزات القديمة بقيت محفوظة، وتم حذف الحجوزات القادمة والطلبات والتقييمات المرتبطة به.",
+            editDatePrompt: "تاريخ الموعد الجديد:",
+            editTimePrompt: "وقت الموعد الجديد:",
+            editServicePrompt: "الخدمة المطلوبة:",
+            editStatusPrompt: "الحالة:",
+            editNotesPrompt: "الملاحظات:",
+            deleteAppointmentConfirm: "هل تريد حذف هذا الحجز؟",
+            updateStatusPrompt: "تحديث الحالة:",
+            deleteOrderConfirm: "حذف الطلب؟",
+            featuredLimitAlert: "لا يمكنك اختيار أكثر من 3 منتجات لتظهر في الصفحة الرئيسية!",
+            salePricePrompt: "أدخل السعر الجديد بعد الخصم:",
+            salePriceError: "يجب أن يكون سعر الخصم أقل من السعر الأصلي!",
+            removeSaleConfirm: "هل تريد إلغاء الخصم والعودة للسعر الأصلي؟",
+            stockPrompt: "أدخل الكمية المتوفرة:",
+            stockNegativeAlert: "الكمية لا يمكن أن تكون أقل من صفر.",
+            deleteProductConfirm: "تأكيد حذف المنتج من المتجر؟",
+            missingProductAlert: "أدخل اسم المنتج والسعر والكمية!",
+            userRequiredAlert: "الرجاء تعبئة الاسم، البريد الإلكتروني، ورقم الهاتف قبل الحفظ.",
+            userUpdatedAlert: "تم تحديث بيانات الزبون بنجاح!",
+            deleteReviewConfirm: "هل أنت متأكد من حذف هذا التقييم؟"
+        });
+        Object.assign(adminDynamicText.he, {
+            productNoteTitle: "הערה חשובה:",
+            productNoteText: "אפשר לסמן עד 3 מוצרים בלבד להצגה כדוגמאות בעמוד הראשי.",
+            adminPanelLabel: "לוח ניהול",
+            adminLoginMissing: "נא להזין אימייל וסיסמה.",
+            adminLoginInvalid: "הפרטים לא נכונים!",
+            deleteUserDoneAlert: "החשבון נמחק. תורים ישנים נשארו שמורים, ותורים עתידיים, הזמנות וביקורות קשורות נמחקו.",
+            editDatePrompt: "תאריך חדש לתור:",
+            editTimePrompt: "שעה חדשה לתור:",
+            editServicePrompt: "שירות מבוקש:",
+            editStatusPrompt: "סטטוס:",
+            editNotesPrompt: "הערות:",
+            deleteAppointmentConfirm: "למחוק את התור הזה?",
+            updateStatusPrompt: "עדכון סטטוס:",
+            deleteOrderConfirm: "למחוק את ההזמנה?",
+            featuredLimitAlert: "אי אפשר לבחור יותר מ-3 מוצרים להצגה בעמוד הראשי!",
+            salePricePrompt: "הכניסי מחיר חדש אחרי הנחה:",
+            salePriceError: "מחיר ההנחה חייב להיות נמוך מהמחיר המקורי!",
+            removeSaleConfirm: "לבטל את ההנחה ולחזור למחיר המקורי?",
+            stockPrompt: "הכניסי כמות זמינה:",
+            stockNegativeAlert: "הכמות לא יכולה להיות קטנה מאפס.",
+            deleteProductConfirm: "למחוק את המוצר מהחנות?",
+            missingProductAlert: "הכניסי שם מוצר, מחיר וכמות!",
+            userRequiredAlert: "נא למלא שם, אימייל ומספר טלפון לפני שמירה.",
+            userUpdatedAlert: "פרטי הלקוח עודכנו בהצלחה!",
+            deleteReviewConfirm: "למחוק את הביקורת הזאת?"
+        });
+        Object.assign(adminDynamicText.en, {
+            productNoteTitle: "Important note:",
+            productNoteText: "You can mark only 3 products to show as featured samples on the home page.",
+            adminPanelLabel: "Admin Panel",
+            adminLoginMissing: "Please enter email and password.",
+            adminLoginInvalid: "The details are incorrect!",
+            deleteUserDoneAlert: "The account was deleted. Old bookings stayed saved, and future bookings, orders, and linked reviews were deleted.",
+            editDatePrompt: "New appointment date:",
+            editTimePrompt: "New appointment time:",
+            editServicePrompt: "Requested service:",
+            editStatusPrompt: "Status:",
+            editNotesPrompt: "Notes:",
+            deleteAppointmentConfirm: "Delete this booking?",
+            updateStatusPrompt: "Update status:",
+            deleteOrderConfirm: "Delete this order?",
+            featuredLimitAlert: "You cannot choose more than 3 products for the home page!",
+            salePricePrompt: "Enter the new sale price:",
+            salePriceError: "The sale price must be lower than the original price!",
+            removeSaleConfirm: "Cancel the sale and return to the original price?",
+            stockPrompt: "Enter the available quantity:",
+            stockNegativeAlert: "Quantity cannot be less than zero.",
+            deleteProductConfirm: "Delete this product from the shop?",
+            missingProductAlert: "Enter product name, price, and quantity!",
+            userRequiredAlert: "Please fill name, email, and phone before saving.",
+            userUpdatedAlert: "Customer details updated successfully!",
+            deleteReviewConfirm: "Delete this review?"
+        });
+
+        Object.assign(adminDynamicText.ar, {
+            addUserTitle: "إضافة زبون جديد",
+            addUserHelp: "الحساب يضاف مباشرة بدون SMS أو تأكيد بريد. أعطِ كلمة المرور للزبون بعد الإنشاء.",
+            addUserButton: "إضافة الزبون",
+            newUserPasswordPlaceholder: "كلمة المرور",
+            addUserRequiredAlert: "املأ الاسم، البريد، الهاتف، تاريخ الميلاد، الجنس وكلمة المرور.",
+            addUserPhoneAlert: "أدخل رقم الهاتف بصيغة صحيحة مثل +972525812195.",
+            addUserPasswordAlert: "كلمة المرور يجب أن تكون 6 أحرف على الأقل.",
+            addUserDuplicateEmail: "هذا البريد مسجل من قبل.",
+            addUserDuplicatePhone: "هذا الهاتف مسجل من قبل.",
+            addUserSuccess: "تمت إضافة الزبون بنجاح بدون SMS أو تأكيد بريد."
+        });
+        Object.assign(adminDynamicText.he, {
+            addUserTitle: "הוספת לקוח חדש",
+            addUserHelp: "החשבון נוסף ישירות בלי SMS או אימות אימייל. מסרי ללקוח את הסיסמה אחרי יצירה.",
+            addUserButton: "הוספת לקוח",
+            newUserPasswordPlaceholder: "סיסמה",
+            addUserRequiredAlert: "מלאי שם, אימייל, טלפון, תאריך לידה, מין וסיסמה.",
+            addUserPhoneAlert: "הכניסי מספר טלפון תקין כמו +972525812195.",
+            addUserPasswordAlert: "הסיסמה חייבת להיות לפחות 6 תווים.",
+            addUserDuplicateEmail: "האימייל הזה כבר רשום.",
+            addUserDuplicatePhone: "הטלפון הזה כבר רשום.",
+            addUserSuccess: "הלקוח נוסף בהצלחה בלי SMS או אימות אימייל."
+        });
+        Object.assign(adminDynamicText.en, {
+            addUserTitle: "Add new customer",
+            addUserHelp: "The account is created directly without SMS or email confirmation. Give the password to the customer after creating it.",
+            addUserButton: "Add customer",
+            newUserPasswordPlaceholder: "Password",
+            addUserRequiredAlert: "Fill first name, last name, email, phone, birth date, gender, and password.",
+            addUserPhoneAlert: "Enter a valid phone number like +972525812195.",
+            addUserPasswordAlert: "Password must be at least 6 characters.",
+            addUserDuplicateEmail: "This email is already registered.",
+            addUserDuplicatePhone: "This phone number is already registered.",
+            addUserSuccess: "Customer added successfully without SMS or email confirmation."
+        });
+
+        function adminT(key, fallback) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            return adminDynamicText[lang]?.[key] || fallback;
+        }
+
+        function renderAdminHeaders(keys) {
+            return `<tr>${keys.map((key) => `<th>${adminT(key, key)}</th>`).join("")}</tr>`;
+        }
+
+        function displayAppointmentStatus(status) {
+            const value = String(status || "").toLowerCase();
+            if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return adminT("confirmedStatus", "تم التأكيد");
+            if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return adminT("rejectedStatus", "تم الرفض");
+            if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return adminT("pendingStatus", "قيد الانتظار");
+            return status;
+        }
+
+        function formatUsersCount(count) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            if (lang === "en") return `${count} ${count === 1 ? "customer" : "customers"}`;
+            return `${count} ${adminT("usersCount", "زبائن")}`;
+        }
 
         function applyAdminSettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
@@ -278,6 +545,18 @@
                 const key = element.dataset.i18n;
                 if (adminText[lang]?.[key]) element.textContent = adminText[lang][key];
             });
+            document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+                const key = element.dataset.i18nPlaceholder;
+                if (adminText[lang]?.[key]) element.placeholder = adminText[lang][key];
+            });
+            document.querySelectorAll("[data-admin-text]").forEach((element) => {
+                const key = element.dataset.adminText;
+                element.textContent = adminT(key, element.textContent);
+            });
+            document.querySelectorAll("[data-admin-placeholder]").forEach((element) => {
+                const key = element.dataset.adminPlaceholder;
+                element.placeholder = adminT(key, element.placeholder);
+            });
         }
 
         const adminSettingsDrawer = document.getElementById("adminSettingsDrawer");
@@ -290,6 +569,7 @@
                 localStorage.setItem("salonLang", document.getElementById("adminLangSelect").value);
                 localStorage.setItem("salonTextSize", document.getElementById("adminTextSizeSelect").value);
                 applyAdminSettings();
+                if (document.getElementById("adminContent").style.display !== "none") loadAllData();
             });
         });
         applyAdminSettings();
@@ -317,8 +597,8 @@
 
         document.getElementById("adminLoginBtn").addEventListener("click", async () => {
             const email = document.getElementById("adminEmail").value; const pass = document.getElementById("adminPassword").value;
-            if (!email || !pass) return alert("الرجاء إدخال البريد وكلمة المرور.");
-            try { await signInWithEmailAndPassword(auth, email, pass); } catch (error) { alert("البيانات غير صحيحة!"); }
+            if (!email || !pass) return alert(adminT("adminLoginMissing", "الرجاء إدخال البريد وكلمة المرور."));
+            try { await signInWithEmailAndPassword(auth, email, pass); } catch (error) { alert(adminT("adminLoginInvalid", "البيانات غير صحيحة!")); }
         });
 
         document.getElementById("adminLogoutBtn").addEventListener("click", async () => { 
@@ -327,6 +607,7 @@
 
         function loadAllData() {
             loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews();
+            document.getElementById("adminBookingDate").value = getTodayValue();
         }
 
         // ================= 1. المواعيد =================
@@ -351,6 +632,62 @@
             return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
         }
 
+        function getUserFullName(user) {
+            return `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.email || user.phone || "Customer";
+        }
+
+        function renderAdminBookingUsers() {
+            const select = document.getElementById("adminBookingUser");
+            if (!select) return;
+            const selectedValue = select.value;
+            select.innerHTML = `<option value="">${adminT("chooseRegisteredCustomer", "اختر زبوناً مسجلاً")}</option>`;
+            allUsers
+                .slice()
+                .sort((a, b) => getUserFullName(a).localeCompare(getUserFullName(b)))
+                .forEach((user) => {
+                    const option = document.createElement("option");
+                    option.value = user.id;
+                    option.textContent = `${getUserFullName(user)} | ${user.phone || user.email || "-"}`;
+                    select.appendChild(option);
+                });
+            if (!allUsers.length) select.innerHTML = `<option value="">${adminT("noRegisteredCustomers", "لا يوجد زبائن مسجلون بعد")}</option>`;
+            if (selectedValue && allUsers.some((user) => user.id === selectedValue)) select.value = selectedValue;
+        }
+
+        async function createAdminBooking() {
+            const userId = document.getElementById("adminBookingUser").value;
+            const service = document.getElementById("adminBookingService").value.trim();
+            const date = document.getElementById("adminBookingDate").value;
+            const time = document.getElementById("adminBookingTime").value;
+            const notes = document.getElementById("adminBookingNotes").value.trim();
+            const customer = allUsers.find((user) => user.id === userId);
+
+            if (!customer) return alert(adminT("selectCustomerAlert", "اختر زبوناً مسجلاً أولاً."));
+            if (!service || !date || !time) return alert(adminT("fillBookingAlert", "اختر الخدمة والتاريخ والوقت قبل إضافة الحجز."));
+
+            await addDoc(collection(db, "Appointments"), {
+                userId: customer.id,
+                customerName: getUserFullName(customer),
+                phone: customer.phone || "",
+                email: customer.email || "",
+                service,
+                date,
+                time,
+                notes,
+                status: "تم التأكيد",
+                createdBy: "admin",
+                createdAt: new Date().toISOString()
+            });
+
+            selectedAppointmentDate = date;
+            document.getElementById("appointmentsMonth").value = getMonthValue(date);
+            document.getElementById("adminBookingService").value = "";
+            document.getElementById("adminBookingTime").value = "";
+            document.getElementById("adminBookingNotes").value = "";
+            await loadAppointments();
+            alert(adminT("bookingAddedAlert", "تمت إضافة الحجز بنجاح."));
+        }
+
         async function loadAppointments() {
             allAppointments = [];
             const querySnapshot = await getDocs(collection(db, "Appointments"));
@@ -368,17 +705,17 @@
 
         function renderAppointmentActions(container, appointment) {
             const acceptBtn = document.createElement("button");
-            acceptBtn.innerText = "قبول";
+            acceptBtn.innerText = adminT("accept", "قبول");
             acceptBtn.className = "btn-action btn-update";
             acceptBtn.onclick = () => acceptAppointment(appointment.id);
 
             const editBtn = document.createElement("button");
-            editBtn.innerText = "تعديل";
+            editBtn.innerText = adminT("edit", "تعديل");
             editBtn.className = "btn-action btn-sale";
             editBtn.onclick = () => editAppointment(appointment);
 
             const deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "حذف";
+            deleteBtn.innerText = adminT("delete", "حذف");
             deleteBtn.className = "btn-action btn-delete";
             deleteBtn.onclick = () => deleteAppointment(appointment.id);
 
@@ -391,12 +728,12 @@
             const card = document.createElement("div");
             card.className = `booking-card ${getAppointmentStatusClass(appointment.status)}`;
             card.innerHTML = `
-                <strong>${appointment.customerName || "زبونة بدون اسم"}</strong>
+                <strong>${appointment.customerName || adminT("unnamedCustomer", "زبونة بدون اسم")}</strong>
                 <small dir="ltr">${appointment.phone || "-"}</small>
                 <small>${appointment.date || "-"} | ${appointment.time || "-"}</small>
-                <small>${appointment.service || "خدمة غير محددة"}</small>
-                <small>${appointment.notes || "لا توجد ملاحظات"}</small>
-                <small><b>${appointment.status || "قيد الانتظار"}</b></small>
+                <small>${appointment.service || adminT("unspecifiedService", "خدمة غير محددة")}</small>
+                <small>${appointment.notes || adminT("noNotes", "لا توجد ملاحظات")}</small>
+                <small><b>${displayAppointmentStatus(appointment.status)}</b></small>
             `;
             const actions = document.createElement("div");
             actions.className = "booking-actions";
@@ -415,7 +752,7 @@
             pendingList.innerHTML = "";
 
             if (pendingBookings.length === 0) {
-                pendingList.innerHTML = `<div class="empty-row">لا توجد حجوزات جديدة الآن</div>`;
+                pendingList.innerHTML = `<div class="empty-row">${adminT("noPending", "لا توجد حجوزات جديدة الآن")}</div>`;
                 return;
             }
 
@@ -439,7 +776,7 @@
                 dayBox.onclick = () => selectAppointmentDate(dateKey);
 
                 if (dayAppointments.length === 0) {
-                    dayBox.innerHTML += `<div class="calendar-empty">لا حجوزات</div>`;
+                    dayBox.innerHTML += `<div class="calendar-empty">${adminT("noBookings", "لا حجوزات")}</div>`;
                 } else {
                     dayAppointments.forEach((appointment) => {
                         const item = document.createElement("div");
@@ -462,15 +799,15 @@
             const table = document.getElementById("selectedDayAppointmentsTable");
             const selectedBookings = allAppointments.filter((appointment) => appointment.date === selectedAppointmentDate);
             const formattedDate = selectedAppointmentDate || getTodayValue();
-            document.getElementById("selectedDayTitle").innerText = `حجوزات يوم ${formattedDate}`;
-            table.innerHTML = `<tr><th>الزبونة</th><th>الخدمة</th><th>التاريخ والوقت</th><th>الملاحظات</th><th>الحالة</th><th>الإجراءات</th></tr>`;
+            document.getElementById("selectedDayTitle").innerText = `${adminT("dayBookings", "حجوزات يوم")} ${formattedDate}`;
+            table.innerHTML = renderAdminHeaders(["customerHeader", "serviceHeader", "dateTimeHeader", "notesHeader", "statusHeader", "actionsHeader"]);
 
             if (selectedBookings.length === 0) {
                 const row = table.insertRow();
                 const cell = row.insertCell(0);
                 cell.colSpan = 6;
                 cell.className = "empty-row";
-                cell.innerText = "لا توجد حجوزات في هذا اليوم";
+                cell.innerText = adminT("noBookingsThisDay", "لا توجد حجوزات في هذا اليوم");
                 return;
             }
 
@@ -481,7 +818,7 @@
                 row.insertCell(2).innerHTML = `${appointment.date || "-"}<br>${appointment.time || "-"}`; 
                 row.insertCell(3).innerHTML = appointment.notes || "-"; 
                 const statusColor = getAppointmentStatusClass(appointment.status) === "accepted" ? "green" : (getAppointmentStatusClass(appointment.status) === "rejected" ? "red" : "#FF9800");
-                row.insertCell(4).innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${appointment.status || "قيد الانتظار"}</span>`;
+                row.insertCell(4).innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span>`;
                 const actionsCell = row.insertCell(5);
                 renderAppointmentActions(actionsCell, appointment);
             });
@@ -509,15 +846,15 @@
         }
 
         window.editAppointment = async function(appointment) {
-            const newDate = prompt("تاريخ الموعد الجديد:", appointment.date || "");
+            const newDate = prompt(adminT("editDatePrompt", "تاريخ الموعد الجديد:"), appointment.date || "");
             if (newDate === null) return;
-            const newTime = prompt("وقت الموعد الجديد:", appointment.time || "");
+            const newTime = prompt(adminT("editTimePrompt", "وقت الموعد الجديد:"), appointment.time || "");
             if (newTime === null) return;
-            const newService = prompt("الخدمة المطلوبة:", appointment.service || "");
+            const newService = prompt(adminT("editServicePrompt", "الخدمة المطلوبة:"), appointment.service || "");
             if (newService === null) return;
-            const newStatus = prompt("الحالة:", appointment.status || "قيد الانتظار");
+            const newStatus = prompt(adminT("editStatusPrompt", "الحالة:"), appointment.status || adminT("pendingStatus", "قيد الانتظار"));
             if (newStatus === null) return;
-            const newNotes = prompt("الملاحظات:", appointment.notes || "");
+            const newNotes = prompt(adminT("editNotesPrompt", "الملاحظات:"), appointment.notes || "");
             if (newNotes === null) return;
 
             await updateDoc(doc(db, "Appointments", appointment.id), {
@@ -531,7 +868,7 @@
         }
 
         window.deleteAppointment = async function(appointmentId) {
-            if (!confirm("هل تريد حذف هذا الحجز؟")) return;
+            if (!confirm(adminT("deleteAppointmentConfirm", "هل تريد حذف هذا الحجز؟"))) return;
             await deleteDoc(doc(db, "Appointments", appointmentId));
             loadAppointments();
         }
@@ -545,11 +882,12 @@
         document.getElementById("pendingBookingsBtn").addEventListener("click", () => {
             document.getElementById("pendingBookingsList").scrollIntoView({ behavior: "smooth", block: "start" });
         });
+        document.getElementById("adminCreateBookingBtn").addEventListener("click", createAdminBooking);
 
         // ================= 2. الطلبات =================
         async function loadOrders() {
             const table = document.getElementById("ordersTable"); 
-            table.innerHTML = `<tr><th>الطلب</th><th>المبلغ</th><th>الزبونة</th><th>الحالة</th><th>الإجراءات</th></tr>`;
+            table.innerHTML = renderAdminHeaders(["orderHeader", "amountHeader", "customerHeader", "statusHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Orders"));
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
@@ -558,10 +896,10 @@
                 row.insertCell(2).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
                 row.insertCell(3).innerHTML = data.status;
                 const actionsCell = row.insertCell(4);
-                const updateBtn = document.createElement("button"); updateBtn.innerText = "تعديل"; updateBtn.className = "btn-action btn-update";
-                updateBtn.onclick = async () => { const newStatus = prompt("تحديث الحالة:", data.status); if (newStatus) { await updateDoc(doc(db, "Orders", id), { status: newStatus }); loadOrders(); } };
-                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف"; deleteBtn.className = "btn-action btn-delete";
-                deleteBtn.onclick = async () => { if (confirm("حذف الطلب؟")) { await deleteDoc(doc(db, "Orders", id)); loadOrders(); } };
+                const updateBtn = document.createElement("button"); updateBtn.innerText = adminT("update", "تعديل"); updateBtn.className = "btn-action btn-update";
+                updateBtn.onclick = async () => { const newStatus = prompt(adminT("updateStatusPrompt", "تحديث الحالة:"), data.status); if (newStatus) { await updateDoc(doc(db, "Orders", id), { status: newStatus }); loadOrders(); } };
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("delete", "حذف"); deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm(adminT("deleteOrderConfirm", "حذف الطلب؟"))) { await deleteDoc(doc(db, "Orders", id)); loadOrders(); } };
                 actionsCell.appendChild(updateBtn); actionsCell.appendChild(deleteBtn);
             });
         }
@@ -571,7 +909,7 @@
             // التحقق من عدد المربعات المختارة حالياً
             const allChecked = document.querySelectorAll('.featured-checkbox:checked');
             if (checkbox.checked && allChecked.length > 3) {
-                alert("❌ لا يمكنك اختيار أكثر من 3 منتجات لتظهر في الصفحة الرئيسية!");
+                alert(adminT("featuredLimitAlert", "لا يمكنك اختيار أكثر من 3 منتجات لتظهر في الصفحة الرئيسية!"));
                 checkbox.checked = false; // التراجع عن الاختيار
                 return;
             }
@@ -580,7 +918,7 @@
         }
 
         window.makeSale = async function(productId, currentPrice) {
-            const newPrice = prompt("أدخل السعر الجديد بعد الخصم:", currentPrice);
+            const newPrice = prompt(adminT("salePricePrompt", "أدخل السعر الجديد بعد الخصم:"), currentPrice);
             if (newPrice && Number(newPrice) < currentPrice) {
                 await updateDoc(doc(db, "Products", productId), {
                     originalPrice: currentPrice, // حفظ السعر القديم
@@ -588,12 +926,12 @@
                 });
                 loadProducts();
             } else if (newPrice) {
-                alert("يجب أن يكون سعر الخصم أقل من السعر الأصلي!");
+                alert(adminT("salePriceError", "يجب أن يكون سعر الخصم أقل من السعر الأصلي!"));
             }
         }
 
         window.removeSale = async function(productId, originalPrice) {
-            if (confirm("هل تريد إلغاء الخصم والعودة للسعر الأصلي؟")) {
+            if (confirm(adminT("removeSaleConfirm", "هل تريد إلغاء الخصم والعودة للسعر الأصلي؟"))) {
                 await updateDoc(doc(db, "Products", productId), {
                     price: originalPrice,
                     originalPrice: null // مسح السعر القديم
@@ -603,9 +941,9 @@
         }
 
         window.updateProductStock = async function(productId, currentStock) {
-            const newStock = prompt("أدخل الكمية المتوفرة:", currentStock || 0);
+            const newStock = prompt(adminT("stockPrompt", "أدخل الكمية المتوفرة:"), currentStock || 0);
             if (newStock === null) return;
-            if (Number(newStock) < 0) return alert("الكمية لا يمكن أن تكون أقل من صفر.");
+            if (Number(newStock) < 0) return alert(adminT("stockNegativeAlert", "الكمية لا يمكن أن تكون أقل من صفر."));
             await updateDoc(doc(db, "Products", productId), { stock: Number(newStock) });
             loadProducts();
         }
@@ -622,7 +960,7 @@
 
         async function loadProducts() {
             const table = document.getElementById("productsTable");
-            table.innerHTML = `<tr><th>للرئيسية</th><th>الصورة</th><th>المنتج</th><th>السعر</th><th>الكمية</th><th>الظهور</th><th>الإجراءات</th></tr>`;
+            table.innerHTML = renderAdminHeaders(["featuredHeader", "imageHeader", "productHeader", "priceHeader", "quantityHeader", "visibilityHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Products"));
             
             querySnapshot.forEach((docSnap) => {
@@ -635,17 +973,17 @@
                 
                 const imgUrl = data.imageUrl ? data.imageUrl : 'https://via.placeholder.com/60?text=No+Image';
                 row.insertCell(1).innerHTML = `<img src="${imgUrl}" class="product-img-preview">`;
-                row.insertCell(2).innerHTML = `<strong>${data.name}</strong><br><small style="color:#666;">${data.description ? data.description.substring(0,25)+'...' : ''}</small>`; 
+                row.insertCell(2).innerHTML = `<strong>${data.name}</strong><br><small class="product-description-preview">${data.description ? data.description.substring(0,25)+'...' : ''}</small>`; 
                 
                 // عرض السعر مع الخصم إذا وجد
                 if (data.originalPrice) {
-                    row.insertCell(3).innerHTML = `<span class="sale-badge">خصم</span> <strong>${data.price}₪</strong> <span class="old-price">${data.originalPrice}₪</span>`;
+                    row.insertCell(3).innerHTML = `<span class="sale-badge">${adminT("saleBadge", "خصم")}</span> <strong>${data.price}₪</strong> <span class="old-price">${data.originalPrice}₪</span>`;
                 } else {
                     row.insertCell(3).innerHTML = `<strong>${data.price} ₪</strong>`;
                 }
 
                 row.insertCell(4).innerHTML = `<strong>${data.stock ?? 0}</strong>`;
-                row.insertCell(5).innerHTML = isVisible ? `<span style="color:green; font-weight:bold;">ظاهر للزبائن</span>` : `<span style="color:#b45309; font-weight:bold;">للاستخدام داخل الصالون</span>`;
+                row.insertCell(5).innerHTML = isVisible ? `<span style="color:green; font-weight:bold;">${adminT("visibleToCustomers", "ظاهر للزبائن")}</span>` : `<span style="color:#b45309; font-weight:bold;">${adminT("salonOnly", "للاستخدام داخل الصالون")}</span>`;
 
                 const actionsCell = row.insertCell(6);
                 
@@ -653,20 +991,20 @@
                 const saleBtn = document.createElement("button"); 
                 saleBtn.className = "btn-action btn-sale";
                 if (data.originalPrice) {
-                    saleBtn.innerText = "إلغاء الخصم";
+                    saleBtn.innerText = adminT("cancelSale", "إلغاء الخصم");
                     saleBtn.onclick = () => removeSale(id, data.originalPrice);
                 } else {
-                    saleBtn.innerText = "تخفيض 📉";
+                    saleBtn.innerText = adminT("sale", "تخفيض");
                     saleBtn.onclick = () => makeSale(id, data.price);
                 }
 
-                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف ❌"; deleteBtn.className = "btn-action btn-delete";
-                deleteBtn.onclick = async () => { if (confirm("تأكيد حذف المنتج من المتجر؟")) { await deleteDoc(doc(db, "Products", id)); loadProducts(); } };
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("deleteProduct", "حذف"); deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm(adminT("deleteProductConfirm", "تأكيد حذف المنتج من المتجر؟"))) { await deleteDoc(doc(db, "Products", id)); loadProducts(); } };
 
-                const stockBtn = document.createElement("button"); stockBtn.innerText = "تعديل الكمية"; stockBtn.className = "btn-action btn-update";
+                const stockBtn = document.createElement("button"); stockBtn.innerText = adminT("updateStock", "تعديل الكمية"); stockBtn.className = "btn-action btn-update";
                 stockBtn.onclick = () => updateProductStock(id, data.stock ?? 0);
 
-                const visibilityBtn = document.createElement("button"); visibilityBtn.innerText = isVisible ? "إخفاء عن الزبائن" : "إظهار للزبائن"; visibilityBtn.className = "btn-action btn-sale";
+                const visibilityBtn = document.createElement("button"); visibilityBtn.innerText = isVisible ? adminT("hideProduct", "إخفاء عن الزبائن") : adminT("showProduct", "إظهار للزبائن"); visibilityBtn.className = "btn-action btn-sale";
                 visibilityBtn.onclick = () => toggleProductVisibility(id, isVisible);
                 
                 actionsCell.appendChild(saleBtn); actionsCell.appendChild(stockBtn); actionsCell.appendChild(visibilityBtn); actionsCell.appendChild(deleteBtn);
@@ -681,7 +1019,7 @@
             const descVal = document.getElementById("productDescription").value; 
             const visibleVal = document.getElementById("productVisible").checked;
 
-            if (!nameVal || !priceVal || stockVal === "") return alert("أدخل اسم المنتج والسعر والكمية!");
+            if (!nameVal || !priceVal || stockVal === "") return alert(adminT("missingProductAlert", "أدخل اسم المنتج والسعر والكمية!"));
             
             await addDoc(collection(db, "Products"), { 
                 name: nameVal, 
@@ -713,10 +1051,98 @@
         }
 
         function genderLabel(value) {
-            if (value === "female") return "أنثى";
-            if (value === "male") return "ذكر";
-            if (value === "other") return "آخر";
-            return "غير محدد";
+            if (value === "female") return adminT("genderFemale", "أنثى");
+            if (value === "male") return adminT("genderMale", "ذكر");
+            if (value === "other") return adminT("genderOther", "آخر");
+            return adminT("genderUnknown", "غير محدد");
+        }
+
+        function normalizePhoneNumber(phone) {
+            const compact = String(phone || "").replace(/[\s-]/g, "");
+            if (!compact) return "";
+            if (compact.startsWith("+")) return compact;
+            if (compact.startsWith("00")) return `+${compact.slice(2)}`;
+            if (compact.startsWith("972")) return `+${compact}`;
+            if (compact.startsWith("0")) return `+972${compact.slice(1)}`;
+            return `+972${compact}`;
+        }
+
+        function isValidPhone(phone) {
+            return /^\+972[1-9]\d{7,8}$/.test(phone);
+        }
+
+        async function adminPhoneExists(phone, exceptUserId = null) {
+            const usersSnapshot = await getDocs(query(collection(db, "Users"), where("phone", "==", phone)));
+            return usersSnapshot.docs.some((userDoc) => userDoc.id !== exceptUserId);
+        }
+
+        async function adminEmailExists(email, exceptUserId = null) {
+            const usersSnapshot = await getDocs(query(collection(db, "Users"), where("email", "==", email)));
+            if (usersSnapshot.docs.some((userDoc) => userDoc.id !== exceptUserId)) return true;
+            const authMethods = await fetchSignInMethodsForEmail(auth, email).catch(() => []);
+            return authMethods.length > 0;
+        }
+
+        function clearAdminCreateUserForm() {
+            ["adminNewFirstName", "adminNewLastName", "adminNewEmail", "adminNewPhone", "adminNewBirthDate", "adminNewPassword"].forEach((id) => {
+                document.getElementById(id).value = "";
+            });
+            document.getElementById("adminNewGender").value = "";
+        }
+
+        async function createAdminUser() {
+            const btn = document.getElementById("adminCreateUserBtn");
+            if (!btn.dataset.readyText) btn.dataset.readyText = btn.innerText;
+            const firstName = document.getElementById("adminNewFirstName").value.trim();
+            const lastName = document.getElementById("adminNewLastName").value.trim();
+            const email = document.getElementById("adminNewEmail").value.trim().toLowerCase();
+            const phone = normalizePhoneNumber(document.getElementById("adminNewPhone").value.trim());
+            const birthDate = document.getElementById("adminNewBirthDate").value;
+            const gender = document.getElementById("adminNewGender").value;
+            const password = document.getElementById("adminNewPassword").value;
+
+            if (!firstName || !lastName || !email || !phone || !birthDate || !gender || !password) return alert(adminT("addUserRequiredAlert", "املأ الاسم، البريد، الهاتف، تاريخ الميلاد، الجنس وكلمة المرور."));
+            if (!isValidPhone(phone)) return alert(adminT("addUserPhoneAlert", "أدخل رقم الهاتف بصيغة صحيحة مثل +972525812195."));
+            if (password.length < 6) return alert(adminT("addUserPasswordAlert", "كلمة المرور يجب أن تكون 6 أحرف على الأقل."));
+            if (await adminEmailExists(email)) return alert(adminT("addUserDuplicateEmail", "هذا البريد مسجل من قبل."));
+            if (await adminPhoneExists(phone)) return alert(adminT("addUserDuplicatePhone", "هذا الهاتف مسجل من قبل."));
+
+            let secondaryApp = null;
+            let secondaryAuth = null;
+            let createdUser = null;
+            try {
+                btn.disabled = true;
+                btn.innerText = "...";
+                secondaryApp = initializeApp(firebaseConfig, `admin-create-user-${Date.now()}`);
+                secondaryAuth = getAuth(secondaryApp);
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+                createdUser = userCredential.user;
+                await setDoc(doc(db, "Users", createdUser.uid), {
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    birthDate,
+                    gender,
+                    phoneVerified: false,
+                    emailVerified: false,
+                    createdByAdmin: true,
+                    authProvider: "admin"
+                });
+                await signOut(secondaryAuth).catch(() => {});
+                clearAdminCreateUserForm();
+                alert(adminT("addUserSuccess", "تمت إضافة الزبون بنجاح بدون SMS أو تأكيد بريد."));
+                loadUsers();
+            } catch (error) {
+                if (createdUser) await deleteAuthUser(createdUser).catch(() => {});
+                if (error.code === "auth/email-already-in-use") alert(adminT("addUserDuplicateEmail", "هذا البريد مسجل من قبل."));
+                else alert(error.message);
+            } finally {
+                if (secondaryAuth) await signOut(secondaryAuth).catch(() => {});
+                if (secondaryApp) await deleteApp(secondaryApp).catch(() => {});
+                btn.disabled = false;
+                btn.innerText = btn.dataset.readyText;
+            }
         }
 
         async function loadUsers() {
@@ -727,6 +1153,7 @@
                 if(data.email === THE_ADMIN_EMAIL) return; // لا تعرض حساب الإدارة
                 allUsers.push({ id: docSnap.id, ...data });
             });
+            renderAdminBookingUsers();
             renderUsersTable();
         }
 
@@ -748,15 +1175,15 @@
                 return searchableText.includes(searchValue);
             });
 
-            document.getElementById("usersCount").innerText = `${filteredUsers.length} زبائن`;
-            table.innerHTML = `<tr><th>الاسم الأول</th><th>اسم العائلة</th><th>البريد الإلكتروني</th><th>الهاتف</th><th>تاريخ الميلاد</th><th>الجنس</th><th>الإجراءات</th></tr>`;
+            document.getElementById("usersCount").innerText = formatUsersCount(filteredUsers.length);
+            table.innerHTML = renderAdminHeaders(["firstNameHeader", "lastNameHeader", "emailHeader", "phoneHeader", "birthDateHeader", "genderHeader", "actionsHeader"]);
 
             if (filteredUsers.length === 0) {
                 const row = table.insertRow();
                 const cell = row.insertCell(0);
                 cell.colSpan = 7;
                 cell.className = "empty-row";
-                cell.innerText = "لا توجد حسابات مطابقة للبحث";
+                cell.innerText = adminT("noUsersSearch", "لا توجد حسابات مطابقة للبحث");
                 return;
             }
 
@@ -769,19 +1196,19 @@
                 row.insertCell(4).innerHTML = `<input class="admin-user-input" id="userBirthDate-${user.id}" type="date" value="${safeText(user.birthDate)}">`;
                 row.insertCell(5).innerHTML = `
                     <select class="admin-user-select" id="userGender-${user.id}">
-                        <option value="" ${!user.gender ? "selected" : ""}>غير محدد</option>
-                        <option value="female" ${user.gender === "female" ? "selected" : ""}>أنثى</option>
-                        <option value="male" ${user.gender === "male" ? "selected" : ""}>ذكر</option>
-                        <option value="other" ${user.gender === "other" ? "selected" : ""}>آخر</option>
+                        <option value="" ${!user.gender ? "selected" : ""}>${adminT("genderUnknown", "غير محدد")}</option>
+                        <option value="female" ${user.gender === "female" ? "selected" : ""}>${adminT("genderFemale", "أنثى")}</option>
+                        <option value="male" ${user.gender === "male" ? "selected" : ""}>${adminT("genderMale", "ذكر")}</option>
+                        <option value="other" ${user.gender === "other" ? "selected" : ""}>${adminT("genderOther", "آخر")}</option>
                     </select>
                 `;
                 const actionsCell = row.insertCell(6);
                 const saveBtn = document.createElement("button");
-                saveBtn.innerText = "حفظ التعديل";
+                saveBtn.innerText = adminT("save", "حفظ التعديل");
                 saveBtn.className = "btn-action btn-update";
                 saveBtn.onclick = () => updateUser(user.id);
                 const deleteBtn = document.createElement("button");
-                deleteBtn.innerText = "حذف الحساب";
+                deleteBtn.innerText = adminT("deleteAccount", "حذف الحساب");
                 deleteBtn.className = "btn-action btn-delete";
                 deleteBtn.onclick = () => deleteUser(user.id, `${user.firstName || ""} ${user.lastName || ""}`.trim(), user.firstName || "", user.phone || "", user.email || "");
                 actionsCell.appendChild(saveBtn);
@@ -800,12 +1227,12 @@
             };
 
             if (!updatedUser.firstName || !updatedUser.lastName || !updatedUser.email || !updatedUser.phone) {
-                alert("الرجاء تعبئة الاسم، البريد الإلكتروني، ورقم الهاتف قبل الحفظ.");
+                alert(adminT("userRequiredAlert", "الرجاء تعبئة الاسم، البريد الإلكتروني، ورقم الهاتف قبل الحفظ."));
                 return;
             }
 
             await updateDoc(doc(db, "Users", userId), updatedUser);
-            alert("تم تحديث بيانات الزبون بنجاح!");
+            alert(adminT("userUpdatedAlert", "تم تحديث بيانات الزبون بنجاح!"));
             loadUsers();
         }
 
@@ -866,16 +1293,17 @@
             }
 
             await deleteDoc(doc(db, "Users", userId));
-            alert("تم حذف الحساب. الحجوزات القديمة بقيت محفوظة، وتم حذف الحجوزات القادمة والطلبات والتقييمات المرتبطة به.");
+            alert(adminT("deleteUserDoneAlert", "تم حذف الحساب. الحجوزات القديمة بقيت محفوظة، وتم حذف الحجوزات القادمة والطلبات والتقييمات المرتبطة به."));
             loadUsers(); loadAppointments(); loadOrders(); loadAdminReviews();
         }
 
+        document.getElementById("adminCreateUserBtn").addEventListener("click", createAdminUser);
         document.getElementById("userSearchInput").addEventListener("input", renderUsersTable);
 
         // ================= 5. التقييمات =================
         async function loadAdminReviews() {
             const table = document.getElementById("reviewsTable"); 
-            table.innerHTML = `<tr><th>الزبونة</th><th>التقييم</th><th>التعليق</th><th>الإجراءات</th></tr>`;
+            table.innerHTML = renderAdminHeaders(["customerHeader", "ratingHeader", "commentHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Reviews"));
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
@@ -884,8 +1312,8 @@
                 row.insertCell(2).innerHTML = `<strong>${data.title}</strong><br><small>${data.text}</small>`; 
                 
                 const actionsCell = row.insertCell(3);
-                const deleteBtn = document.createElement("button"); deleteBtn.innerText = "حذف التقييم"; deleteBtn.className = "btn-action btn-delete";
-                deleteBtn.onclick = async () => { if (confirm("هل أنت متأكد من حذف هذا التقييم؟")) { await deleteDoc(doc(db, "Reviews", id)); loadAdminReviews(); } };
+                const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("deleteReview", "حذف التقييم"); deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.onclick = async () => { if (confirm(adminT("deleteReviewConfirm", "هل أنت متأكد من حذف هذا التقييم؟"))) { await deleteDoc(doc(db, "Reviews", id)); loadAdminReviews(); } };
                 actionsCell.appendChild(deleteBtn);
             });
         }

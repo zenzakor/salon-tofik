@@ -13,8 +13,15 @@
         body.dark-mode { background-color: #151515; color: #f3f3f3; }
         body.dark-mode .section-box, body.dark-mode .modal-content, body.dark-mode .product-card, body.dark-mode .review-slider-container { background-color: #222; color: #f3f3f3; border-color: #333; }
         body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: #181818; color: #f3f3f3; border-color: #444; }
-        body.dark-mode .about-text, body.dark-mode .review-slide p { color: #ddd; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode label, body.dark-mode .review-slide h4, body.dark-mode .product-card .price { color: #f3f3f3; }
+        body.dark-mode .about-text, body.dark-mode .review-slide p, body.dark-mode .reviewer-name, body.dark-mode .modal-content p { color: #ddd; }
         body.dark-mode .appointment-item { background: #1d1d1d; border-color: #333; }
+        body.dark-mode .info-btn { background: #2a2a2a; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .google-auth-btn { background: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .google-auth-btn:hover { background: #2a2a2a; color: #fff; }
+        body.dark-mode .review-form-card { background: #1d1d1d; color: #f3f3f3; border-color: #3a3a3a; }
+        body.dark-mode .review-form-card .star { color: #666; }
+        body.dark-mode .review-form-card .star.selected, body.dark-mode .review-form-card .star:hover, body.dark-mode .review-form-card .star:hover ~ .star { color: #FFD700; }
         .container { padding: 20px; max-width: 1000px; margin: auto; }
         .section-box { background-color: white; padding: 40px; margin-bottom: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eaeaea; }
         
@@ -29,6 +36,13 @@
 
         .btn { background-color: #000000; color: white; border: 1px solid #000; padding: 12px 25px; cursor: pointer; border-radius: 4px; font-size: 16px; margin-top: 10px; font-weight: bold; transition: background 0.3s, color 0.3s;}
         .btn:hover { background-color: #ffffff; color: #000000; }
+        .btn-secondary { background-color: #ffffff; color: #000000; border-color: #bbb; }
+        .btn-secondary:hover { background-color: #000000; color: #ffffff; border-color: #000; }
+        body.dark-mode .btn-secondary { background-color: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .btn-secondary:hover { background-color: #ffffff; color: #000000; }
+        .google-auth-btn { background-color: #fff; color: #222; border-color: #dadce0; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+        .google-auth-btn:hover { background-color: #f8f9fa; color: #000; }
+        .google-auth-icon { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #4285f4; }
         
         .hero-section { background-color: #111; color: white; text-align: center; padding: 60px 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
         .hero-section h1 { font-size: 2.5em; margin-bottom: 10px; color: #fff;}
@@ -38,6 +52,10 @@
 
         input, select, textarea { padding: 12px; margin: 8px 0; width: 100%; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; background-color: #fafafa; box-sizing: border-box;}
         input:focus, textarea:focus { outline: none; border-color: #000; }
+        .phone-field { display: flex; align-items: stretch; gap: 0; margin: 8px 0; direction: ltr; }
+        .phone-prefix { display: flex; align-items: center; justify-content: center; width: 82px; padding: 0 12px; border: 1px solid #ccc; border-right: 0; border-radius: 4px 0 0 4px; background: #eee; font-weight: bold; box-sizing: border-box; }
+        .phone-field input { margin: 0; border-radius: 0 4px 4px 0; text-align: left; direction: ltr; }
+        body.dark-mode .phone-prefix { background-color: #2a2a2a; color: #f3f3f3; border-color: #444; }
 
         .about-text { font-size: 1.1em; line-height: 1.8; color: #555; text-align: center; max-width: 800px; margin: auto; }
         
@@ -48,6 +66,7 @@
         .review-slide p { font-style: italic; color: #555; font-size: 16px; margin: 0 0 10px 0; }
         .review-slide .stars { color: #FFD700; font-size: 20px; }
         .review-slide .reviewer-name { font-weight: bold; color: #888; font-size: 14px; margin-top: 10px; }
+        .review-form-card { background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #ddd; text-align: center; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -69,6 +88,9 @@
         .close-modal:hover { color: #000; }
         .settings-row { text-align: right; margin: 16px 0; }
         .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; box-sizing: border-box; font-family: inherit; text-align: right; }
+        body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
+        .old-bookings-btn { width: 100%; margin: 22px 0 10px; }
         .btn-danger { background-color: #d32f2f; border-color: #d32f2f; }
         .btn-danger:hover { background-color: #fff; color: #d32f2f; }
         .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
@@ -139,6 +161,7 @@
                 <input type="password" id="loginPassword" placeholder="كلمة المرور" data-i18n-placeholder="password">
                 <br>
                 <button id="loginBtn" class="btn" style="width: 100%;">دخول لحسابي</button>
+                <button id="googleLoginBtn" class="btn google-auth-btn" type="button"><span class="google-auth-icon">G</span> <span data-i18n="googleLogin">الدخول بواسطة Google</span></button>
                 <p>ليس لديك حساب؟ <span class="auth-toggle" id="showSignup">أنشئ حساباً جديداً</span></p>
             </div>
             <div id="signupForm" style="display: none;">
@@ -146,7 +169,10 @@
                 <input type="text" id="regFirstName" placeholder="الاسم الأول" data-i18n-placeholder="firstName">
                 <input type="text" id="regLastName" placeholder="اسم العائلة" data-i18n-placeholder="lastName">
                 <input type="email" id="regEmail" placeholder="البريد الإلكتروني" data-i18n-placeholder="email">
-                <input type="tel" id="regPhone" placeholder="رقم الهاتف" data-i18n-placeholder="phone">
+                <div class="phone-field">
+                    <span class="phone-prefix">+972</span>
+                    <input type="tel" id="regPhone" placeholder="52 123 4567" inputmode="numeric" autocomplete="tel-national">
+                </div>
                 <input type="date" id="regBirthDate" title="تاريخ الميلاد">
                 <select id="regGender">
                     <option value="">الجنس</option>
@@ -158,8 +184,41 @@
                 <input type="password" id="regConfirmPassword" placeholder="تأكيد كلمة المرور" data-i18n-placeholder="confirmPassword">
                 <br>
                 <button id="signupBtn" class="btn" style="width: 100%;">إنشاء الحساب</button>
+                <button id="googleSignupBtn" class="btn google-auth-btn" type="button"><span class="google-auth-icon">G</span> <span data-i18n="googleSignup">إنشاء حساب بواسطة Google</span></button>
                 <p>لديك حساب بالفعل؟ <span class="auth-toggle" id="showLogin">تسجيل الدخول</span></p>
             </div>
+        </div>
+    </div>
+    <div id="otpModal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="closeOtpModal" class="close-modal">&times;</span>
+            <h2 data-i18n="smsVerification">SMS verification</h2>
+            <p style="color:#666" data-i18n="smsVerificationText">We sent a 6 digit password to your phone. Enter it here to finish signup.</p>
+            <div id="recaptcha-container" style="margin-bottom: 15px;"></div>
+            <input type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="SMS password" data-i18n-placeholder="smsPassword" style="text-align: center; font-size: 20px; letter-spacing: 5px;">
+            <button id="verifyOtpBtn" class="btn" style="width: 100%;" data-i18n="verifySms">Verify and sign in</button>
+        </div>
+    </div>
+
+    <div id="googleProfileModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 data-i18n="completeProfileTitle">إكمال بيانات الحساب</h2>
+            <p style="color:#666" data-i18n="completeProfileText">نحتاج رقم الهاتف، تاريخ الميلاد والجنس لإكمال حساب Google. سيتم تأكيد رقم الهاتف برسالة SMS.</p>
+            <input type="text" id="googleFirstName" placeholder="الاسم الأول" data-i18n-placeholder="firstName">
+            <input type="text" id="googleLastName" placeholder="اسم العائلة" data-i18n-placeholder="lastName">
+            <div class="phone-field">
+                <span class="phone-prefix">+972</span>
+                <input type="tel" id="googlePhone" placeholder="52 123 4567" inputmode="numeric" autocomplete="tel-national">
+            </div>
+            <input type="date" id="googleBirthDate" title="تاريخ الميلاد">
+            <select id="googleGender">
+                <option value="" data-i18n="gender">الجنس</option>
+                <option value="female" data-i18n="genderFemale">أنثى</option>
+                <option value="male" data-i18n="genderMale">ذكر</option>
+                <option value="other" data-i18n="genderOther">آخر</option>
+            </select>
+            <button id="googleCompleteProfileBtn" class="btn" style="width: 100%;" data-i18n="completeProfileButton">تأكيد الهاتف وإكمال الحساب</button>
+            <button id="cancelGoogleProfileBtn" class="btn btn-secondary" style="width: 100%;" data-i18n="cancelAndBack">إلغاء والرجوع</button>
         </div>
     </div>
 
@@ -198,6 +257,8 @@
                     <option value="large" data-i18n="large">كبير</option>
                 </select>
             </div>
+            <button id="oldBookingsPageBtn" class="btn old-bookings-btn" type="button" data-i18n="oldBookingsButton">الحجوزات القديمة</button>
+            <button id="accountInfoPageBtn" class="btn old-bookings-btn" type="button" data-i18n="accountInfoButton">معلومات حسابي</button>
             <button id="deleteAccountBtn" class="btn btn-danger" style="width: 100%;" data-i18n="deleteAccount">حذف حسابي</button>
         </div>
     </div>
@@ -239,7 +300,7 @@
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
-            <div style="background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
+            <div class="review-form-card">
                 <h3 style="margin-top: 0;" data-i18n="addReviewTitle">أضفي تقييمك الخاص بنا:</h3>
                 
                 <div class="star-rating" id="starRating">
@@ -274,8 +335,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser as deleteAuthUser } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser as deleteAuthUser, RecaptchaVerifier, PhoneAuthProvider, linkWithCredential, updatePhoneNumber, GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -291,14 +352,41 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
         let loggedInUserData = null; 
         let currentUserId = null;
+        let pendingSignupData = null;
+        let pendingGoogleProfileData = null;
+        let pendingSmsPurpose = "";
+        let pendingSignupExpiresAt = 0;
+        let pendingSignupTimer = null;
+        let phoneVerificationId = null;
+        let recaptchaVerifier = null;
+        let appointmentsRefreshTimer = null;
+        const SIGNUP_VERIFICATION_MINUTES = 10;
 
         const uiText = {
-            ar: { home: "الرئيسية", book: "حجز دور", shop: "المتجر", reviews: "التقييمات", settings: "الإعدادات", account: "حسابي", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", deleteAccount: "حذف حسابي", email: "البريد الإلكتروني", password: "كلمة المرور", firstName: "الاسم الأول", lastName: "اسم العائلة", phone: "رقم الهاتف", confirmPassword: "تأكيد كلمة المرور", reviewTitlePlaceholder: "عنوان التقييم (مثال: تجربة رائعة!)", reviewTextPlaceholder: "اكتبي تفاصيل تجربتك معنا هنا...", heroTitle: "صالون توفيق للأناقة والجمال", heroCopy: "وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.", bookNow: "احجزي موعدك الآن 📅", myAppointments: "📅 مواعيدي القادمة", featuredProducts: "🛍️ تشكيلة من منتجاتنا", featuredProductsCopy: "اكتشفي أفضل منتجات العناية المتوفرة لدينا.", viewProducts: "عرض كل المنتجات وشراؤها 🛒", aboutTitle: "✨ عن صالون توفيق", aboutCopy: "تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.", reviewsTitle: "⭐ ماذا يقول زبائننا عنّا", addReviewTitle: "أضفي تقييمك الخاص بنا:" },
-            he: { home: "בית", book: "הזמנת תור", shop: "חנות", reviews: "ביקורות", settings: "הגדרות", account: "החשבון שלי", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", deleteAccount: "מחיקת החשבון שלי", email: "אימייל", password: "סיסמה", firstName: "שם פרטי", lastName: "שם משפחה", phone: "מספר טלפון", confirmPassword: "אישור סיסמה", reviewTitlePlaceholder: "כותרת הביקורת", reviewTextPlaceholder: "כתבי כאן את החוויה שלך...", heroTitle: "סלון תופיק ליופי וסטייל", heroCopy: "המקום שלך לטיפוח, יופי וסטייל עם צוות מקצועי ושירות מוקפד.", bookNow: "הזמיני תור עכשיו 📅", myAppointments: "📅 התורים הקרובים שלי", featuredProducts: "🛍️ מבחר מהמוצרים שלנו", featuredProductsCopy: "גלי את מוצרי הטיפוח הזמינים אצלנו.", viewProducts: "לכל המוצרים וקנייה 🛒", aboutTitle: "✨ על סלון תופיק", aboutCopy: "סלון תופיק נועד לתת חוויית טיפוח נוחה, מקצועית ואלגנטית עם תשומת לב לפרטים.", reviewsTitle: "⭐ מה הלקוחות אומרות עלינו", addReviewTitle: "הוסיפי ביקורת:" },
-            en: { home: "Home", book: "Book", shop: "Shop", reviews: "Reviews", settings: "Settings", account: "Account", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", deleteAccount: "Delete my account", email: "Email", password: "Password", firstName: "First name", lastName: "Last name", phone: "Phone number", confirmPassword: "Confirm password", reviewTitlePlaceholder: "Review title", reviewTextPlaceholder: "Write your experience here...", heroTitle: "Salon Tofik for Style and Beauty", heroCopy: "Your place for elegant care, beauty, and professional salon service.", bookNow: "Book now 📅", myAppointments: "📅 My Upcoming Appointments", featuredProducts: "🛍️ Featured Products", featuredProductsCopy: "Discover selected care products available at the salon.", viewProducts: "View and buy products 🛒", aboutTitle: "✨ About Salon Tofik", aboutCopy: "Salon Tofik is built for comfortable, elegant, and professional beauty care with close attention to every detail.", reviewsTitle: "⭐ What our customers say", addReviewTitle: "Add your review:" }
+            ar: { home: "الرئيسية", book: "حجز دور", shop: "المتجر", reviews: "التقييمات", settings: "الإعدادات", account: "حسابي", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", deleteAccount: "حذف حسابي", email: "البريد الإلكتروني", password: "كلمة المرور", firstName: "الاسم الأول", lastName: "اسم العائلة", phone: "رقم الهاتف", confirmPassword: "تأكيد كلمة المرور", googleLogin: "الدخول بواسطة Google", googleSignup: "إنشاء حساب بواسطة Google", smsVerification: "التحقق برسالة SMS", smsVerificationText: "أرسلنا كلمة مرور من 6 أرقام إلى هاتفك. أدخلها هنا لإكمال التسجيل.", smsPassword: "كلمة مرور SMS", verifySms: "تحقق وسجل الدخول", reviewTitlePlaceholder: "عنوان التقييم (مثال: تجربة رائعة!)", reviewTextPlaceholder: "اكتبي تفاصيل تجربتك معنا هنا...", heroTitle: "صالون توفيق للأناقة والجمال", heroCopy: "وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.", bookNow: "احجزي موعدك الآن 📅", myAppointments: "📅 مواعيدي القادمة", featuredProducts: "🛍️ تشكيلة من منتجاتنا", featuredProductsCopy: "اكتشفي أفضل منتجات العناية المتوفرة لدينا.", viewProducts: "عرض كل المنتجات وشراؤها 🛒", aboutTitle: "✨ عن صالون توفيق", aboutCopy: "تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.", reviewsTitle: "⭐ ماذا يقول زبائننا عنّا", addReviewTitle: "أضفي تقييمك الخاص بنا:" },
+            he: { home: "בית", book: "הזמנת תור", shop: "חנות", reviews: "ביקורות", settings: "הגדרות", account: "החשבון שלי", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", deleteAccount: "מחיקת החשבון שלי", email: "אימייל", password: "סיסמה", firstName: "שם פרטי", lastName: "שם משפחה", phone: "מספר טלפון", confirmPassword: "אישור סיסמה", googleLogin: "כניסה עם Google", googleSignup: "הרשמה עם Google", smsVerification: "אימות SMS", smsVerificationText: "שלחנו סיסמה בת 6 ספרות לטלפון שלך. הזיני אותה כאן להשלמת ההרשמה.", smsPassword: "סיסמת SMS", verifySms: "אימות וכניסה", reviewTitlePlaceholder: "כותרת הביקורת", reviewTextPlaceholder: "כתבי כאן את החוויה שלך...", heroTitle: "סלון תופיק ליופי וסטייל", heroCopy: "המקום שלך לטיפוח, יופי וסטייל עם צוות מקצועי ושירות מוקפד.", bookNow: "הזמיני תור עכשיו 📅", myAppointments: "📅 התורים הקרובים שלי", featuredProducts: "🛍️ מבחר מהמוצרים שלנו", featuredProductsCopy: "גלי את מוצרי הטיפוח הזמינים אצלנו.", viewProducts: "לכל המוצרים וקנייה 🛒", aboutTitle: "✨ על סלון תופיק", aboutCopy: "סלון תופיק נועד לתת חוויית טיפוח נוחה, מקצועית ואלגנטית עם תשומת לב לפרטים.", reviewsTitle: "⭐ מה הלקוחות אומרות עלינו", addReviewTitle: "הוסיפי ביקורת:" },
+            en: { home: "Home", book: "Book", shop: "Shop", reviews: "Reviews", settings: "Settings", account: "Account", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", deleteAccount: "Delete my account", email: "Email", password: "Password", firstName: "First name", lastName: "Last name", phone: "Phone number", confirmPassword: "Confirm password", googleLogin: "Sign in with Google", googleSignup: "Sign up with Google", smsVerification: "SMS verification", smsVerificationText: "We sent a 6 digit password to your phone. Enter it here to finish signup.", smsPassword: "SMS password", verifySms: "Verify and sign in", reviewTitlePlaceholder: "Review title", reviewTextPlaceholder: "Write your experience here...", heroTitle: "Salon Tofik for Style and Beauty", heroCopy: "Your place for elegant care, beauty, and professional salon service.", bookNow: "Book now 📅", myAppointments: "📅 My Upcoming Appointments", featuredProducts: "🛍️ Featured Products", featuredProductsCopy: "Discover selected care products available at the salon.", viewProducts: "View and buy products 🛒", aboutTitle: "✨ About Salon Tofik", aboutCopy: "Salon Tofik is built for comfortable, elegant, and professional beauty care with close attention to every detail.", reviewsTitle: "⭐ What our customers say", addReviewTitle: "Add your review:" }
         };
+
+        Object.assign(uiText.ar, { shopPreviewButton: "عرض في المتجر", noFeaturedProducts: "لم يتم تحديد منتجات مميزة لعرضها هنا. تصفحي المتجر!", saleBadge: "خصم", serviceWord: "الخدمة:", timeWord: "الساعة:", unspecified: "غير محدد", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", noInfo: "لا توجد تفاصيل إضافية.", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي", completeProfileTitle: "إكمال بيانات الحساب", completeProfileText: "نحتاج رقم الهاتف، تاريخ الميلاد والجنس لإكمال حساب Google. سيتم تأكيد رقم الهاتف برسالة SMS.", completeProfileButton: "تأكيد الهاتف وإكمال الحساب", cancelAndBack: "إلغاء والرجوع", gender: "الجنس", genderFemale: "أنثى", genderMale: "ذكر", genderOther: "آخر" });
+        Object.assign(uiText.he, { shopPreviewButton: "צפייה בחנות", noFeaturedProducts: "עדיין לא נבחרו מוצרים מומלצים להצגה כאן. עברי לחנות!", saleBadge: "הנחה", serviceWord: "שירות:", timeWord: "שעה:", unspecified: "לא מוגדר", pendingStatus: "ממתין לאישור", confirmedStatus: "אושר", rejectedStatus: "נדחה", noInfo: "אין פרטים נוספים.", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי", completeProfileTitle: "השלמת פרטי חשבון", completeProfileText: "צריך מספר טלפון, תאריך לידה ומין כדי להשלים חשבון Google. הטלפון יאומת ב-SMS.", completeProfileButton: "אימות טלפון והשלמת חשבון", cancelAndBack: "ביטול וחזרה", gender: "מין", genderFemale: "נקבה", genderMale: "זכר", genderOther: "אחר" });
+        Object.assign(uiText.en, { shopPreviewButton: "View in shop", noFeaturedProducts: "No featured products were selected yet. Browse the shop!", saleBadge: "Sale", serviceWord: "Service:", timeWord: "Time:", unspecified: "Not specified", pendingStatus: "Pending", confirmedStatus: "Confirmed", rejectedStatus: "Rejected", noInfo: "No extra details.", oldBookingsButton: "Old bookings", accountInfoButton: "My account info", completeProfileTitle: "Complete account details", completeProfileText: "We need phone, birth date, and gender to complete your Google account. Your phone will be verified by SMS.", completeProfileButton: "Verify phone and complete account", cancelAndBack: "Cancel and go back", gender: "Gender", genderFemale: "Female", genderMale: "Male", genderOther: "Other" });
+
+        function uiT(key, fallback) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            return uiText[lang]?.[key] || fallback;
+        }
+
+        function displayAppointmentStatus(status) {
+            const value = String(status || "").toLowerCase();
+            if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return uiT("confirmedStatus", "تم التأكيد");
+            if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return uiT("rejectedStatus", "تم الرفض");
+            if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return uiT("pendingStatus", "قيد الانتظار");
+            return status;
+        }
 
         function getTodayValue() {
             const today = new Date();
@@ -317,21 +405,25 @@
             document.getElementById("langSelect").value = lang;
             document.getElementById("textSizeSelect").value = textSize;
             document.querySelectorAll("[data-i18n]").forEach((element) => {
+                if (!element.dataset.i18nOriginal) element.dataset.i18nOriginal = element.textContent;
                 const key = element.dataset.i18n;
-                if (uiText[lang] && uiText[lang][key]) element.textContent = uiText[lang][key];
+                if (lang === "ar") element.textContent = element.dataset.i18nOriginal;
+                else if (uiText[lang] && uiText[lang][key]) element.textContent = uiText[lang][key];
             });
             document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+                if (!element.dataset.i18nPlaceholderOriginal) element.dataset.i18nPlaceholderOriginal = element.placeholder;
                 const key = element.dataset.i18nPlaceholder;
-                if (uiText[lang] && uiText[lang][key]) element.placeholder = uiText[lang][key];
+                if (lang === "ar") element.placeholder = element.dataset.i18nPlaceholderOriginal;
+                else if (uiText[lang] && uiText[lang][key]) element.placeholder = uiText[lang][key];
             });
-            if (!loggedInUserData) document.getElementById("profileName").innerText = uiText[lang].account;
+            if (!loggedInUserData) document.getElementById("profileName").innerText = lang === "ar" ? "حسابي" : uiText[lang].account;
         }
 
         applySettings();
 
         window.openInfoModal = function(name, desc, img) {
             document.getElementById('infoTitle').innerText = name;
-            document.getElementById('infoDesc').innerText = desc ? desc : "لا توجد تفاصيل إضافية.";
+            document.getElementById('infoDesc').innerText = desc ? desc : uiT("noInfo", "لا توجد تفاصيل إضافية.");
             document.getElementById('infoImg').src = img;
             document.getElementById('productInfoModal').style.display = 'flex';
         }
@@ -346,10 +438,224 @@
                 localStorage.setItem("salonLang", document.getElementById("langSelect").value);
                 localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
                 applySettings();
+                loadShopPreview();
+                if (loggedInUserData) loadMyAppointments();
             });
+        });
+        document.getElementById("oldBookingsPageBtn").addEventListener("click", () => {
+            window.location.href = "old-bookings.html";
+        });
+        document.getElementById("accountInfoPageBtn").addEventListener("click", () => {
+            window.location.href = "account.html";
         });
 
         const authModal = document.getElementById('authModal');
+        const otpModal = document.getElementById('otpModal');
+
+        function normalizePhoneNumber(phone) {
+            const compact = phone.replace(/[\s-]/g, "");
+            if (compact.startsWith("+")) return compact;
+            if (compact.startsWith("00")) return `+${compact.slice(2)}`;
+            if (compact.startsWith("972")) return `+${compact}`;
+            if (compact.startsWith("0")) return `+972${compact.slice(1)}`;
+            return `+972${compact}`;
+        }
+
+        function isValidLocalPhone(phone) {
+            return /^\+972[1-9]\d{7,8}$/.test(phone);
+        }
+
+        async function phoneExists(phone, exceptUserId = null) {
+            const usersQuery = query(collection(db, "Users"), where("phone", "==", phone));
+            const usersSnapshot = await getDocs(usersQuery);
+            return usersSnapshot.docs.some((userDoc) => userDoc.id !== exceptUserId);
+        }
+
+        async function emailExists(email, exceptUserId = null) {
+            const usersQuery = query(collection(db, "Users"), where("email", "==", email));
+            const usersSnapshot = await getDocs(usersQuery);
+            if (usersSnapshot.docs.some((userDoc) => userDoc.id !== exceptUserId)) return true;
+            const authMethods = await fetchSignInMethodsForEmail(auth, email).catch(() => []);
+            return authMethods.length > 0;
+        }
+
+        async function applyPhoneCredential(user, credential) {
+            if (user.providerData.some((provider) => provider.providerId === "phone")) {
+                await updatePhoneNumber(user, credential);
+                return;
+            }
+            try {
+                await linkWithCredential(user, credential);
+            } catch (error) {
+                if (error.code === "auth/provider-already-linked") await updatePhoneNumber(user, credential);
+                else throw error;
+            }
+        }
+
+        function clearPendingSignup(reopenGoogleProfile = true) {
+            const shouldReopenGoogleProfile = pendingSmsPurpose === "googleProfile" && !!pendingGoogleProfileData;
+            const googleProfileData = pendingGoogleProfileData;
+            pendingSignupData = null;
+            pendingGoogleProfileData = null;
+            pendingSmsPurpose = "";
+            pendingSignupExpiresAt = 0;
+            phoneVerificationId = null;
+            document.getElementById("otpCode").value = "";
+            otpModal.style.display = "none";
+            if (pendingSignupTimer) {
+                clearTimeout(pendingSignupTimer);
+                pendingSignupTimer = null;
+            }
+            if (recaptchaVerifier) {
+                recaptchaVerifier.clear();
+                recaptchaVerifier = null;
+                document.getElementById("recaptcha-container").innerHTML = "";
+            }
+            if (reopenGoogleProfile && shouldReopenGoogleProfile) showGoogleProfileCompletion(googleProfileData);
+        }
+
+        async function beginSmsVerification({ purpose, phone, signupData = null, googleProfileData = null }) {
+            clearPendingSignup();
+            pendingSmsPurpose = purpose;
+            pendingSignupData = signupData;
+            pendingGoogleProfileData = googleProfileData;
+            pendingSignupExpiresAt = Date.now() + SIGNUP_VERIFICATION_MINUTES * 60 * 1000;
+            pendingSignupTimer = setTimeout(() => {
+                clearPendingSignup();
+                alert("The SMS password expired. Your details were not saved. Please try again.");
+            }, SIGNUP_VERIFICATION_MINUTES * 60 * 1000);
+
+            authModal.style.display = "none";
+            if (purpose === "googleProfile") document.getElementById("googleProfileModal").style.display = "none";
+            otpModal.style.display = "flex";
+            try {
+                recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "normal" });
+                const provider = new PhoneAuthProvider(auth);
+                phoneVerificationId = await provider.verifyPhoneNumber(normalizePhoneNumber(phone), recaptchaVerifier);
+                document.getElementById("otpCode").focus();
+            } catch (error) {
+                clearPendingSignup();
+                if (purpose === "signup") authModal.style.display = "flex";
+                if (purpose === "googleProfile") document.getElementById("googleProfileModal").style.display = "flex";
+                throw error;
+            }
+        }
+
+        async function sendSignupSmsCode(signupData) {
+            return beginSmsVerification({ purpose: "signup", phone: signupData.phone, signupData });
+        }
+
+        async function sendGoogleProfileSmsCode(profileData) {
+            return beginSmsVerification({ purpose: "googleProfile", phone: profileData.phone, googleProfileData: profileData });
+        }
+
+        async function ensureGoogleUserDocument(user) {
+            const userRef = doc(db, "Users", user.uid);
+            const docSnap = await getDoc(userRef);
+            if (docSnap.exists()) {
+                const existingData = docSnap.data();
+                if (needsGoogleProfileCompletion(user, existingData)) {
+                    await deleteDoc(userRef).catch(() => {});
+                    return { ...existingData, email: user.email || existingData.email || "" };
+                }
+                if (user.email && existingData.email !== user.email) await setDoc(userRef, { email: user.email }, { merge: true });
+                return { ...existingData, email: user.email || existingData.email || "" };
+            }
+
+            const displayNameParts = (user.displayName || "").trim().split(/\s+/).filter(Boolean);
+            const firstName = displayNameParts.shift() || "Google";
+            const lastName = displayNameParts.join(" ");
+            return {
+                firstName,
+                lastName,
+                email: user.email || "",
+                phone: user.phoneNumber || "",
+                birthDate: "",
+                gender: "",
+                authProvider: "google"
+            };
+        }
+
+        function needsGoogleProfileCompletion(user, data) {
+            const isGoogleUser = user.providerData.some((provider) => provider.providerId === "google.com");
+            return isGoogleUser && (!data?.phone || !data?.birthDate || !data?.gender || !data?.firstName || !data?.lastName);
+        }
+
+        function showGoogleProfileCompletion(data = {}) {
+            const googleModal = document.getElementById("googleProfileModal");
+            document.getElementById("googleFirstName").value = data.firstName || "";
+            document.getElementById("googleLastName").value = data.lastName || "";
+            document.getElementById("googlePhone").value = (data.phone || "").replace(/^\+972/, "");
+            document.getElementById("googleBirthDate").value = data.birthDate || "";
+            document.getElementById("googleGender").value = data.gender || "";
+            googleModal.style.display = "flex";
+        }
+
+        async function completeGoogleProfile() {
+            const completeBtn = document.getElementById("googleCompleteProfileBtn");
+            if (!completeBtn.dataset.readyText) completeBtn.dataset.readyText = completeBtn.innerText;
+            const user = auth.currentUser;
+            if (!user) return alert("Please sign in with Google first.");
+            const firstName = document.getElementById("googleFirstName").value.trim();
+            const lastName = document.getElementById("googleLastName").value.trim();
+            const phone = normalizePhoneNumber(document.getElementById("googlePhone").value.trim());
+            const birthDate = document.getElementById("googleBirthDate").value;
+            const gender = document.getElementById("googleGender").value;
+            if (!firstName || !lastName || !phone || !birthDate || !gender) return alert("Please fill all account details.");
+            if (!isValidLocalPhone(phone)) return alert("Enter the phone number after +972 without the first 0. Example: 525812195");
+            try {
+                completeBtn.disabled = true;
+                completeBtn.innerText = "Sending SMS password...";
+                if (await phoneExists(phone, user.uid)) {
+                    alert("This phone number is already registered.");
+                    return;
+                }
+                await sendGoogleProfileSmsCode({ firstName, lastName, email: user.email || "", phone, birthDate, gender, authProvider: "google" });
+                document.getElementById("googleProfileModal").style.display = "none";
+            } catch (error) {
+                alert("Could not send SMS password: " + error.message);
+            } finally {
+                completeBtn.disabled = false;
+                completeBtn.innerText = completeBtn.dataset.readyText;
+            }
+        }
+
+        async function cancelGoogleProfileCompletion() {
+            document.getElementById("googleProfileModal").style.display = "none";
+            clearPendingSignup(false);
+            const user = auth.currentUser;
+            if (user) {
+                const userRef = doc(db, "Users", user.uid);
+                const docSnap = await getDoc(userRef).catch(() => null);
+                if (docSnap?.exists() && needsGoogleProfileCompletion(user, docSnap.data())) {
+                    await deleteDoc(userRef).catch(() => {});
+                }
+                await deleteAuthUser(user).catch(async () => {
+                    await signOut(auth).catch(() => {});
+                });
+            }
+            currentUserId = null;
+            loggedInUserData = null;
+            document.getElementById("profileName").innerText = uiT("account", "حسابي");
+            document.getElementById("signupForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+            authModal.style.display = "flex";
+        }
+
+        async function signInWithGoogle() {
+            try {
+                clearPendingSignup();
+                const result = await signInWithPopup(auth, googleProvider);
+                if (result.user.email === THE_ADMIN_EMAIL) {
+                    window.location.href = "admin.html";
+                    return;
+                }
+                await ensureGoogleUserDocument(result.user);
+                authModal.style.display = "none";
+            } catch (error) {
+                alert("Google sign in failed: " + error.message);
+            }
+        }
         document.getElementById('profileBtn').addEventListener('click', () => {
             if (loggedInUserData) { 
                 if(confirm('هل أنت متأكد أنك تريد تسجيل الخروج؟')) { 
@@ -359,8 +665,10 @@
             } else { authModal.style.display = 'flex'; }
         });
         document.getElementById('closeModalBtn').addEventListener('click', () => { authModal.style.display = 'none'; });
+        document.getElementById('closeOtpModal').addEventListener('click', clearPendingSignup);
         window.addEventListener('click', (event) => { 
             if (event.target === authModal) authModal.style.display = 'none'; 
+            if (event.target === otpModal) clearPendingSignup();
             if (event.target === document.getElementById('productInfoModal')) closeInfoModal();
             if (event.target === settingsModal) settingsModal.classList.remove('open');
         });
@@ -403,26 +711,119 @@
         });
 
         document.getElementById("showSignup").onclick = () => { document.getElementById("loginForm").style.display = "none"; document.getElementById("signupForm").style.display = "block"; };
-        document.getElementById("showLogin").onclick = () => { document.getElementById("signupForm").style.display = "none"; document.getElementById("loginForm").style.display = "block"; };
+        document.getElementById("showLogin").onclick = () => { clearPendingSignup(); document.getElementById("signupForm").style.display = "none"; document.getElementById("loginForm").style.display = "block"; };
+        document.getElementById("googleLoginBtn").addEventListener("click", signInWithGoogle);
+        document.getElementById("googleSignupBtn").addEventListener("click", signInWithGoogle);
+        document.getElementById("googleCompleteProfileBtn").addEventListener("click", completeGoogleProfile);
+        document.getElementById("cancelGoogleProfileBtn").addEventListener("click", cancelGoogleProfileCompletion);
 
         document.getElementById("signupBtn").addEventListener("click", async () => {
+            const signupBtn = document.getElementById("signupBtn");
+            if (!signupBtn.dataset.readyText) signupBtn.dataset.readyText = signupBtn.innerText;
             const fName = document.getElementById("regFirstName").value.trim();
             const lName = document.getElementById("regLastName").value.trim();
-            const email = document.getElementById("regEmail").value.trim();
-            const phone = document.getElementById("regPhone").value.trim();
+            const email = document.getElementById("regEmail").value.trim().toLowerCase();
+            const phone = normalizePhoneNumber(document.getElementById("regPhone").value.trim());
             const birthDate = document.getElementById("regBirthDate").value;
             const gender = document.getElementById("regGender").value;
             const pass = document.getElementById("regPassword").value;
             const confirmPass = document.getElementById("regConfirmPassword").value;
-            if (!fName || !lName || !email || !phone || !birthDate || !gender || !pass || !confirmPass) return alert("الرجاء تعبئة جميع البيانات!");
-            if (pass !== confirmPass) return alert("كلمة المرور وتأكيد كلمة المرور غير متطابقين!");
+            if (!fName || !lName || !phone || !email || !birthDate || !gender || !pass || !confirmPass) return alert("Please fill all signup details.");
+            if (!isValidLocalPhone(phone)) return alert("Enter the phone number after +972 without the first 0. Example: 525812195");
+            if (pass !== confirmPass) return alert("Password and confirm password do not match.");
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "Users", userCredential.user.uid), { firstName: fName, lastName: lName, email: email, phone: phone, birthDate: birthDate, gender: gender });
-                alert("تم إنشاء الحساب بنجاح!"); authModal.style.display = 'none';
-            } catch (error) { alert("حدث خطأ: " + error.message); }
+                signupBtn.disabled = true;
+                signupBtn.innerText = "Sending SMS password...";
+                if (await emailExists(email)) {
+                    alert("This email is already registered.");
+                    return;
+                }
+                if (await phoneExists(phone)) {
+                    alert("This phone number is already registered.");
+                    return;
+                }
+                await sendSignupSmsCode({ firstName: fName, lastName: lName, email, phone, birthDate, gender, password: pass });
+            } catch (error) { alert("Could not send SMS password: " + error.message); }
+            finally {
+                signupBtn.disabled = false;
+                signupBtn.innerText = signupBtn.dataset.readyText;
+            }
         });
 
+        document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
+            const verifyBtn = document.getElementById("verifyOtpBtn");
+            if (!verifyBtn.dataset.readyText) verifyBtn.dataset.readyText = verifyBtn.innerText;
+            const code = document.getElementById("otpCode").value.trim();
+            if ((!pendingSignupData && !pendingGoogleProfileData) || !phoneVerificationId) return alert("SMS password expired. Please try again.");
+            if (Date.now() > pendingSignupExpiresAt) {
+                clearPendingSignup();
+                return alert("SMS password expired. Your details were not saved. Please try again.");
+            }
+            if (!/^\d{6}$/.test(code)) return alert("Please enter the 6 digit SMS password.");
+
+            try {
+                verifyBtn.disabled = true;
+                verifyBtn.innerText = "Checking...";
+                const phoneCredential = PhoneAuthProvider.credential(phoneVerificationId, code);
+                if (pendingSmsPurpose === "signup") {
+                    const signupData = pendingSignupData;
+                    if (await emailExists(signupData.email)) throw new Error("This email is already registered.");
+                    if (await phoneExists(signupData.phone)) throw new Error("This phone number is already registered.");
+                    const userCredential = await createUserWithEmailAndPassword(auth, signupData.email, signupData.password);
+                    try {
+                        await linkWithCredential(userCredential.user, phoneCredential);
+                        await setDoc(doc(db, "Users", userCredential.user.uid), {
+                            firstName: signupData.firstName,
+                            lastName: signupData.lastName,
+                            email: signupData.email,
+                            phone: signupData.phone,
+                            birthDate: signupData.birthDate,
+                            gender: signupData.gender,
+                            phoneVerified: true
+                        });
+                        currentUserId = userCredential.user.uid;
+                        loggedInUserData = {
+                            firstName: signupData.firstName,
+                            lastName: signupData.lastName,
+                            email: signupData.email,
+                            phone: signupData.phone,
+                            birthDate: signupData.birthDate,
+                            gender: signupData.gender,
+                            phoneVerified: true
+                        };
+                        document.getElementById("profileName").innerText = loggedInUserData.firstName;
+                        loadMyAppointments();
+                        startAppointmentsRefresh();
+                        clearPendingSignup();
+                        authModal.style.display = "none";
+                        alert("Phone verified. Account created successfully.");
+                    } catch (linkOrSaveError) {
+                        await deleteAuthUser(userCredential.user).catch(() => {});
+                        throw linkOrSaveError;
+                    }
+                } else if (pendingSmsPurpose === "googleProfile") {
+                    const profileData = pendingGoogleProfileData;
+                    const user = auth.currentUser;
+                    if (!user) throw new Error("Please sign in with Google again.");
+                    if (await phoneExists(profileData.phone, user.uid)) throw new Error("This phone number is already registered.");
+                    await applyPhoneCredential(user, phoneCredential);
+                    await setDoc(doc(db, "Users", user.uid), { ...profileData, email: user.email || profileData.email || "", phoneVerified: true }, { merge: true });
+                    currentUserId = user.uid;
+                    loggedInUserData = { ...profileData, email: user.email || profileData.email || "", phoneVerified: true };
+                    document.getElementById("profileName").innerText = loggedInUserData.firstName;
+                    loadMyAppointments();
+                    startAppointmentsRefresh();
+                    clearPendingSignup();
+                    document.getElementById("googleProfileModal").style.display = "none";
+                    alert("Phone verified. Account details saved successfully.");
+                }
+            } catch (error) {
+                alert("Could not verify SMS password: " + error.message);
+            } finally {
+                verifyBtn.disabled = false;
+                verifyBtn.innerText = verifyBtn.dataset.readyText;
+            }
+        });
         document.getElementById("loginBtn").addEventListener("click", async () => {
             const email = document.getElementById("loginEmail").value; const pass = document.getElementById("loginPassword").value;
             if (!email || !pass) return alert("أدخل الإيميل وكلمة المرور.");
@@ -434,24 +835,73 @@
                 if (user.email === THE_ADMIN_EMAIL) { window.location.href = "admin.html"; return; }
                 const docSnap = await getDoc(doc(db, "Users", user.uid));
                 if (docSnap.exists()) {
+                    const savedUserData = { ...docSnap.data(), email: user.email };
+                    if (needsGoogleProfileCompletion(user, savedUserData)) {
+                        await deleteDoc(doc(db, "Users", user.uid)).catch(() => {});
+                        currentUserId = null;
+                        loggedInUserData = null;
+                        document.getElementById("profileName").innerText = uiT("account", "حسابي");
+                        document.getElementById("myAppointmentsSection").style.display = "none";
+                        showGoogleProfileCompletion(savedUserData);
+                        return;
+                    }
                     currentUserId = user.uid;
-                    loggedInUserData = { ...docSnap.data(), email: user.email };
+                    loggedInUserData = savedUserData;
                     document.getElementById("profileName").innerText = loggedInUserData.firstName; 
                     loadMyAppointments();
+                    startAppointmentsRefresh();
+                } else if (user.providerData.some((provider) => provider.providerId === "google.com")) {
+                    const googleUserData = await ensureGoogleUserDocument(user);
+                    currentUserId = null;
+                    loggedInUserData = null;
+                    document.getElementById("profileName").innerText = uiT("account", "حسابي");
+                    document.getElementById("myAppointmentsSection").style.display = "none";
+                    showGoogleProfileCompletion({ ...googleUserData, email: user.email });
                 }
-            } else { currentUserId = null; loggedInUserData = null; document.getElementById("profileName").innerText = "حسابي"; document.getElementById("myAppointmentsSection").style.display = "none"; }
+            } else { stopAppointmentsRefresh(); currentUserId = null; loggedInUserData = null; document.getElementById("profileName").innerText = uiT("account", "حسابي"); document.getElementById("myAppointmentsSection").style.display = "none"; document.getElementById("googleProfileModal").style.display = "none"; }
         });
+
+        function startAppointmentsRefresh() {
+            stopAppointmentsRefresh();
+            appointmentsRefreshTimer = setInterval(() => {
+                if (loggedInUserData) loadMyAppointments();
+            }, 60000);
+        }
+
+        function stopAppointmentsRefresh() {
+            if (appointmentsRefreshTimer) {
+                clearInterval(appointmentsRefreshTimer);
+                appointmentsRefreshTimer = null;
+            }
+        }
+
+        function getAppointmentDateTime(appointment) {
+            if (!appointment.date) return null;
+            const [year, month, day] = String(appointment.date).split("-").map(Number);
+            if (!year || !month || !day) return null;
+            const [hour = 23, minute = 59] = String(appointment.time || "23:59").split(":").map(Number);
+            return new Date(year, month - 1, day, hour || 0, minute || 0, 0, 0);
+        }
+
+        function isSameLoggedInUser(data) {
+            return data.userId === currentUserId || data.email === loggedInUserData?.email || (!!data.phone && data.phone === loggedInUserData?.phone);
+        }
+
+        function renderAppointmentItem(data) {
+            return `<div class="appointment-item"><div><strong>${uiT("serviceWord", "الخدمة:")}</strong> ${data.service || uiT("unspecified", "غير محدد")}<br><small>📅 ${data.date || "-"} | ⏰ ${uiT("timeWord", "الساعة:")} ${data.time || uiT("unspecified", "غير محدد")}</small></div><div><span style="background: #eee; color:#222; padding: 5px 10px; border-radius: 4px; font-size: 13px;">${displayAppointmentStatus(data.status)}</span></div></div>`;
+        }
 
         async function loadMyAppointments() {
             if (!loggedInUserData) return;
             const container = document.getElementById("myAppointmentsList");
             const qSnap = await getDocs(collection(db, "Appointments"));
-            const today = new Date().toISOString().slice(0, 10);
+            const now = new Date();
             const myAppointments = [];
             qSnap.forEach((docSnap) => {
                 const data = docSnap.data();
-                const sameUser = data.userId === currentUserId || data.email === loggedInUserData.email || (!!data.phone && data.phone === loggedInUserData.phone);
-                if (sameUser && data.date >= today) myAppointments.push(data);
+                if (!isSameLoggedInUser(data)) return;
+                const appointmentDateTime = getAppointmentDateTime(data);
+                if (!appointmentDateTime || appointmentDateTime > now) myAppointments.push(data);
             });
 
             myAppointments.sort((a, b) => `${a.date || ""} ${a.time || ""}`.localeCompare(`${b.date || ""} ${b.time || ""}`));
@@ -462,7 +912,7 @@
             }
 
             myAppointments.forEach((data) => {
-                container.innerHTML += `<div class="appointment-item"><div><strong>الخدمة:</strong> ${data.service || 'غير محدد'}<br><span style="color: #666; font-size: 14px;">📅 ${data.date} | ⏰ الساعة: ${data.time || 'غير محدد'}</span></div><div><span style="background: #eee; padding: 5px 10px; border-radius: 4px; font-size: 13px;">${data.status || 'قيد الانتظار'}</span></div></div>`;
+                container.innerHTML += renderAppointmentItem(data);
             });
             document.getElementById("myAppointmentsSection").style.display = "block";
         }
@@ -471,6 +921,8 @@
             const container = document.getElementById("productsContainer");
             const querySnapshot = await getDocs(collection(db, "Products"));
             container.innerHTML = ""; 
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const text = uiText[lang] || uiText.ar;
             
             let hasFeatured = false;
             
@@ -488,19 +940,19 @@
                     // ترتيب السعر (مع أو بدون خصم)
                     let priceHtml = `<p class="price">${data.price} ₪</p>`;
                     if (data.originalPrice) {
-                        priceHtml = `<p class="price"><span class="sale-badge">خصم</span> ${data.price} ₪ <span class="old-price">${data.originalPrice} ₪</span></p>`;
+                        priceHtml = `<p class="price"><span class="sale-badge">${text.saleBadge}</span> ${data.price} ₪ <span class="old-price">${data.originalPrice} ₪</span></p>`;
                     }
 
                     const card = document.createElement("div"); card.className = "product-card";
                     card.innerHTML = `<div class="info-btn" onclick="openInfoModal('${safeName}', '${safeDesc}', '${imgUrl}')">i</div><img src="${imgUrl}"><h3>${data.name}</h3>${priceHtml}`;
-                    const shopBtn = document.createElement("button"); shopBtn.className = "btn"; shopBtn.innerText = "عرض في المتجر 🛍️";
+                    const shopBtn = document.createElement("button"); shopBtn.className = "btn"; shopBtn.innerText = text.shopPreviewButton;
                     shopBtn.onclick = () => { window.location.href = "shop.html"; }; 
                     card.appendChild(shopBtn); container.appendChild(card);
                 }
             });
             
             if (!hasFeatured) {
-                container.innerHTML = "<p style='color:#888;'>لم يتم تحديد منتجات مميزة لعرضها هنا. تصفحي المتجر!</p>";
+                container.innerHTML = `<p style='color:#888;'>${text.noFeaturedProducts}</p>`;
             }
         }
 

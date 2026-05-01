@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معلومات حسابي | Salon Tofik</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; color: #222; }
+        body.dark-mode { background: #151515; color: #f3f3f3; }
+        header { background: #000; color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header-logo { height: 60px; max-width: 180px; object-fit: contain; }
+        nav { display: flex; align-items: center; gap: 20px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #fff; text-decoration: none; cursor: pointer; transition: color 0.25s; background: none; border: 0; padding: 0; font-family: inherit; }
+        .nav-item:hover { color: #aaa; }
+        .nav-icon { font-size: 26px; margin-bottom: 4px; }
+        .nav-text { font-size: 13px; font-weight: bold; }
+        .container { max-width: 780px; margin: 0 auto; padding: 28px 20px 60px; }
+        .account-card { background: #fff; padding: 34px; border-radius: 12px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body.dark-mode .account-card, body.dark-mode .status-box { background: #222; color: #f3f3f3; border-color: #333; }
+        h1 { margin: 0 0 10px; text-align: center; }
+        .subtitle { margin: 0 auto 28px; color: #666; text-align: center; line-height: 1.6; max-width: 560px; }
+        body.dark-mode .subtitle, body.dark-mode small { color: #ddd; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+        .field { text-align: right; }
+        .field.full { grid-column: 1 / -1; }
+        label { display: block; font-weight: bold; margin-bottom: 7px; color: #222; }
+        body.dark-mode label { color: #f3f3f3; }
+        input, select { width: 100%; padding: 13px; border: 1px solid #ccc; border-radius: 5px; background: #fafafa; color: #222; font-family: inherit; font-size: 15px; }
+        body.dark-mode input, body.dark-mode select { background: #181818; color: #f3f3f3; border-color: #444; }
+        .phone-field { display: flex; align-items: stretch; direction: ltr; }
+        .phone-prefix { display: flex; align-items: center; justify-content: center; width: 82px; padding: 0 12px; border: 1px solid #ccc; border-right: 0; border-radius: 5px 0 0 5px; background: #eee; font-weight: bold; }
+        .phone-field input { border-radius: 0 5px 5px 0; text-align: left; direction: ltr; }
+        body.dark-mode .phone-prefix { background: #2a2a2a; color: #f3f3f3; border-color: #444; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+        .btn { flex: 1; min-width: 190px; background: #000; color: #fff; border: 1px solid #000; padding: 13px 18px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: background 0.25s, color 0.25s; text-decoration: none; text-align: center; }
+        .btn:hover { background: #fff; color: #000; }
+        .btn.secondary { background: #fff; color: #000; }
+        .btn.secondary:hover { background: #000; color: #fff; }
+        body.dark-mode .btn.secondary { background: #181818; color: #f3f3f3; border-color: #555; }
+        .status-box { margin-top: 20px; padding: 18px; background: #fafafa; border: 1px solid #e6e6e6; border-radius: 8px; text-align: center; display: none; }
+        #profileRecaptcha { display: flex; justify-content: center; margin: 12px 0; }
+        .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
+        .settings-drawer-overlay.open { display: block; }
+        .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
+        .settings-drawer-overlay.open .settings-drawer { transform: translateX(0); }
+        body.dark-mode .settings-drawer { background: #202020; color: #f3f3f3; }
+        .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
+        .settings-row { text-align: right; margin: 16px 0; }
+        .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; font-family: inherit; text-align: right; }
+        body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
+        .drawer-btn { width: 100%; margin: 22px 0 0; }
+        @media (max-width: 700px) {
+            header { padding: 12px 16px; }
+            nav { gap: 12px; }
+            .header-logo { height: 48px; }
+            .container { padding: 18px 12px 40px; }
+            .account-card { padding: 24px 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR">
+        <nav>
+            <a href="index.html" class="nav-item">
+                <span class="material-symbols-outlined nav-icon">home</span>
+                <span class="nav-text" data-i18n="home">الرئيسية</span>
+            </a>
+            <a href="old-bookings.html" class="nav-item">
+                <span class="material-symbols-outlined nav-icon">history</span>
+                <span class="nav-text" data-i18n="oldBookingsButton">الحجوزات القديمة</span>
+            </a>
+            <button id="settingsBtn" class="nav-item" type="button">
+                <span class="material-symbols-outlined nav-icon">settings</span>
+                <span class="nav-text" data-i18n="settings">الإعدادات</span>
+            </button>
+        </nav>
+    </header>
+
+    <div id="settingsModal" class="settings-drawer-overlay">
+        <div class="settings-drawer">
+            <span id="closeSettingsBtn" class="settings-close">&times;</span>
+            <h2 data-i18n="settings">الإعدادات</h2>
+            <div class="settings-row">
+                <label for="themeSelect" data-i18n="theme">المظهر</label>
+                <select id="themeSelect">
+                    <option value="light" data-i18n="light">فاتح</option>
+                    <option value="dark" data-i18n="dark">داكن</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="langSelect" data-i18n="language">اللغة</label>
+                <select id="langSelect">
+                    <option value="ar">العربية</option>
+                    <option value="he">עברית</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="textSizeSelect" data-i18n="textSize">حجم الخط</label>
+                <select id="textSizeSelect">
+                    <option value="normal" data-i18n="normal">عادي</option>
+                    <option value="large" data-i18n="large">كبير</option>
+                </select>
+            </div>
+            <button class="btn drawer-btn" type="button" onclick="window.location.href='old-bookings.html'" data-i18n="oldBookingsButton">الحجوزات القديمة</button>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="account-card">
+            <h1 data-i18n="accountInfoTitle">معلومات حسابي</h1>
+            <p class="subtitle" data-i18n="accountInfoSubtitle">يمكنك رؤية وتعديل بياناتك هنا. قبل حفظ التعديل سنطلب تأكيد SMS، وتغيير كلمة المرور يتم عبر رسالة بريد إلكتروني.</p>
+            <div id="loginRequired" class="status-box">
+                <h3 data-i18n="loginRequiredTitle">يرجى تسجيل الدخول أولاً</h3>
+                <p data-i18n="loginRequiredText">سجّل الدخول من الصفحة الرئيسية لتعديل بيانات حسابك.</p>
+                <a class="btn" href="index.html" data-i18n="backHome">العودة للصفحة الرئيسية</a>
+            </div>
+
+            <form id="accountForm" style="display:none;">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="profileFirstName" data-i18n="firstName">الاسم الأول</label>
+                        <input id="profileFirstName" type="text">
+                    </div>
+                    <div class="field">
+                        <label for="profileLastName" data-i18n="lastName">اسم العائلة</label>
+                        <input id="profileLastName" type="text">
+                    </div>
+                    <div class="field full">
+                        <label for="profileEmail" data-i18n="email">البريد الإلكتروني</label>
+                        <input id="profileEmail" type="email" dir="ltr">
+                        <small id="emailNote"></small>
+                    </div>
+                    <div class="field full">
+                        <label for="profilePhone" data-i18n="phone">رقم الهاتف</label>
+                        <div class="phone-field">
+                            <span class="phone-prefix">+972</span>
+                            <input id="profilePhone" type="tel" inputmode="numeric" autocomplete="tel-national">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="profileBirthDate" data-i18n="birthDate">تاريخ الميلاد</label>
+                        <input id="profileBirthDate" type="date">
+                    </div>
+                    <div class="field">
+                        <label for="profileGender" data-i18n="gender">الجنس</label>
+                        <select id="profileGender">
+                            <option value="" data-i18n="genderUnknown">غير محدد</option>
+                            <option value="female" data-i18n="genderFemale">أنثى</option>
+                            <option value="male" data-i18n="genderMale">ذكر</option>
+                            <option value="other" data-i18n="genderOther">آخر</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button id="sendProfileSmsBtn" class="btn" type="button" data-i18n="sendProfileSms">إرسال كود SMS وحفظ التعديل</button>
+                    <button id="passwordResetBtn" class="btn secondary" type="button" data-i18n="passwordReset">تغيير كلمة المرور بالبريد</button>
+                </div>
+                <div id="smsPanel" class="status-box">
+                    <p data-i18n="profileSmsSent">أرسلنا كود SMS. أدخله هنا لإكمال حفظ التعديل.</p>
+                    <div id="profileRecaptcha"></div>
+                    <input id="profileSmsCode" type="text" inputmode="numeric" maxlength="6" placeholder="SMS password" style="text-align:center; font-size:20px; letter-spacing:5px;">
+                    <button id="verifyProfileSmsBtn" class="btn" type="button" data-i18n="verifyAndSave">تأكيد وحفظ</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, query, where, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, RecaptchaVerifier, PhoneAuthProvider, linkWithCredential, updatePhoneNumber, verifyBeforeUpdateEmail, sendPasswordResetEmail, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentUser = null;
+        let currentProfile = null;
+        let pendingProfileData = null;
+        let profileVerificationId = "";
+        let profileRecaptchaVerifier = null;
+
+        const uiText = {
+            ar: { home: "الرئيسية", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", oldBookingsButton: "الحجوزات القديمة", accountInfoTitle: "معلومات حسابي", accountInfoSubtitle: "يمكنك رؤية وتعديل بياناتك هنا. قبل حفظ التعديل سنطلب تأكيد SMS، وتغيير كلمة المرور يتم عبر رسالة بريد إلكتروني.", loginRequiredTitle: "يرجى تسجيل الدخول أولاً", loginRequiredText: "سجّل الدخول من الصفحة الرئيسية لتعديل بيانات حسابك.", backHome: "العودة للصفحة الرئيسية", firstName: "الاسم الأول", lastName: "اسم العائلة", email: "البريد الإلكتروني", phone: "رقم الهاتف", birthDate: "تاريخ الميلاد", gender: "الجنس", genderUnknown: "غير محدد", genderFemale: "أنثى", genderMale: "ذكر", genderOther: "آخر", sendProfileSms: "إرسال كود SMS وحفظ التعديل", passwordReset: "تغيير كلمة المرور بالبريد", profileSmsSent: "أرسلنا كود SMS. أدخله هنا لإكمال حفظ التعديل.", verifyAndSave: "تأكيد وحفظ", pendingEmailNote: "بانتظار تأكيد البريد الجديد:" },
+            he: { home: "בית", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", oldBookingsButton: "תורים ישנים", accountInfoTitle: "פרטי החשבון שלי", accountInfoSubtitle: "כאן אפשר לראות ולעדכן את הפרטים. לפני שמירה נבקש אימות SMS, ושינוי סיסמה מתבצע דרך אימייל.", loginRequiredTitle: "צריך להתחבר קודם", loginRequiredText: "התחברי מהעמוד הראשי כדי לערוך את פרטי החשבון.", backHome: "חזרה לעמוד הראשי", firstName: "שם פרטי", lastName: "שם משפחה", email: "אימייל", phone: "טלפון", birthDate: "תאריך לידה", gender: "מין", genderUnknown: "לא מוגדר", genderFemale: "נקבה", genderMale: "זכר", genderOther: "אחר", sendProfileSms: "שליחת קוד SMS ושמירת שינוי", passwordReset: "שינוי סיסמה באימייל", profileSmsSent: "שלחנו קוד SMS. הזיני אותו כדי להשלים שמירה.", verifyAndSave: "אימות ושמירה", pendingEmailNote: "ממתין לאישור האימייל החדש:" },
+            en: { home: "Home", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", oldBookingsButton: "Old bookings", accountInfoTitle: "My account info", accountInfoSubtitle: "You can view and edit your details here. Before saving changes we ask for SMS confirmation, and password changes are handled by email.", loginRequiredTitle: "Please log in first", loginRequiredText: "Log in from the home page to edit your account details.", backHome: "Back to home page", firstName: "First name", lastName: "Last name", email: "Email", phone: "Phone number", birthDate: "Birth date", gender: "Gender", genderUnknown: "Not specified", genderFemale: "Female", genderMale: "Male", genderOther: "Other", sendProfileSms: "Send SMS code and save changes", passwordReset: "Change password by email", profileSmsSent: "We sent an SMS code. Enter it to finish saving.", verifyAndSave: "Verify and save", pendingEmailNote: "Waiting for new email confirmation:" }
+        };
+
+        function uiT(key, fallback) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            return uiText[lang]?.[key] || fallback;
+        }
+
+        function applySettings() {
+            const theme = localStorage.getItem("salonTheme") || "light";
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const textSize = localStorage.getItem("salonTextSize") || "normal";
+            document.body.classList.toggle("dark-mode", theme === "dark");
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+            document.body.style.fontSize = textSize === "large" ? "18px" : "";
+            document.getElementById("themeSelect").value = theme;
+            document.getElementById("langSelect").value = lang;
+            document.getElementById("textSizeSelect").value = textSize;
+            document.querySelectorAll("[data-i18n]").forEach((element) => {
+                const key = element.dataset.i18n;
+                if (uiText[lang]?.[key]) element.textContent = uiText[lang][key];
+            });
+            renderEmailNote();
+        }
+
+        function normalizePhoneNumber(phone) {
+            const compact = String(phone || "").replace(/[\s-]/g, "");
+            if (!compact) return "";
+            if (compact.startsWith("+")) return compact;
+            if (compact.startsWith("00")) return `+${compact.slice(2)}`;
+            if (compact.startsWith("972")) return `+${compact}`;
+            if (compact.startsWith("0")) return `+972${compact.slice(1)}`;
+            return `+972${compact}`;
+        }
+
+        function displayLocalPhone(phone) {
+            return String(phone || "").replace(/^\+972/, "");
+        }
+
+        function isValidLocalPhone(phone) {
+            return /^\+972[1-9]\d{7,8}$/.test(phone);
+        }
+
+        async function phoneExists(phone, exceptUserId = null) {
+            const usersSnapshot = await getDocs(query(collection(db, "Users"), where("phone", "==", phone)));
+            return usersSnapshot.docs.some((userDoc) => userDoc.id !== exceptUserId);
+        }
+
+        async function emailExists(email, exceptUserId = null) {
+            const usersSnapshot = await getDocs(query(collection(db, "Users"), where("email", "==", email)));
+            if (usersSnapshot.docs.some((userDoc) => userDoc.id !== exceptUserId)) return true;
+            const authMethods = await fetchSignInMethodsForEmail(auth, email).catch(() => []);
+            return authMethods.length > 0;
+        }
+
+        async function applyPhoneCredential(user, credential) {
+            if (user.providerData.some((provider) => provider.providerId === "phone")) {
+                await updatePhoneNumber(user, credential);
+                return;
+            }
+            try {
+                await linkWithCredential(user, credential);
+            } catch (error) {
+                if (error.code === "auth/provider-already-linked") await updatePhoneNumber(user, credential);
+                else throw error;
+            }
+        }
+
+        function readProfileForm() {
+            return {
+                firstName: document.getElementById("profileFirstName").value.trim(),
+                lastName: document.getElementById("profileLastName").value.trim(),
+                email: document.getElementById("profileEmail").value.trim().toLowerCase(),
+                phone: normalizePhoneNumber(document.getElementById("profilePhone").value.trim()),
+                birthDate: document.getElementById("profileBirthDate").value,
+                gender: document.getElementById("profileGender").value
+            };
+        }
+
+        function renderEmailNote() {
+            const note = document.getElementById("emailNote");
+            if (!note || !currentProfile) return;
+            note.textContent = currentProfile.pendingEmail ? `${uiT("pendingEmailNote", "بانتظار تأكيد البريد الجديد:")} ${currentProfile.pendingEmail}` : "";
+        }
+
+        function fillProfileForm(data) {
+            document.getElementById("profileFirstName").value = data.firstName || "";
+            document.getElementById("profileLastName").value = data.lastName || "";
+            document.getElementById("profileEmail").value = currentUser?.email || data.email || "";
+            document.getElementById("profilePhone").value = displayLocalPhone(data.phone || currentUser?.phoneNumber || "");
+            document.getElementById("profileBirthDate").value = data.birthDate || "";
+            document.getElementById("profileGender").value = data.gender || "";
+            renderEmailNote();
+        }
+
+        function resetProfileSms() {
+            profileVerificationId = "";
+            pendingProfileData = null;
+            document.getElementById("profileSmsCode").value = "";
+            document.getElementById("smsPanel").style.display = "none";
+            if (profileRecaptchaVerifier) {
+                profileRecaptchaVerifier.clear();
+                profileRecaptchaVerifier = null;
+                document.getElementById("profileRecaptcha").innerHTML = "";
+            }
+        }
+
+        async function sendProfileSms() {
+            if (!currentUser || !currentProfile) return;
+            const data = readProfileForm();
+            if (!data.firstName || !data.lastName || !data.email || !data.phone || !data.birthDate || !data.gender) return alert("Please fill all account details.");
+            if (!isValidLocalPhone(data.phone)) return alert("Enter the phone number after +972 without the first 0. Example: 525812195");
+            if (await phoneExists(data.phone, currentUser.uid)) return alert("This phone number is already registered.");
+            if (data.email !== (currentUser.email || "").toLowerCase() && await emailExists(data.email, currentUser.uid)) return alert("This email is already registered.");
+
+            const btn = document.getElementById("sendProfileSmsBtn");
+            if (!btn.dataset.readyText) btn.dataset.readyText = btn.innerText;
+            try {
+                btn.disabled = true;
+                btn.innerText = "Sending SMS password...";
+                resetProfileSms();
+                pendingProfileData = data;
+                document.getElementById("smsPanel").style.display = "block";
+                profileRecaptchaVerifier = new RecaptchaVerifier(auth, "profileRecaptcha", { size: "normal" });
+                const provider = new PhoneAuthProvider(auth);
+                profileVerificationId = await provider.verifyPhoneNumber(data.phone, profileRecaptchaVerifier);
+                document.getElementById("profileSmsCode").focus();
+            } catch (error) {
+                resetProfileSms();
+                alert("Could not send SMS password: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = btn.dataset.readyText;
+            }
+        }
+
+        async function verifyProfileSmsAndSave() {
+            const code = document.getElementById("profileSmsCode").value.trim();
+            if (!pendingProfileData || !profileVerificationId) return alert("Send the SMS password first.");
+            if (!/^\d{6}$/.test(code)) return alert("Please enter the 6 digit SMS password.");
+
+            const btn = document.getElementById("verifyProfileSmsBtn");
+            if (!btn.dataset.readyText) btn.dataset.readyText = btn.innerText;
+            try {
+                btn.disabled = true;
+                btn.innerText = "Saving...";
+                const credential = PhoneAuthProvider.credential(profileVerificationId, code);
+                await applyPhoneCredential(currentUser, credential);
+
+                const newEmail = pendingProfileData.email;
+                const currentEmail = (currentUser.email || "").toLowerCase();
+                const saveData = {
+                    firstName: pendingProfileData.firstName,
+                    lastName: pendingProfileData.lastName,
+                    email: currentUser.email || pendingProfileData.email,
+                    phone: pendingProfileData.phone,
+                    birthDate: pendingProfileData.birthDate,
+                    gender: pendingProfileData.gender,
+                    phoneVerified: true
+                };
+
+                if (newEmail && newEmail !== currentEmail) {
+                    await verifyBeforeUpdateEmail(currentUser, newEmail);
+                    saveData.pendingEmail = newEmail;
+                    alert("We sent a confirmation email to the new email address. Open it to finish changing the email.");
+                } else {
+                    saveData.pendingEmail = "";
+                }
+
+                await setDoc(doc(db, "Users", currentUser.uid), saveData, { merge: true });
+                currentProfile = { ...currentProfile, ...saveData };
+                fillProfileForm(currentProfile);
+                resetProfileSms();
+                alert("Account details saved successfully.");
+            } catch (error) {
+                alert("Could not save account details: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = btn.dataset.readyText;
+            }
+        }
+
+        async function sendPasswordReset() {
+            if (!currentUser?.email) return alert("No email is connected to this account.");
+            try {
+                await sendPasswordResetEmail(auth, currentUser.email);
+                alert("Password reset email sent.");
+            } catch (error) {
+                alert("Could not send password reset email: " + error.message);
+            }
+        }
+
+        document.getElementById("settingsBtn").addEventListener("click", () => document.getElementById("settingsModal").classList.add("open"));
+        document.getElementById("closeSettingsBtn").addEventListener("click", () => document.getElementById("settingsModal").classList.remove("open"));
+        document.getElementById("settingsModal").addEventListener("click", (event) => {
+            if (event.target === document.getElementById("settingsModal")) document.getElementById("settingsModal").classList.remove("open");
+        });
+        ["themeSelect", "langSelect", "textSizeSelect"].forEach((id) => document.getElementById(id).addEventListener("change", () => {
+            localStorage.setItem("salonTheme", document.getElementById("themeSelect").value);
+            localStorage.setItem("salonLang", document.getElementById("langSelect").value);
+            localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
+            applySettings();
+        }));
+        document.getElementById("sendProfileSmsBtn").addEventListener("click", sendProfileSms);
+        document.getElementById("verifyProfileSmsBtn").addEventListener("click", verifyProfileSmsAndSave);
+        document.getElementById("passwordResetBtn").addEventListener("click", sendPasswordReset);
+
+        applySettings();
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            resetProfileSms();
+            if (!user) {
+                document.getElementById("loginRequired").style.display = "block";
+                document.getElementById("accountForm").style.display = "none";
+                return;
+            }
+
+            const userRef = doc(db, "Users", user.uid);
+            const userSnap = await getDoc(userRef);
+            const displayNameParts = (user.displayName || "").trim().split(/\s+/).filter(Boolean);
+            const fallbackProfile = {
+                firstName: displayNameParts.shift() || "",
+                lastName: displayNameParts.join(" "),
+                email: user.email || "",
+                phone: user.phoneNumber || "",
+                birthDate: "",
+                gender: ""
+            };
+            currentProfile = userSnap.exists() ? { ...fallbackProfile, ...userSnap.data(), email: user.email || userSnap.data().email || "" } : fallbackProfile;
+            if (!userSnap.exists() || currentProfile.email !== user.email) {
+                await setDoc(userRef, { ...currentProfile, email: user.email || currentProfile.email || "" }, { merge: true });
+            }
+            document.getElementById("loginRequired").style.display = "none";
+            document.getElementById("accountForm").style.display = "block";
+            fillProfileForm(currentProfile);
+
+        });
+    </script>
+</body>
+</html>

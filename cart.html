@@ -12,9 +12,14 @@
         body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh;}
         body.dark-mode { background-color: #151515; color: #f3f3f3; }
         body.dark-mode .cart-container { background: #222; color: #f3f3f3; border-color: #333; }
-        body.dark-mode .item-details h3, body.dark-mode .total-price { color: #f3f3f3; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode label, body.dark-mode .item-details h3, body.dark-mode .total-price { color: #f3f3f3; }
+        body.dark-mode .item-details p, body.dark-mode .empty-cart, body.dark-mode .loader, body.dark-mode small { color: #ddd !important; }
+        body.dark-mode .cart-item { border-color: #333; }
         body.dark-mode .qty-controls { background: #181818; border-color: #444; }
         body.dark-mode .qty-btn { background: #222; color: #f3f3f3; border-color: #555; }
+        body.dark-mode #loginWarning { background: #241818 !important; border-color: #5a2b2b !important; color: #f3f3f3; }
+        body.dark-mode #loginWarning h3 { color: #ff8a8a !important; }
+        body.dark-mode #emptyCartMsg a { color: #f3f3f3 !important; }
         header { background-color: #000000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;}
         .header-logo { height: 60px; max-width: 180px; object-fit: contain; }
         
@@ -51,6 +56,19 @@
         
         .empty-cart { text-align: center; padding: 40px; color: #666; font-size: 18px;}
         .loader { text-align: center; color: #888; font-weight: bold; display: none; margin-top: 15px;}
+        input, select, textarea { padding: 12px; margin: 8px 0; width: 100%; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; background-color: #fafafa; box-sizing: border-box;}
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #181818; color: #f3f3f3; border-color: #444; }
+        .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
+        .settings-drawer-overlay.open { display: block; }
+        .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-sizing: border-box; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
+        .settings-drawer-overlay.open .settings-drawer { transform: translateX(0); }
+        body.dark-mode .settings-drawer { background: #202020; color: #f3f3f3; }
+        .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
+        .settings-row { text-align: right; margin: 16px 0; }
+        .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; box-sizing: border-box; font-family: inherit; text-align: right; }
+        body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
+        .old-bookings-btn { width: 100%; margin: 22px 0 10px; padding: 12px 25px; border-radius: 4px; font-size: 16px; }
 
         footer { background-color: #000000; color: white; padding: 40px 20px 20px; text-align: center; margin-top: auto;}
         .social-icons { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;}
@@ -90,34 +108,42 @@
             <div id="cartItemsList"></div>
             
             <div id="cartSummary" class="cart-summary" style="display: none;">
-                <div class="total-price">المجموع الكلي: <span id="totalAmount">0</span> ₪</div>
-                <button id="checkoutBtn" class="btn-checkout">تأكيد الطلب والدفع</button>
-                <div id="loader" class="loader">جاري إرسال الطلب... ⏳</div>
+                <div class="total-price"><span data-i18n="totalLabel">المجموع الكلي:</span> <span id="totalAmount">0</span> ₪</div>
+                <button id="checkoutBtn" class="btn-checkout" data-i18n="checkout">تأكيد الطلب والدفع</button>
+                <div id="loader" class="loader" data-i18n="checkoutLoader">جاري إرسال الطلب... ⏳</div>
             </div>
             
             <div id="emptyCartMsg" class="empty-cart" style="display: none;">
-                <p>سلتك فارغة حالياً 😔</p>
-                <a href="shop.html" style="color: #000; font-weight: bold;">تصفحي المتجر وأضيفي منتجات</a>
+                <p data-i18n="emptyCart">سلتك فارغة حالياً 😔</p>
+                <a href="shop.html" style="color: #000; font-weight: bold;" data-i18n="browseShop">تصفحي المتجر وأضيفي منتجات</a>
             </div>
             
             <div id="loginWarning" style="display: none; text-align: center; background: #fff3f3; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #ffcccc;">
-                <h3 style="color: #cc0000; margin-top: 0;">🔒 يرجى تسجيل الدخول</h3>
-                <p>يجب عليك تسجيل الدخول من الصفحة الرئيسية لتتمكني من تأكيد الطلب.</p>
-                <a href="index.html" style="background: #000; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">الذهاب لتسجيل الدخول</a>
+                <h3 style="color: #cc0000; margin-top: 0;" data-i18n="loginRequiredTitle">🔒 يرجى تسجيل الدخول</h3>
+                <p data-i18n="loginRequiredText">يجب عليك تسجيل الدخول من الصفحة الرئيسية لتتمكني من تأكيد الطلب.</p>
+                <a href="index.html" style="background: #000; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;" data-i18n="loginLink">الذهاب لتسجيل الدخول</a>
             </div>
         </div>
     </div>
 
-    <div id="settingsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center;">
-        <div class="cart-container" style="max-width:420px; width:90%; position:relative;">
-            <span onclick="closeSettings()" style="position:absolute; top:10px; right:18px; font-size:28px; cursor:pointer;">&times;</span>
+    <div id="settingsModal" class="settings-drawer-overlay">
+        <div class="settings-drawer">
+            <span onclick="closeSettings()" class="settings-close">&times;</span>
             <h2 data-i18n="settings">الإعدادات</h2>
-            <label data-i18n="theme">المظهر</label>
-            <select id="themeSelect"><option value="light" data-i18n="light">فاتح</option><option value="dark" data-i18n="dark">داكن</option></select>
-            <label data-i18n="language">اللغة</label>
-            <select id="langSelect"><option value="ar">العربية</option><option value="he">עברית</option><option value="en">English</option></select>
-            <label data-i18n="textSize">حجم الخط</label>
-            <select id="textSizeSelect"><option value="normal" data-i18n="normal">عادي</option><option value="large" data-i18n="large">كبير</option></select>
+            <div class="settings-row">
+                <label data-i18n="theme">المظهر</label>
+                <select id="themeSelect"><option value="light" data-i18n="light">فاتح</option><option value="dark" data-i18n="dark">داكن</option></select>
+            </div>
+            <div class="settings-row">
+                <label data-i18n="language">اللغة</label>
+                <select id="langSelect"><option value="ar">العربية</option><option value="he">עברית</option><option value="en">English</option></select>
+            </div>
+            <div class="settings-row">
+                <label data-i18n="textSize">حجم الخط</label>
+                <select id="textSizeSelect"><option value="normal" data-i18n="normal">عادي</option><option value="large" data-i18n="large">كبير</option></select>
+            </div>
+            <button id="oldBookingsPageBtn" class="btn-checkout old-bookings-btn" type="button" data-i18n="oldBookingsButton">الحجوزات القديمة</button>
+            <button id="accountInfoPageBtn" class="btn-checkout old-bookings-btn" type="button" data-i18n="accountInfoButton">معلومات حسابي</button>
         </div>
     </div>
 
@@ -149,10 +175,14 @@
         let cart = JSON.parse(localStorage.getItem('salonCart')) || [];
 
         const uiText = {
-            ar: { home: "الرئيسية", shop: "المتجر", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", cartTitle: "🛒 سلة المشتريات" },
-            he: { home: "בית", shop: "חנות", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", cartTitle: "🛒 עגלת קניות" },
-            en: { home: "Home", shop: "Shop", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", cartTitle: "🛒 Shopping Cart" }
+            ar: { home: "الرئيسية", shop: "المتجر", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", cartTitle: "🛒 سلة المشتريات", totalLabel: "المجموع الكلي:", checkout: "تأكيد الطلب والدفع", checkoutLoader: "جاري إرسال الطلب... ⏳", emptyCart: "سلتك فارغة حالياً 😔", browseShop: "تصفحي المتجر وأضيفي منتجات", loginRequiredTitle: "🔒 يرجى تسجيل الدخول", loginRequiredText: "يجب عليك تسجيل الدخول من الصفحة الرئيسية لتتمكني من تأكيد الطلب.", loginLink: "الذهاب لتسجيل الدخول", each: "للقطعة", available: "المتوفر", remove: "حذف ❌" },
+            he: { home: "בית", shop: "חנות", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", cartTitle: "🛒 עגלת קניות", totalLabel: "סה\"כ:", checkout: "אישור הזמנה ותשלום", checkoutLoader: "שולח הזמנה... ⏳", emptyCart: "העגלה שלך ריקה כרגע 😔", browseShop: "עברי לחנות והוסיפי מוצרים", loginRequiredTitle: "🔒 צריך להתחבר", loginRequiredText: "יש להתחבר מהעמוד הראשי כדי לאשר הזמנה.", loginLink: "לעמוד התחברות", each: "ליחידה", available: "במלאי", remove: "מחיקה ❌" },
+            en: { home: "Home", shop: "Shop", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", cartTitle: "🛒 Shopping Cart", totalLabel: "Total:", checkout: "Confirm order and payment", checkoutLoader: "Sending order... ⏳", emptyCart: "Your cart is empty right now 😔", browseShop: "Browse the shop and add products", loginRequiredTitle: "🔒 Please log in", loginRequiredText: "You need to log in from the home page before confirming the order.", loginLink: "Go to login", each: "each", available: "Available", remove: "Remove ❌" }
         };
+        Object.assign(uiText.ar, { quantityLimit: "لا يمكنك اختيار أكثر من الكمية المتوفرة:", loginBeforeCheckout: "يجب تسجيل الدخول قبل تأكيد الطلب.", orderSuccess: "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.", orderError: "حدث خطأ أثناء إرسال الطلب: ", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي" });
+        Object.assign(uiText.he, { quantityLimit: "אי אפשר לבחור יותר מהכמות הזמינה:", loginBeforeCheckout: "צריך להתחבר לפני אישור ההזמנה.", orderSuccess: "ההזמנה נשלחה בהצלחה! ניצור איתך קשר בקרוב.", orderError: "אירעה שגיאה בשליחת ההזמנה: ", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי" });
+        Object.assign(uiText.en, { quantityLimit: "You cannot choose more than the available quantity:", loginBeforeCheckout: "Please log in before confirming the order.", orderSuccess: "Your order was sent successfully! We will contact you soon.", orderError: "Error while sending the order: ", oldBookingsButton: "Old bookings", accountInfoButton: "My account info" });
+
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -165,9 +195,13 @@
             document.getElementById("langSelect").value = lang;
             document.getElementById("textSizeSelect").value = textSize;
             document.querySelectorAll("[data-i18n]").forEach((element) => { const key = element.dataset.i18n; if (uiText[lang]?.[key]) element.textContent = uiText[lang][key]; });
+            renderCart();
         }
-        window.openSettings = () => { document.getElementById("settingsModal").style.display = "flex"; };
-        window.closeSettings = () => { document.getElementById("settingsModal").style.display = "none"; };
+        window.openSettings = () => { document.getElementById("settingsModal").classList.add("open"); };
+        window.closeSettings = () => { document.getElementById("settingsModal").classList.remove("open"); };
+        document.getElementById("settingsModal").addEventListener("click", (event) => { if (event.target === document.getElementById("settingsModal")) closeSettings(); });
+        document.getElementById("oldBookingsPageBtn").addEventListener("click", () => { window.location.href = "old-bookings.html"; });
+        document.getElementById("accountInfoPageBtn").addEventListener("click", () => { window.location.href = "account.html"; });
         ["themeSelect", "langSelect", "textSizeSelect"].forEach((id) => document.getElementById(id).addEventListener("change", () => {
             localStorage.setItem("salonTheme", document.getElementById("themeSelect").value);
             localStorage.setItem("salonLang", document.getElementById("langSelect").value);
@@ -197,6 +231,8 @@
             const summary = document.getElementById("cartSummary");
             const emptyMsg = document.getElementById("emptyCartMsg");
             const totalAmountSpan = document.getElementById("totalAmount");
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const text = uiText[lang] || uiText.ar;
 
             itemsList.innerHTML = ""; let total = 0;
 
@@ -216,8 +252,8 @@
                         <img src="${product.image}" class="item-img">
                         <div class="item-details">
                             <h3>${product.name}</h3>
-                            <p>${product.price} ₪ للقطعة</p>
-                            <small style="color:#666;">المتوفر: ${product.stock ?? 0}</small>
+                            <p>${product.price} ₪ ${text.each}</p>
+                            <small style="color:#666;">${text.available}: ${product.stock ?? 0}</small>
                         </div>
                     </div>
                     <div class="qty-controls">
@@ -226,7 +262,7 @@
                         <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
                     </div>
                     <div style="font-weight: bold; width: 80px; text-align: center;">${itemTotal} ₪</div>
-                    <button class="btn-remove" onclick="removeItem(${index})">حذف ❌</button>
+                    <button class="btn-remove" onclick="removeItem(${index})">${text.remove}</button>
                 `;
                 itemsList.appendChild(itemDiv);
             });
@@ -234,10 +270,12 @@
         }
 
         window.updateQuantity = function(index, change) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const text = uiText[lang] || uiText.ar;
             if (!cart[index].quantity) cart[index].quantity = 1;
             const nextQuantity = cart[index].quantity + change;
             if (change > 0 && nextQuantity > Number(cart[index].stock || 0)) {
-                alert(`لا يمكنك اختيار أكثر من الكمية المتوفرة: ${cart[index].stock || 0}`);
+                alert(`${text.quantityLimit} ${cart[index].stock || 0}`);
                 return;
             }
             cart[index].quantity = nextQuantity;
@@ -248,7 +286,9 @@
         window.removeItem = function(index) { cart.splice(index, 1); localStorage.setItem('salonCart', JSON.stringify(cart)); renderCart(); };
 
         document.getElementById("checkoutBtn").addEventListener("click", async () => {
-            if (!loggedInUserData || !currentUserId) return alert("يجب تسجيل الدخول قبل تأكيد الطلب.");
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const text = uiText[lang] || uiText.ar;
+            if (!loggedInUserData || !currentUserId) return alert(text.loginBeforeCheckout);
             document.getElementById("loader").style.display = "block"; document.getElementById("checkoutBtn").disabled = true;
 
             try {
@@ -287,8 +327,8 @@
                 await batch.commit();
                 
                 localStorage.removeItem('salonCart'); cart = []; renderCart();
-                alert("✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.");
-            } catch (error) { console.error(error); alert("حدث خطأ أثناء إرسال الطلب: " + error.message);
+                alert(text.orderSuccess);
+            } catch (error) { console.error(error); alert(text.orderError + error.message);
             } finally { document.getElementById("loader").style.display = "none"; document.getElementById("checkoutBtn").disabled = false; }
         });
 

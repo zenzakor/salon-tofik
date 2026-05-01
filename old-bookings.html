@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحجوزات القديمة | Salon Tofik</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; color: #222; }
+        body.dark-mode { background: #151515; color: #f3f3f3; }
+        header { background: #000; color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header-logo { height: 60px; max-width: 180px; object-fit: contain; }
+        nav { display: flex; align-items: center; gap: 20px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #fff; text-decoration: none; cursor: pointer; transition: color 0.25s; }
+        .nav-item:hover { color: #aaa; }
+        .nav-icon { font-size: 26px; margin-bottom: 4px; }
+        .nav-text { font-size: 13px; font-weight: bold; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 28px 20px 60px; }
+        .section-box { background: #fff; padding: 36px; border-radius: 12px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body.dark-mode .section-box, body.dark-mode .booking-card, body.dark-mode .empty-state { background: #222; color: #f3f3f3; border-color: #333; }
+        .page-title { margin: 0 0 8px; text-align: center; font-size: 30px; }
+        .page-subtitle { margin: 0 auto 30px; color: #666; text-align: center; line-height: 1.6; max-width: 620px; }
+        body.dark-mode .page-subtitle, body.dark-mode .booking-card small { color: #ddd; }
+        .booking-list { display: grid; gap: 14px; }
+        .booking-card { background: #fafafa; border: 1px solid #e6e6e6; border-right: 5px solid #000; border-radius: 8px; padding: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        body.dark-mode .booking-card { border-right-color: #fff; }
+        .booking-info { line-height: 1.7; }
+        .booking-info strong { display: block; font-size: 17px; margin-bottom: 4px; }
+        .booking-card small { color: #666; }
+        .status-pill { display: inline-flex; align-items: center; justify-content: center; min-width: 96px; padding: 7px 12px; border-radius: 999px; background: #eee; color: #222; font-size: 13px; font-weight: bold; white-space: nowrap; }
+        body.dark-mode .status-pill { background: #333; color: #f3f3f3; }
+        .empty-state { background: #fafafa; border: 1px solid #e6e6e6; border-radius: 8px; padding: 30px; text-align: center; color: #555; }
+        body.dark-mode .empty-state { color: #ddd; }
+        .btn { display: inline-block; background: #000; color: #fff; border: 1px solid #000; padding: 12px 25px; cursor: pointer; border-radius: 4px; font-size: 16px; margin-top: 18px; font-weight: bold; text-decoration: none; transition: background 0.25s, color 0.25s; }
+        .btn:hover { background: #fff; color: #000; }
+        body.dark-mode .btn { background: #fff; color: #000; border-color: #fff; }
+        body.dark-mode .btn:hover { background: #000; color: #fff; }
+        .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
+        .settings-drawer-overlay.open { display: block; }
+        .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
+        .settings-drawer-overlay.open .settings-drawer { transform: translateX(0); }
+        body.dark-mode .settings-drawer { background: #202020; color: #f3f3f3; }
+        .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
+        .settings-row { text-align: right; margin: 16px 0; }
+        .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; font-family: inherit; text-align: right; }
+        body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
+        @media (max-width: 700px) {
+            header { padding: 12px 16px; }
+            nav { gap: 12px; }
+            .header-logo { height: 48px; }
+            .container { padding: 18px 12px 40px; }
+            .section-box { padding: 24px 16px; }
+            .booking-card { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR">
+        <nav>
+            <a href="index.html" class="nav-item">
+                <span class="material-symbols-outlined nav-icon">home</span>
+                <span class="nav-text" data-i18n="home">الرئيسية</span>
+            </a>
+            <a href="book.html" class="nav-item">
+                <span class="material-symbols-outlined nav-icon">calendar_month</span>
+                <span class="nav-text" data-i18n="book">حجز دور</span>
+            </a>
+            <button id="settingsBtn" class="nav-item" type="button" style="background:none;border:0;padding:0;font-family:inherit;">
+                <span class="material-symbols-outlined nav-icon">settings</span>
+                <span class="nav-text" data-i18n="settings">الإعدادات</span>
+            </button>
+        </nav>
+    </header>
+
+    <div id="settingsModal" class="settings-drawer-overlay">
+        <div class="settings-drawer">
+            <span id="closeSettingsBtn" class="settings-close">&times;</span>
+            <h2 data-i18n="settings">الإعدادات</h2>
+            <div class="settings-row">
+                <label for="themeSelect" data-i18n="theme">المظهر</label>
+                <select id="themeSelect">
+                    <option value="light" data-i18n="light">فاتح</option>
+                    <option value="dark" data-i18n="dark">داكن</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="langSelect" data-i18n="language">اللغة</label>
+                <select id="langSelect">
+                    <option value="ar">العربية</option>
+                    <option value="he">עברית</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <label for="textSizeSelect" data-i18n="textSize">حجم الخط</label>
+                <select id="textSizeSelect">
+                    <option value="normal" data-i18n="normal">عادي</option>
+                    <option value="large" data-i18n="large">كبير</option>
+                </select>
+            </div>
+            <button id="accountInfoPageBtn" class="btn" type="button" style="width:100%;" data-i18n="accountInfoButton">معلومات حسابي</button>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="section-box">
+            <h1 class="page-title" data-i18n="oldBookingsTitle">الحجوزات القديمة</h1>
+            <p class="page-subtitle" data-i18n="oldBookingsSubtitle">هنا تظهر المواعيد التي انتهى وقتها فقط.</p>
+            <div id="oldBookingsList" class="booking-list">
+                <div class="empty-state" data-i18n="loading">جاري التحميل...</div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentUser = null;
+        let loggedInUserData = null;
+
+        const uiText = {
+            ar: { home: "الرئيسية", book: "حجز دور", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", oldBookingsTitle: "الحجوزات القديمة", oldBookingsSubtitle: "هنا تظهر المواعيد التي انتهى وقتها فقط.", loading: "جاري التحميل...", noOldBookings: "لا توجد حجوزات قديمة بعد.", loginRequiredTitle: "يرجى تسجيل الدخول أولاً", loginRequiredText: "سجّل الدخول من الصفحة الرئيسية حتى ترى حجوزاتك القديمة.", backHome: "العودة للصفحة الرئيسية", serviceWord: "الخدمة:", timeWord: "الساعة:", unspecified: "غير محدد", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", accountInfoButton: "معلومات حسابي" },
+            he: { home: "בית", book: "הזמנת תור", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", oldBookingsTitle: "תורים ישנים", oldBookingsSubtitle: "כאן מופיעים רק תורים שהזמן שלהם כבר עבר.", loading: "טוען...", noOldBookings: "אין עדיין תורים ישנים.", loginRequiredTitle: "צריך להתחבר קודם", loginRequiredText: "התחברי מהעמוד הראשי כדי לראות את התורים הישנים שלך.", backHome: "חזרה לעמוד הראשי", serviceWord: "שירות:", timeWord: "שעה:", unspecified: "לא מוגדר", pendingStatus: "ממתין לאישור", confirmedStatus: "אושר", rejectedStatus: "נדחה", accountInfoButton: "פרטי החשבון שלי" },
+            en: { home: "Home", book: "Book", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", oldBookingsTitle: "Old bookings", oldBookingsSubtitle: "Only appointments whose time has already passed are shown here.", loading: "Loading...", noOldBookings: "No old bookings yet.", loginRequiredTitle: "Please log in first", loginRequiredText: "Log in from the home page to see your old bookings.", backHome: "Back to home page", serviceWord: "Service:", timeWord: "Time:", unspecified: "Not specified", pendingStatus: "Pending", confirmedStatus: "Confirmed", rejectedStatus: "Rejected", accountInfoButton: "My account info" }
+        };
+
+        function uiT(key, fallback) {
+            const lang = localStorage.getItem("salonLang") || "ar";
+            return uiText[lang]?.[key] || fallback;
+        }
+
+        function applySettings() {
+            const theme = localStorage.getItem("salonTheme") || "light";
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const textSize = localStorage.getItem("salonTextSize") || "normal";
+            document.body.classList.toggle("dark-mode", theme === "dark");
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+            document.body.style.fontSize = textSize === "large" ? "18px" : "";
+            document.getElementById("themeSelect").value = theme;
+            document.getElementById("langSelect").value = lang;
+            document.getElementById("textSizeSelect").value = textSize;
+            document.querySelectorAll("[data-i18n]").forEach((element) => {
+                const key = element.dataset.i18n;
+                if (uiText[lang]?.[key]) element.textContent = uiText[lang][key];
+            });
+        }
+
+        function displayAppointmentStatus(status) {
+            const value = String(status || "").toLowerCase();
+            if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return uiT("confirmedStatus", "تم التأكيد");
+            if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return uiT("rejectedStatus", "تم الرفض");
+            if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return uiT("pendingStatus", "قيد الانتظار");
+            return status;
+        }
+
+        function getAppointmentDateTime(appointment) {
+            if (!appointment.date) return null;
+            const [year, month, day] = String(appointment.date).split("-").map(Number);
+            if (!year || !month || !day) return null;
+            const [hour = 23, minute = 59] = String(appointment.time || "23:59").split(":").map(Number);
+            return new Date(year, month - 1, day, hour || 0, minute || 0, 0, 0);
+        }
+
+        function isSameLoggedInUser(appointment) {
+            return appointment.userId === currentUser?.uid ||
+                appointment.email === currentUser?.email ||
+                appointment.email === loggedInUserData?.email ||
+                (!!appointment.phone && appointment.phone === loggedInUserData?.phone);
+        }
+
+        function renderMessage(title, text = "") {
+            document.getElementById("oldBookingsList").innerHTML = `
+                <div class="empty-state">
+                    <h3>${title}</h3>
+                    ${text ? `<p>${text}</p>` : ""}
+                    ${!currentUser ? `<a class="btn" href="index.html">${uiT("backHome", "العودة للصفحة الرئيسية")}</a>` : ""}
+                </div>
+            `;
+        }
+
+        function renderBooking(appointment) {
+            return `
+                <div class="booking-card">
+                    <div class="booking-info">
+                        <strong>${uiT("serviceWord", "الخدمة:")} ${appointment.service || uiT("unspecified", "غير محدد")}</strong>
+                        <small>${appointment.date || "-"} | ${uiT("timeWord", "الساعة:")} ${appointment.time || uiT("unspecified", "غير محدد")}</small>
+                    </div>
+                    <span class="status-pill">${displayAppointmentStatus(appointment.status)}</span>
+                </div>
+            `;
+        }
+
+        async function loadOldBookings() {
+            if (!currentUser) {
+                renderMessage(uiT("loginRequiredTitle", "يرجى تسجيل الدخول أولاً"), uiT("loginRequiredText", "سجّل الدخول من الصفحة الرئيسية حتى ترى حجوزاتك القديمة."));
+                return;
+            }
+            const querySnapshot = await getDocs(collection(db, "Appointments"));
+            const now = new Date();
+            const oldBookings = [];
+            querySnapshot.forEach((documentSnap) => {
+                const appointment = documentSnap.data();
+                if (!isSameLoggedInUser(appointment)) return;
+                const appointmentDateTime = getAppointmentDateTime(appointment);
+                if (appointmentDateTime && appointmentDateTime <= now) oldBookings.push(appointment);
+            });
+
+            oldBookings.sort((a, b) => `${b.date || ""} ${b.time || ""}`.localeCompare(`${a.date || ""} ${a.time || ""}`));
+            const list = document.getElementById("oldBookingsList");
+            if (oldBookings.length === 0) {
+                list.innerHTML = `<div class="empty-state">${uiT("noOldBookings", "لا توجد حجوزات قديمة بعد.")}</div>`;
+                return;
+            }
+            list.innerHTML = oldBookings.map(renderBooking).join("");
+        }
+
+        document.getElementById("settingsBtn").addEventListener("click", () => document.getElementById("settingsModal").classList.add("open"));
+        document.getElementById("closeSettingsBtn").addEventListener("click", () => document.getElementById("settingsModal").classList.remove("open"));
+        document.getElementById("accountInfoPageBtn").addEventListener("click", () => { window.location.href = "account.html"; });
+        document.getElementById("settingsModal").addEventListener("click", (event) => {
+            if (event.target === document.getElementById("settingsModal")) document.getElementById("settingsModal").classList.remove("open");
+        });
+        ["themeSelect", "langSelect", "textSizeSelect"].forEach((id) => document.getElementById(id).addEventListener("change", () => {
+            localStorage.setItem("salonTheme", document.getElementById("themeSelect").value);
+            localStorage.setItem("salonLang", document.getElementById("langSelect").value);
+            localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
+            applySettings();
+            loadOldBookings();
+        }));
+
+        applySettings();
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            loggedInUserData = null;
+            if (user) {
+                const userSnap = await getDoc(doc(db, "Users", user.uid));
+                loggedInUserData = userSnap.exists() ? { ...userSnap.data(), email: user.email } : { email: user.email };
+            }
+            loadOldBookings();
+        });
+    </script>
+</body>
+</html>
