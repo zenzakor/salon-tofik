@@ -18,6 +18,12 @@
         body.dark-mode #infoDesc { background: #181818 !important; color: #ddd !important; border-color: #333 !important; }
         body.dark-mode .info-btn { background: #2a2a2a; color: #f3f3f3; border-color: #444; }
         body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .search-shell { background: #202020; border-color: #343434; box-shadow: 0 10px 24px rgba(0,0,0,0.22); }
+        body.dark-mode .search-shell:focus-within { border-color: #777; box-shadow: 0 12px 28px rgba(0,0,0,0.35); }
+        body.dark-mode .search-icon, body.dark-mode .search-clear { color: #f3f3f3; }
+        body.dark-mode .search-input::placeholder, body.dark-mode .no-search-results { color: #aaa; }
+        body.dark-mode .search-clear { background: #303030; }
+        body.dark-mode .search-clear:hover { background: #3a3a3a; }
         header { background-color: #000000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;}
         .header-logo { height: 60px; max-width: 180px; object-fit: contain; }
         
@@ -31,10 +37,23 @@
         
         .container { padding: 40px 20px; max-width: 1100px; margin: auto; flex: 1;}
         .page-title { text-align: center; margin-bottom: 40px;}
+        .shop-toolbar { display: flex; justify-content: center; margin: -14px auto 28px; }
+        .search-shell { position: relative; display: flex; align-items: center; width: min(640px, 100%); min-height: 58px; padding: 0 58px; background: #fff; border: 1px solid #e4e4e4; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.08); box-sizing: border-box; transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease; }
+        .search-shell:focus-within { border-color: #111; box-shadow: 0 14px 34px rgba(0,0,0,0.12); transform: translateY(-1px); }
+        .search-icon { position: absolute; inset-inline-start: 20px; color: #111; font-size: 25px; pointer-events: none; }
+        .search-input { width: 100%; min-height: 54px; margin: 0; padding: 0; border: 0; background: transparent !important; color: #111; font-size: 17px; font-weight: 600; box-shadow: none; }
+        .search-input:focus { border: 0; outline: none; }
+        .search-input::placeholder { color: #777; font-weight: 500; }
+        .search-clear { position: absolute; inset-inline-end: 14px; width: 38px; height: 38px; display: none; align-items: center; justify-content: center; padding: 0; border: 0; border-radius: 50%; background: #f1f1f1; color: #111; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .search-clear.visible { display: flex; }
+        .search-clear:hover { background: #e2e2e2; transform: scale(1.04); }
+        .search-clear .material-symbols-outlined { font-size: 21px; }
+        .no-search-results { display: none; margin: -4px 0 24px; text-align: center; color: #777; font-weight: bold; }
         .products-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center;}
         
-        .product-card { position: relative; background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; width: 260px; text-align: center; transition: box-shadow 0.3s;}
+        .product-card { position: relative; background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; width: 260px; text-align: center; transition: box-shadow 0.3s; box-sizing: border-box;}
         .product-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.1); transform: translateY(-5px); transition: 0.3s;}
+        .product-card img { width: 100%; height: 200px; object-fit: contain; object-position: center; background: #fff; border-radius: 5px; margin-bottom: 10px;}
         .product-card h3 { color: #111; margin-top: 10px; font-size: 18px;}
         .product-card .price { font-size: 22px; font-weight: bold; color: #000; margin: 15px 0; }
         
@@ -105,6 +124,16 @@
             <h1 data-i18n="shopTitle">🛍️ متجر صالون توفيق</h1>
             <p style="color: #666;" data-i18n="shopSubtitle">أضيفي المنتجات إلى سلتك وأكملي عملية الشراء بسهولة.</p>
         </div>
+        <div class="shop-toolbar" role="search">
+            <div class="search-shell">
+                <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
+                <input id="productSearchInput" class="search-input" type="search" autocomplete="off" data-i18n-placeholder="searchPlaceholder" aria-label="Search products">
+                <button id="clearProductSearch" class="search-clear" type="button" data-i18n-aria="clearSearch">
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+            </div>
+        </div>
+        <p id="noSearchResults" class="no-search-results" data-i18n="noSearchResults"></p>
         <div id="productsContainer" class="products-grid"><div style="text-align: center; width: 100%;">جاري تحميل المنتجات... ⏳</div></div>
     </div>
 
@@ -132,7 +161,7 @@
     <div id="productInfoModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" onclick="closeInfoModal()">&times;</span>
-            <img id="infoImg" src="" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
+            <img id="infoImg" src="" style="width: 150px; height: 150px; object-fit: contain; object-position: center; background: #fff; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
             <h2 id="infoTitle" style="margin-top: 0; color: #111;">اسم المنتج</h2>
             <p id="infoDesc" style="text-align: justify; color: #555; line-height: 1.6; font-size: 16px; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; white-space: pre-wrap;"></p>
         </div>
@@ -166,9 +195,9 @@
             he: { home: "בית", book: "הזמנת תור", cart: "עגלה", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", shopTitle: "🛍️ החנות של סלון תופיק", shopSubtitle: "הוסיפי מוצרים לעגלה והשלימי את הקנייה בקלות.", loadingProducts: "טוען מוצרים... ⏳", emptyShop: "החנות ריקה כרגע.", noSaleProducts: "אין כרגע מוצרים זמינים למכירה.", available: "במלאי", unavailable: "לא זמין כרגע", addToCart: "הוסיפי לעגלה 🛒", added: "✔ נוסף", outOfStock: "אזל מהמלאי", noInfo: "אין כרגע פרטים נוספים על המוצר הזה." },
             en: { home: "Home", book: "Book", cart: "Cart", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", shopTitle: "🛍️ Salon Tofik Shop", shopSubtitle: "Add products to your cart and complete your order easily.", loadingProducts: "Loading products... ⏳", emptyShop: "The shop is currently empty.", noSaleProducts: "No products are currently available for sale.", available: "Available", unavailable: "Unavailable right now", addToCart: "Add to cart 🛒", added: "✔ Added", outOfStock: "Out of stock", noInfo: "There are no extra details for this product right now." }
         };
-        Object.assign(uiText.ar, { saleBadge: "خصم", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي" });
-        Object.assign(uiText.he, { saleBadge: "הנחה", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי" });
-        Object.assign(uiText.en, { saleBadge: "Sale", oldBookingsButton: "Old bookings", accountInfoButton: "My account info" });
+        Object.assign(uiText.ar, { saleBadge: "خصم", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي", searchPlaceholder: "ابحثي عن اسم منتج...", clearSearch: "مسح البحث", noSearchResults: "لا توجد منتجات بهذا الاسم." });
+        Object.assign(uiText.he, { saleBadge: "הנחה", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי", searchPlaceholder: "חפשי מוצר לפי שם...", clearSearch: "נקה חיפוש", noSearchResults: "לא נמצאו מוצרים בשם הזה." });
+        Object.assign(uiText.en, { saleBadge: "Sale", oldBookingsButton: "Old bookings", accountInfoButton: "My account info", searchPlaceholder: "Search product name...", clearSearch: "Clear search", noSearchResults: "No products found with this name." });
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -181,6 +210,8 @@
             document.getElementById("langSelect").value = lang;
             document.getElementById("textSizeSelect").value = textSize;
             document.querySelectorAll("[data-i18n]").forEach((element) => { const key = element.dataset.i18n; if (uiText[lang]?.[key]) element.textContent = uiText[lang][key]; });
+            document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { const key = element.dataset.i18nPlaceholder; if (uiText[lang]?.[key]) element.placeholder = uiText[lang][key]; });
+            document.querySelectorAll("[data-i18n-aria]").forEach((element) => { const key = element.dataset.i18nAria; if (uiText[lang]?.[key]) element.setAttribute("aria-label", uiText[lang][key]); });
         }
         window.openSettings = () => { document.getElementById("settingsModal").classList.add("open"); };
         window.closeSettings = () => { document.getElementById("settingsModal").classList.remove("open"); };
@@ -200,6 +231,37 @@
         updateCartBadge(); 
 
         window.goToCart = function() { window.location.href = "cart.html"; };
+
+        const productSearchInput = document.getElementById("productSearchInput");
+        const clearProductSearch = document.getElementById("clearProductSearch");
+        const noSearchResults = document.getElementById("noSearchResults");
+        function normalizeProductText(value) {
+            return String(value || "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+        }
+        function syncProductGridBalance(cards) {
+            cards.forEach((card) => card.classList.remove("is-last-unpaired"));
+            const visibleCards = cards.filter((card) => !card.hidden);
+            if (visibleCards.length % 2 === 1) visibleCards[visibleCards.length - 1].classList.add("is-last-unpaired");
+        }
+        function filterProductsByName() {
+            const searchTerm = normalizeProductText(productSearchInput.value);
+            const cards = Array.from(document.querySelectorAll("#productsContainer .product-card"));
+            let matchedCount = 0;
+            cards.forEach((card) => {
+                const matches = !searchTerm || normalizeProductText(card.dataset.productName).includes(searchTerm);
+                card.hidden = !matches;
+                if (matches) matchedCount++;
+            });
+            syncProductGridBalance(cards);
+            clearProductSearch.classList.toggle("visible", Boolean(searchTerm));
+            noSearchResults.style.display = searchTerm && cards.length && matchedCount === 0 ? "block" : "none";
+        }
+        productSearchInput.addEventListener("input", filterProductsByName);
+        clearProductSearch.addEventListener("click", () => {
+            productSearchInput.value = "";
+            productSearchInput.focus();
+            filterProductsByName();
+        });
 
         window.openInfoModal = function(name, desc, img) {
             document.getElementById('infoTitle').innerText = name;
@@ -241,9 +303,10 @@
                 }
                 
                 const card = document.createElement("div"); card.className = "product-card";
+                card.dataset.productName = data.name || "";
                 card.innerHTML = `
                     <div class="info-btn" onclick="openInfoModal('${safeName}', '${safeDesc}', '${imgUrl}')">i</div>
-                    <img src="${imgUrl}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+                    <img src="${imgUrl}">
                     <h3>${data.name}</h3>
                     ${priceHtml}
                     <p class="product-stock ${stock > 0 ? 'in-stock' : 'out-of-stock'}">${stock > 0 ? `${uiText[lang].available}: ${stock}` : uiText[lang].unavailable}</p>
@@ -268,6 +331,7 @@
                 card.appendChild(addBtn); container.appendChild(card);
             });
             if (visibleProductsCount === 0) container.innerHTML = `<p>${uiText[lang].noSaleProducts}</p>`;
+            filterProductsByName();
         }
         loadShopProducts();
     </script>

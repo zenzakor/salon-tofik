@@ -19,6 +19,7 @@
         body.dark-mode .booking-card.pending { background: #2b2415; }
         body.dark-mode .calendar-day-number, body.dark-mode .booking-card strong { color: #f3f3f3; }
         body.dark-mode .booking-card small, body.dark-mode .calendar-empty, body.dark-mode .empty-row { color: #cfcfcf; }
+        body.dark-mode .admin-field label, body.dark-mode .admin-time-separator { color: #f3f3f3; }
         body.dark-mode table small, body.dark-mode .product-description-preview, body.dark-mode .users-count + small { color: #cfcfcf !important; }
         body.dark-mode th, body.dark-mode td { border-bottom-color: #3a3a3a; }
         body.dark-mode .login-box { background: #202020; color: #f3f3f3; border-color: #555; }
@@ -62,6 +63,27 @@
         .btn-delete { background-color: #ff4d4d; }
         .btn-update { background-color: #4CAF50; }
         .btn-sale { background-color: #FF9800; }
+        .review-status-badge { display: inline-flex; align-items: center; justify-content: center; margin-top: 6px; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: bold; background: #eef2ff; color: #3730a3; }
+        .review-status-badge.pending { background: #fff7ed; color: #c2410c; }
+        .review-status-badge.published { background: #ecfdf5; color: #047857; }
+        .review-status-badge.hidden { background: #f3f4f6; color: #4b5563; }
+        .review-comment-preview { display: inline; color: #333; line-height: 1.6; white-space: normal; }
+        .review-more-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 28px; margin-inline-start: 6px; padding: 0 8px; border: 1px solid #ddd; border-radius: 999px; background: #fff; color: #111; cursor: pointer; font-weight: bold; font-size: 18px; line-height: 1; vertical-align: middle; }
+        .review-more-btn:hover { background: #111; color: #fff; border-color: #111; }
+        .admin-modal-overlay { display: none; position: fixed; inset: 0; z-index: 1400; align-items: center; justify-content: center; padding: 18px; background: rgba(0,0,0,0.58); box-sizing: border-box; }
+        .admin-modal-overlay.open { display: flex; }
+        .admin-mini-modal { width: min(430px, 100%); max-height: min(78vh, 560px); overflow-y: auto; padding: 24px; border-radius: 14px; background: #fff; color: #222; box-shadow: 0 18px 45px rgba(0,0,0,0.28); text-align: center; box-sizing: border-box; position: relative; }
+        .admin-mini-close { position: absolute; top: 10px; inset-inline-end: 14px; border: 0; background: transparent; color: inherit; cursor: pointer; font-size: 28px; line-height: 1; }
+        .review-modal-stars { color: #FFD700; font-size: 26px; margin: 10px 0; }
+        .review-modal-title { margin: 8px 0; color: #111; }
+        .review-modal-text { margin: 14px 0 0; padding: 15px; border: 1px solid #eee; border-radius: 10px; background: #fafafa; color: #444; text-align: start; white-space: pre-wrap; line-height: 1.8; }
+        body.dark-mode .review-comment-preview { color: #ddd; }
+        body.dark-mode .review-more-btn { background: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .review-more-btn:hover { background: #fff; color: #111; border-color: #fff; }
+        body.dark-mode .admin-mini-modal { background: #202020; color: #f3f3f3; }
+        body.dark-mode .review-modal-title { color: #f3f3f3; }
+        body.dark-mode .review-modal-text { background: #181818; color: #ddd; border-color: #333; }
+        body.dark-mode .review-status-badge.hidden { background: #303030; color: #ddd; }
         .nav-badge { background: #ff4d4d; color: white; border-radius: 999px; min-width: 22px; height: 22px; padding: 0 7px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: auto; }
         .appointments-topbar { background: white; padding: 16px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
         .appointments-topbar label { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
@@ -76,6 +98,10 @@
         .admin-booking-grid { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; align-items: end; }
         .admin-booking-grid label { display: block; font-weight: bold; color: #444; margin-bottom: 6px; }
         .admin-booking-grid input, .admin-booking-grid select { width: 100%; min-width: 0; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .admin-date-input { direction: ltr; text-align: center; }
+        .admin-time-parts { display: flex; direction: ltr; align-items: center; gap: 8px; width: 100%; min-width: 0; }
+        .admin-time-part { flex: 1 1 0; min-width: 0; height: 40px; text-align: center; text-align-last: center; direction: ltr; }
+        .admin-time-separator { flex: 0 0 auto; color: #333; font-weight: bold; font-size: 18px; line-height: 1; }
         .admin-booking-grid .wide { grid-column: span 2; }
         .admin-booking-grid .full { grid-column: 1 / -1; }
         .booking-list { display: flex; flex-direction: column; gap: 12px; }
@@ -112,6 +138,9 @@
         .users-count { color: #666; font-weight: bold; white-space: nowrap; }
         .admin-create-user-grid { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)); gap: 12px; align-items: end; }
         .admin-create-user-grid input, .admin-create-user-grid select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 15px; box-sizing: border-box; }
+        .admin-field { display: flex; min-width: 0; flex-direction: column; gap: 6px; }
+        .admin-field label { color: #444; font-weight: bold; font-size: 14px; }
+        .admin-field input, .admin-field select { min-width: 0; }
         .admin-create-user-grid .wide { grid-column: span 2; }
         .admin-create-user-help { display: block; color: #777; margin: 8px 0 14px; }
         body.dark-mode .admin-create-user-help { color: #cfcfcf; }
@@ -132,7 +161,7 @@
         .btn-add { background-color: #000; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;}
         .product-note { background: #eef2ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c7d2fe; }
         
-        .product-img-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .product-img-preview { width: 60px; height: 60px; object-fit: contain; object-position: center; background: #fff; border-radius: 8px; border: 1px solid #ddd; }
         
         /* تصميم مربع الاختيار (Checkbox) الاحترافي */
         .featured-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #000;}
@@ -222,12 +251,16 @@
                             <input type="text" id="adminBookingService" placeholder="قص شعر / صبغة / مكياج" data-i18n-placeholder="adminBookServicePlaceholder">
                         </div>
                         <div>
-                            <label for="adminBookingDate" data-i18n="adminBookDate">التاريخ</label>
-                            <input type="date" id="adminBookingDate">
+                            <label for="adminBookingDate" data-i18n="adminBookDate">تاريخ الحجز</label>
+                            <input type="date" id="adminBookingDate" class="admin-date-input">
                         </div>
                         <div>
-                            <label for="adminBookingTime" data-i18n="adminBookTime">الوقت</label>
-                            <input type="time" id="adminBookingTime" min="09:00" max="19:00" step="900">
+                            <label for="adminBookingHour" data-i18n="adminBookTime">الوقت</label>
+                            <div class="admin-time-parts">
+                                <select id="adminBookingHour" class="admin-time-part" aria-label="Hour"></select>
+                                <span class="admin-time-separator">:</span>
+                                <select id="adminBookingMinute" class="admin-time-part" aria-label="Minute"></select>
+                            </div>
                         </div>
                         <div class="wide">
                             <label for="adminBookingNotes" data-i18n="adminBookNotes">ملاحظات</label>
@@ -298,7 +331,10 @@
                         <input type="text" id="adminNewLastName" placeholder="اسم العائلة" data-admin-placeholder="lastNameHeader">
                         <input type="email" id="adminNewEmail" placeholder="البريد الإلكتروني" data-admin-placeholder="emailHeader" dir="ltr">
                         <input type="tel" id="adminNewPhone" placeholder="+972..." data-admin-placeholder="phoneHeader" dir="ltr">
-                        <input type="date" id="adminNewBirthDate">
+                        <div class="admin-field">
+                            <label for="adminNewBirthDate" data-admin-text="birthDateHeader">تاريخ الميلاد</label>
+                            <input type="date" id="adminNewBirthDate" data-admin-placeholder="birthDateHeader">
+                        </div>
                         <select id="adminNewGender">
                             <option value="" data-admin-text="genderUnknown">غير محدد</option>
                             <option value="female" data-admin-text="genderFemale">أنثى</option>
@@ -322,6 +358,17 @@
                 <table id="reviewsTable"></table>
             </div>
 
+        </div>
+    </div>
+
+    <div id="reviewDetailsModal" class="admin-modal-overlay">
+        <div class="admin-mini-modal" role="dialog" aria-modal="true" aria-labelledby="reviewDetailsTitle">
+            <button id="closeReviewDetailsBtn" class="admin-mini-close" type="button">&times;</button>
+            <h2 id="reviewDetailsTitle" data-admin-text="reviewDetailsTitle">تفاصيل التقييم</h2>
+            <h3 id="reviewDetailsName" class="review-modal-title"></h3>
+            <div id="reviewDetailsStars" class="review-modal-stars"></div>
+            <h4 id="reviewDetailsHeading" class="review-modal-title"></h4>
+            <p id="reviewDetailsText" class="review-modal-text"></p>
         </div>
     </div>
 
@@ -374,7 +421,7 @@
                 unnamedCustomer: "زبونة بدون اسم", unspecifiedService: "خدمة غير محددة", noNotes: "لا توجد ملاحظات", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", noPending: "لا توجد حجوزات جديدة الآن", noBookings: "لا حجوزات", dayBookings: "حجوزات يوم", noBookingsThisDay: "لا توجد حجوزات في هذا اليوم",
                 customerHeader: "الزبونة", serviceHeader: "الخدمة", dateTimeHeader: "التاريخ والوقت", notesHeader: "الملاحظات", statusHeader: "الحالة", actionsHeader: "الإجراءات",
                 orderHeader: "الطلب", amountHeader: "المبلغ", productHeader: "المنتج", priceHeader: "السعر", quantityHeader: "الكمية", visibilityHeader: "الظهور", featuredHeader: "للرئيسية", imageHeader: "الصورة",
-                firstNameHeader: "الاسم الأول", lastNameHeader: "اسم العائلة", emailHeader: "البريد الإلكتروني", phoneHeader: "الهاتف", birthDateHeader: "تاريخ الميلاد", genderHeader: "الجنس", ratingHeader: "التقييم", commentHeader: "التعليق",
+                firstNameHeader: "الاسم الأول", lastNameHeader: "اسم العائلة", emailHeader: "البريد الإلكتروني", phoneHeader: "رقم الهاتف", birthDateHeader: "تاريخ الميلاد", genderHeader: "الجنس", ratingHeader: "التقييم", commentHeader: "التعليق",
                 cancelSale: "إلغاء الخصم", sale: "تخفيض", saleBadge: "خصم", updateStock: "تعديل الكمية", hideProduct: "إخفاء عن الزبائن", showProduct: "إظهار للزبائن", visibleToCustomers: "ظاهر للزبائن", salonOnly: "للاستخدام داخل الصالون", deleteProduct: "حذف", deleteReview: "حذف التقييم",
                 genderFemale: "أنثى", genderMale: "ذكر", genderOther: "آخر", genderUnknown: "غير محدد", noUsersSearch: "لا توجد حسابات مطابقة للبحث", usersCount: "زبائن"
             },
@@ -525,6 +572,44 @@
             addUserSuccess: "Customer added successfully without SMS or email confirmation."
         });
 
+        Object.assign(adminDynamicText.ar, {
+            reviewDetailsTitle: "تفاصيل التقييم",
+            viewFullReview: "عرض التعليق الكامل",
+            publishReview: "نشر",
+            keepUnpublishedReview: "إبقاء بدون نشر",
+            hideReview: "إخفاء",
+            reviewPending: "بانتظار الموافقة",
+            reviewPublished: "منشور",
+            reviewHidden: "غير منشور"
+        });
+        Object.assign(adminDynamicText.he, {
+            reviewDetailsTitle: "פרטי הביקורת",
+            viewFullReview: "הצגת התגובה המלאה",
+            publishReview: "פרסום",
+            keepUnpublishedReview: "השאר ללא פרסום",
+            hideReview: "הסתרה",
+            reviewPending: "ממתין לאישור",
+            reviewPublished: "פורסם",
+            reviewHidden: "לא פורסם"
+        });
+        Object.assign(adminDynamicText.en, {
+            reviewDetailsTitle: "Review details",
+            viewFullReview: "View full comment",
+            publishReview: "Publish",
+            keepUnpublishedReview: "Keep unpublished",
+            hideReview: "Hide",
+            reviewPending: "Awaiting approval",
+            reviewPublished: "Published",
+            reviewHidden: "Unpublished"
+        });
+
+        Object.assign(adminText.ar, { adminBookDate: "تاريخ الحجز" });
+        Object.assign(adminText.he, { adminBookDate: "תאריך התור" });
+        Object.assign(adminText.en, { adminBookDate: "Booking date" });
+        Object.assign(adminDynamicText.ar, { adminHourPlaceholder: "ساعة", adminMinutePlaceholder: "دقيقة" });
+        Object.assign(adminDynamicText.he, { adminHourPlaceholder: "שעה", adminMinutePlaceholder: "דקה" });
+        Object.assign(adminDynamicText.en, { adminHourPlaceholder: "Hour", adminMinutePlaceholder: "Minute" });
+
         function adminT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
             return adminDynamicText[lang]?.[key] || fallback;
@@ -540,6 +625,21 @@
             if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return adminT("rejectedStatus", "تم الرفض");
             if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return adminT("pendingStatus", "قيد الانتظار");
             return status;
+        }
+
+        function isConfirmedAppointment(status) {
+            const value = String(status || "").toLowerCase();
+            return value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר");
+        }
+
+        function isRejectedAppointment(status) {
+            const value = String(status || "").toLowerCase();
+            return value.includes("رفض") || value.includes("reject") || value.includes("נדחה");
+        }
+
+        function isPendingAppointment(status) {
+            const value = String(status || "").toLowerCase();
+            return !status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין");
         }
 
         function formatUsersCount(count) {
@@ -575,6 +675,7 @@
                 const key = element.dataset.adminPlaceholder;
                 element.placeholder = adminT(key, element.placeholder);
             });
+            populateAdminTimeSelects();
         }
 
         const adminContentElement = document.getElementById("adminContent");
@@ -653,18 +754,15 @@
 
         function loadAllData() {
             loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews();
+            populateAdminTimeSelects();
             document.getElementById("adminBookingDate").value = getTodayValue();
         }
 
         // ================= 1. المواعيد =================
         function getAppointmentStatusClass(status) {
-            if ((status || "").includes("تأكيد")) return "accepted";
-            if ((status || "").includes("رفض")) return "rejected";
+            if (isConfirmedAppointment(status)) return "accepted";
+            if (isRejectedAppointment(status)) return "rejected";
             return "pending";
-        }
-
-        function isPendingAppointment(status) {
-            return !status || status.includes("انتظار") || status.includes("جديد");
         }
 
         function getMonthValue(dateValue) {
@@ -676,6 +774,37 @@
         function getTodayValue() {
             const today = new Date();
             return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+        }
+
+        function fillTimeSelect(select, maxValue, placeholder, selectedValue) {
+            if (!select) return;
+            select.innerHTML = `<option value="">${placeholder}</option>`;
+            for (let value = 0; value <= maxValue; value++) {
+                const optionValue = String(value).padStart(2, "0");
+                const option = document.createElement("option");
+                option.value = optionValue;
+                option.textContent = optionValue;
+                select.appendChild(option);
+            }
+            if (selectedValue) select.value = selectedValue;
+        }
+
+        function populateAdminTimeSelects() {
+            const hourSelect = document.getElementById("adminBookingHour");
+            const minuteSelect = document.getElementById("adminBookingMinute");
+            fillTimeSelect(hourSelect, 23, adminT("adminHourPlaceholder", "ساعة"), hourSelect?.value || "");
+            fillTimeSelect(minuteSelect, 59, adminT("adminMinutePlaceholder", "دقيقة"), minuteSelect?.value || "");
+        }
+
+        function getAdminBookingTime() {
+            const hour = document.getElementById("adminBookingHour").value;
+            const minute = document.getElementById("adminBookingMinute").value;
+            return hour && minute ? `${hour}:${minute}` : "";
+        }
+
+        function clearAdminBookingTime() {
+            document.getElementById("adminBookingHour").value = "";
+            document.getElementById("adminBookingMinute").value = "";
         }
 
         function getUserFullName(user) {
@@ -704,7 +833,7 @@
             const userId = document.getElementById("adminBookingUser").value;
             const service = document.getElementById("adminBookingService").value.trim();
             const date = document.getElementById("adminBookingDate").value;
-            const time = document.getElementById("adminBookingTime").value;
+            const time = getAdminBookingTime();
             const notes = document.getElementById("adminBookingNotes").value.trim();
             const customer = allUsers.find((user) => user.id === userId);
 
@@ -728,7 +857,7 @@
             selectedAppointmentDate = date;
             document.getElementById("appointmentsMonth").value = getMonthValue(date);
             document.getElementById("adminBookingService").value = "";
-            document.getElementById("adminBookingTime").value = "";
+            clearAdminBookingTime();
             document.getElementById("adminBookingNotes").value = "";
             await loadAppointments();
             alert(adminT("bookingAddedAlert", "تمت إضافة الحجز بنجاح."));
@@ -750,10 +879,13 @@
         }
 
         function renderAppointmentActions(container, appointment) {
-            const acceptBtn = document.createElement("button");
-            acceptBtn.innerText = adminT("accept", "قبول");
-            acceptBtn.className = "btn-action btn-update";
-            acceptBtn.onclick = () => acceptAppointment(appointment.id);
+            if (isPendingAppointment(appointment.status)) {
+                const acceptBtn = document.createElement("button");
+                acceptBtn.innerText = adminT("accept", "قبول");
+                acceptBtn.className = "btn-action btn-update";
+                acceptBtn.onclick = () => acceptAppointment(appointment.id);
+                container.appendChild(acceptBtn);
+            }
 
             const editBtn = document.createElement("button");
             editBtn.innerText = adminT("edit", "تعديل");
@@ -765,7 +897,6 @@
             deleteBtn.className = "btn-action btn-delete";
             deleteBtn.onclick = () => deleteAppointment(appointment.id);
 
-            container.appendChild(acceptBtn);
             container.appendChild(editBtn);
             container.appendChild(deleteBtn);
         }
@@ -775,7 +906,7 @@
             card.className = `booking-card ${getAppointmentStatusClass(appointment.status)}`;
             card.innerHTML = `
                 <strong>${appointment.customerName || adminT("unnamedCustomer", "زبونة بدون اسم")}</strong>
-                <small dir="ltr">${appointment.phone || "-"}</small>
+                <small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>
                 <small>${appointment.date || "-"} | ${appointment.time || "-"}</small>
                 <small>${appointment.service || adminT("unspecifiedService", "خدمة غير محددة")}</small>
                 <small>${appointment.notes || adminT("noNotes", "لا توجد ملاحظات")}</small>
@@ -861,7 +992,7 @@
                 const row = table.insertRow();
                 const customerCell = row.insertCell(0);
                 customerCell.dataset.label = adminT("customerHeader", "Customer");
-                customerCell.innerHTML = `<strong>${appointment.customerName || "-"}</strong><br><small dir="ltr">${appointment.phone || "-"}</small>`;
+                customerCell.innerHTML = `<strong>${appointment.customerName || "-"}</strong><br><small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>`;
 
                 const serviceCell = row.insertCell(1);
                 serviceCell.dataset.label = adminT("serviceHeader", "Service");
@@ -1363,17 +1494,130 @@
         document.getElementById("userSearchInput").addEventListener("input", renderUsersTable);
 
         // ================= 5. التقييمات =================
+        function getReviewStatus(review) {
+            if (review.status === "published" || review.isPublished === true || (!review.status && review.isPublished !== false)) return "published";
+            if (review.status === "hidden") return "hidden";
+            return "pending";
+        }
+
+        function getReviewStatusLabel(status) {
+            if (status === "published") return adminT("reviewPublished", "منشور");
+            if (status === "hidden") return adminT("reviewHidden", "غير منشور");
+            return adminT("reviewPending", "بانتظار الموافقة");
+        }
+
+        function renderReviewStars(rating) {
+            const ratingNumber = Number(rating);
+            const safeRating = Number.isFinite(ratingNumber) ? Math.max(0, Math.min(5, Math.round(ratingNumber))) : 5;
+            return `${'★'.repeat(safeRating)}${'☆'.repeat(5 - safeRating)}`;
+        }
+
+        function getReviewPreview(text) {
+            const cleanText = String(text || "").replace(/\s+/g, " ").trim();
+            if (cleanText.length <= 68) return cleanText;
+            return `${cleanText.substring(0, 68).trim()}…`;
+        }
+
+        function openReviewDetails(review) {
+            document.getElementById("reviewDetailsName").innerText = review.name || "-";
+            document.getElementById("reviewDetailsStars").innerText = renderReviewStars(review.rating);
+            document.getElementById("reviewDetailsHeading").innerText = review.title || "";
+            document.getElementById("reviewDetailsText").innerText = review.text || "-";
+            document.getElementById("reviewDetailsModal").classList.add("open");
+        }
+
+        function closeReviewDetails() {
+            document.getElementById("reviewDetailsModal").classList.remove("open");
+        }
+
+        document.getElementById("closeReviewDetailsBtn").addEventListener("click", closeReviewDetails);
+        document.getElementById("reviewDetailsModal").addEventListener("click", (event) => {
+            if (event.target === document.getElementById("reviewDetailsModal")) closeReviewDetails();
+        });
+
+        async function setReviewPublication(id, status) {
+            const isPublished = status === "published";
+            await updateDoc(doc(db, "Reviews", id), {
+                status,
+                isPublished,
+                moderatedAt: new Date().toISOString()
+            });
+            loadAdminReviews();
+        }
+
         async function loadAdminReviews() {
             const table = document.getElementById("reviewsTable"); 
             table.innerHTML = renderAdminHeaders(["customerHeader", "ratingHeader", "commentHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Reviews"));
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
-                row.insertCell(0).innerHTML = `<strong>${data.name}</strong>`; 
-                row.insertCell(1).innerHTML = `<span style="color:#FFD700; font-size:18px;">${'★'.repeat(data.rating || 5)}${'☆'.repeat(5 - (data.rating || 5))}</span>`; 
-                row.insertCell(2).innerHTML = `<strong>${data.title}</strong><br><small>${data.text}</small>`; 
+            const reviews = querySnapshot.docs.map((reviewDoc) => ({ id: reviewDoc.id, data: reviewDoc.data() }));
+            const statusOrder = { pending: 0, hidden: 1, published: 2 };
+            reviews.sort((a, b) => {
+                const statusDiff = statusOrder[getReviewStatus(a.data)] - statusOrder[getReviewStatus(b.data)];
+                if (statusDiff) return statusDiff;
+                return String(b.data.createdAt || "").localeCompare(String(a.data.createdAt || ""));
+            });
+
+            if (reviews.length === 0) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 4;
+                cell.className = "empty-row";
+                cell.innerText = adminT("noReviews", "لا توجد تقييمات بعد");
+                return;
+            }
+
+            reviews.forEach(({ id, data }) => {
+                const status = getReviewStatus(data);
+                const row = table.insertRow();
+                const customerCell = row.insertCell(0);
+                customerCell.dataset.label = adminT("customerHeader", "الزبونة");
+                customerCell.innerHTML = `<strong>${safeText(data.name || "-")}</strong><br><span class="review-status-badge ${status}">${getReviewStatusLabel(status)}</span>`;
+
+                const ratingCell = row.insertCell(1);
+                ratingCell.dataset.label = adminT("ratingHeader", "التقييم");
+                ratingCell.innerHTML = `<span style="color:#FFD700; font-size:18px;">${renderReviewStars(data.rating)}</span>`;
+
+                const commentCell = row.insertCell(2);
+                commentCell.className = "review-comment-cell";
+                commentCell.dataset.label = adminT("commentHeader", "التعليق");
+                const titleHtml = data.title ? `<strong>${safeText(data.title)}</strong><br>` : "";
+                commentCell.innerHTML = `${titleHtml}<span class="review-comment-preview">${safeText(getReviewPreview(data.text))}</span>`;
+                const detailsBtn = document.createElement("button");
+                detailsBtn.className = "review-more-btn";
+                detailsBtn.type = "button";
+                detailsBtn.innerText = "…";
+                detailsBtn.title = adminT("viewFullReview", "عرض التعليق الكامل");
+                detailsBtn.setAttribute("aria-label", adminT("viewFullReview", "عرض التعليق الكامل"));
+                detailsBtn.onclick = () => openReviewDetails(data);
+                commentCell.appendChild(detailsBtn);
                 
                 const actionsCell = row.insertCell(3);
+                actionsCell.dataset.label = adminT("actionsHeader", "الإجراءات");
+
+                if (status !== "published") {
+                    const publishBtn = document.createElement("button");
+                    publishBtn.innerText = adminT("publishReview", "نشر");
+                    publishBtn.className = "btn-action btn-update";
+                    publishBtn.onclick = () => setReviewPublication(id, "published");
+                    actionsCell.appendChild(publishBtn);
+                }
+
+                if (status === "pending") {
+                    const keepBtn = document.createElement("button");
+                    keepBtn.innerText = adminT("keepUnpublishedReview", "إبقاء بدون نشر");
+                    keepBtn.className = "btn-action btn-sale";
+                    keepBtn.onclick = () => setReviewPublication(id, "hidden");
+                    actionsCell.appendChild(keepBtn);
+                }
+
+                if (status === "published") {
+                    const hideBtn = document.createElement("button");
+                    hideBtn.innerText = adminT("hideReview", "إخفاء");
+                    hideBtn.className = "btn-action btn-sale";
+                    hideBtn.onclick = () => setReviewPublication(id, "hidden");
+                    actionsCell.appendChild(hideBtn);
+                }
+
                 const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("deleteReview", "حذف التقييم"); deleteBtn.className = "btn-action btn-delete";
                 deleteBtn.onclick = async () => { if (confirm(adminT("deleteReviewConfirm", "هل أنت متأكد من حذف هذا التقييم؟"))) { await deleteDoc(doc(db, "Reviews", id)); loadAdminReviews(); } };
                 actionsCell.appendChild(deleteBtn);

@@ -102,9 +102,9 @@
         .settings-close { position: absolute; top: 12px; right: 18px; font-size: 28px; cursor: pointer; color: inherit; }
 
         .products-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;}
-        .product-card { position: relative; background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; width: 250px; text-align: center; transition: box-shadow 0.3s;}
+        .product-card { position: relative; background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; width: 250px; text-align: center; transition: box-shadow 0.3s; box-sizing: border-box;}
         .info-btn { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.9); color: #000; border: 1px solid #ddd; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; z-index: 10;}
-        .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;}
+        .product-card img { width: 100%; height: 180px; object-fit: contain; object-position: center; background: #fff; border-radius: 5px; margin-bottom: 10px;}
         .product-card .price { font-size: 22px; font-weight: bold; color: #000; margin: 10px 0; }
         
         /* تصميم شارة الخصم */
@@ -229,7 +229,7 @@
     <div id="productInfoModal" class="modal-overlay">
         <div class="modal-content" style="max-width: 450px;">
             <span class="close-modal" onclick="closeInfoModal()">&times;</span>
-            <img id="infoImg" src="" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
+            <img id="infoImg" src="" style="width: 150px; height: 150px; object-fit: contain; object-position: center; background: #fff; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
             <h2 id="infoTitle" style="margin-top: 0;">اسم المنتج</h2>
             <p id="infoDesc" style="text-align: justify; color: #555; line-height: 1.6; font-size: 16px; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; white-space: pre-wrap;"></p>
         </div>
@@ -407,6 +407,9 @@
         Object.assign(uiText.ar, { shopPreviewButton: "عرض في المتجر", noFeaturedProducts: "لم يتم تحديد منتجات مميزة لعرضها هنا. تصفحي المتجر!", saleBadge: "خصم", serviceWord: "الخدمة:", timeWord: "الساعة:", unspecified: "غير محدد", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", noInfo: "لا توجد تفاصيل إضافية.", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي", completeProfileTitle: "إكمال بيانات الحساب", completeProfileText: "نحتاج رقم الهاتف، تاريخ الميلاد والجنس لإكمال حساب Google. سيتم تأكيد رقم الهاتف برسالة SMS.", completeProfileButton: "تأكيد الهاتف وإكمال الحساب", cancelAndBack: "إلغاء والرجوع", gender: "الجنس", genderFemale: "أنثى", genderMale: "ذكر", genderOther: "آخر" });
         Object.assign(uiText.he, { shopPreviewButton: "צפייה בחנות", noFeaturedProducts: "עדיין לא נבחרו מוצרים מומלצים להצגה כאן. עברי לחנות!", saleBadge: "הנחה", serviceWord: "שירות:", timeWord: "שעה:", unspecified: "לא מוגדר", pendingStatus: "ממתין לאישור", confirmedStatus: "אושר", rejectedStatus: "נדחה", noInfo: "אין פרטים נוספים.", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי", completeProfileTitle: "השלמת פרטי חשבון", completeProfileText: "צריך מספר טלפון, תאריך לידה ומין כדי להשלים חשבון Google. הטלפון יאומת ב-SMS.", completeProfileButton: "אימות טלפון והשלמת חשבון", cancelAndBack: "ביטול וחזרה", gender: "מין", genderFemale: "נקבה", genderMale: "זכר", genderOther: "אחר" });
         Object.assign(uiText.en, { shopPreviewButton: "View in shop", noFeaturedProducts: "No featured products were selected yet. Browse the shop!", saleBadge: "Sale", serviceWord: "Service:", timeWord: "Time:", unspecified: "Not specified", pendingStatus: "Pending", confirmedStatus: "Confirmed", rejectedStatus: "Rejected", noInfo: "No extra details.", oldBookingsButton: "Old bookings", accountInfoButton: "My account info", completeProfileTitle: "Complete account details", completeProfileText: "We need phone, birth date, and gender to complete your Google account. Your phone will be verified by SMS.", completeProfileButton: "Verify phone and complete account", cancelAndBack: "Cancel and go back", gender: "Gender", genderFemale: "Female", genderMale: "Male", genderOther: "Other" });
+        Object.assign(uiText.ar, { reviewPendingAlert: "تم إرسال تقييمك للإدارة. سيظهر للزبائن بعد الموافقة عليه." });
+        Object.assign(uiText.he, { reviewPendingAlert: "הביקורת נשלחה לאישור ההנהלה ותופיע לאחר אישור." });
+        Object.assign(uiText.en, { reviewPendingAlert: "Your review was sent for admin approval and will appear after it is approved." });
 
         function uiT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -1017,12 +1020,18 @@
             reviewIndex = (reviewIndex + 1) % allReviews.length;
         }
 
+        function isPublicReview(review) {
+            return review && review.status !== "pending" && review.status !== "hidden" && review.isPublished !== false;
+        }
+
         async function loadReviews() {
             const querySnapshot = await getDocs(collection(db, "Reviews"));
-            if (!querySnapshot.empty) {
-                allReviews = []; 
-                querySnapshot.forEach((docSnap) => { allReviews.push(docSnap.data()); });
-            }
+            const publishedReviews = [];
+            querySnapshot.forEach((docSnap) => {
+                const review = docSnap.data();
+                if (isPublicReview(review)) publishedReviews.push(review);
+            });
+            if (publishedReviews.length) allReviews = publishedReviews;
             showNextReview();
             if(sliderInterval) clearInterval(sliderInterval);
             sliderInterval = setInterval(showNextReview, 3500); 
@@ -1034,9 +1043,20 @@
             const textVal = document.getElementById("reviewText").value;
             if (!titleVal || !textVal) return alert("الرجاء كتابة العنوان والتفاصيل!");
             try { 
-                await addDoc(collection(db, "Reviews"), { name: loggedInUserData.firstName, title: titleVal, text: textVal, rating: currentRating }); 
+                await addDoc(collection(db, "Reviews"), {
+                    name: loggedInUserData.firstName,
+                    title: titleVal,
+                    text: textVal,
+                    rating: currentRating,
+                    status: "pending",
+                    isPublished: false,
+                    createdAt: new Date().toISOString(),
+                    userId: currentUserId || "",
+                    email: loggedInUserData.email || "",
+                    phone: loggedInUserData.phone || ""
+                }); 
                 document.getElementById("reviewTitle").value = ""; document.getElementById("reviewText").value = ""; 
-                alert("تم نشر تقييمك بنجاح! شكراً لك."); loadReviews(); 
+                alert(uiT("reviewPendingAlert", "تم إرسال تقييمك للإدارة. سيظهر للزبائن بعد الموافقة عليه.")); loadReviews(); 
             } catch (e) { console.error(e); }
         });
 
