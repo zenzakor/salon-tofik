@@ -24,6 +24,8 @@
         .page-subtitle { margin: 0 auto 30px; color: #666; text-align: center; line-height: 1.6; max-width: 620px; }
         body.dark-mode .page-subtitle, body.dark-mode .booking-card small { color: #ddd; }
         .booking-list { display: grid; gap: 14px; }
+        .records-title { margin: 34px 0 14px; font-size: 22px; color: #000; }
+        body.dark-mode .records-title { color: #fff; }
         .booking-card { background: #fafafa; border: 1px solid #e6e6e6; border-right: 5px solid #000; border-radius: 8px; padding: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
         body.dark-mode .booking-card { border-right-color: #fff; }
         .booking-info { line-height: 1.7; }
@@ -37,6 +39,10 @@
         .btn:hover { background: #fff; color: #000; }
         body.dark-mode .btn { background: #fff; color: #000; border-color: #fff; }
         body.dark-mode .btn:hover { background: #000; color: #fff; }
+        .booking-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .booking-actions .btn { margin-top: 0; padding: 9px 14px; font-size: 14px; }
+        .booking-policy { display: block; margin-top: 8px; color: #555; }
+        body.dark-mode .booking-policy { color: #ddd; }
         .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; }
         .settings-drawer-overlay.open { display: block; }
         .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
@@ -56,9 +62,11 @@
             .booking-card { align-items: flex-start; flex-direction: column; }
         }
     </style>
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/mobile-layout.css">
 </head>
 <body>
+    <a class="skip-link" href="#oldBookingsList">تخطي إلى سجل الحجوزات</a>
     <header>
         <img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR">
         <nav>
@@ -114,13 +122,25 @@
             <div id="oldBookingsList" class="booking-list">
                 <div class="empty-state" data-i18n="loading">جاري التحميل...</div>
             </div>
+            <h2 class="records-title" data-i18n="paymentRecordsTitle">سجل الطلبات والفواتير</h2>
+            <div id="paymentRecordsList" class="booking-list">
+                <div class="empty-state" data-i18n="loading">جاري التحميل...</div>
+            </div>
         </section>
     </main>
 
+    <footer style="background:#000;color:#fff;text-align:center;padding:28px 20px;">
+        <div class="legal-links" aria-label="روابط قانونية">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Conditions</a>
+        </div>
+    </footer>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { formatIls, getCancellationAssessment } from "./assets/compliance.js";
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
         const app = initializeApp(firebaseConfig);
@@ -129,15 +149,22 @@
 
         let currentUser = null;
         let loggedInUserData = null;
+        let userAppointments = [];
 
         const uiText = {
-            ar: { home: "الرئيسية", book: "حجز دور", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", oldBookingsTitle: "الحجوزات القديمة", oldBookingsSubtitle: "هنا تظهر المواعيد التي انتهى وقتها فقط.", loading: "جاري التحميل...", noOldBookings: "لا توجد حجوزات قديمة بعد.", loginRequiredTitle: "يرجى تسجيل الدخول أولاً", loginRequiredText: "سجّل الدخول من الصفحة الرئيسية حتى ترى حجوزاتك القديمة.", backHome: "العودة للصفحة الرئيسية", serviceWord: "الخدمة:", timeWord: "الساعة:", unspecified: "غير محدد", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", accountInfoButton: "معلومات حسابي" },
-            he: { home: "בית", book: "הזמנת תור", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", oldBookingsTitle: "תורים ישנים", oldBookingsSubtitle: "כאן מופיעים רק תורים שהזמן שלהם כבר עבר.", loading: "טוען...", noOldBookings: "אין עדיין תורים ישנים.", loginRequiredTitle: "צריך להתחבר קודם", loginRequiredText: "התחברי מהעמוד הראשי כדי לראות את התורים הישנים שלך.", backHome: "חזרה לעמוד הראשי", serviceWord: "שירות:", timeWord: "שעה:", unspecified: "לא מוגדר", pendingStatus: "ממתין לאישור", confirmedStatus: "אושר", rejectedStatus: "נדחה", accountInfoButton: "פרטי החשבון שלי" },
-            en: { home: "Home", book: "Book", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", oldBookingsTitle: "Old bookings", oldBookingsSubtitle: "Only appointments whose time has already passed are shown here.", loading: "Loading...", noOldBookings: "No old bookings yet.", loginRequiredTitle: "Please log in first", loginRequiredText: "Log in from the home page to see your old bookings.", backHome: "Back to home page", serviceWord: "Service:", timeWord: "Time:", unspecified: "Not specified", pendingStatus: "Pending", confirmedStatus: "Confirmed", rejectedStatus: "Rejected", accountInfoButton: "My account info" }
+            ar: { home: "الرئيسية", book: "حجز دور", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", oldBookingsTitle: "حجوزاتي وسجل المواعيد", oldBookingsSubtitle: "هنا تظهر الحجوزات القادمة والقديمة، ويمكن إلغاء الحجز حسب سياسة الصالون.", loading: "جاري التحميل...", noOldBookings: "لا توجد حجوزات محفوظة بعد.", loginRequiredTitle: "يرجى تسجيل الدخول أولاً", loginRequiredText: "سجّل الدخول من الصفحة الرئيسية حتى ترى حجوزاتك.", backHome: "العودة للصفحة الرئيسية", serviceWord: "الخدمة:", timeWord: "الساعة:", unspecified: "غير محدد", pendingStatus: "قيد الانتظار", confirmedStatus: "تم التأكيد", rejectedStatus: "تم الرفض", accountInfoButton: "معلومات حسابي" },
+            he: { home: "בית", book: "הזמנת תור", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", oldBookingsTitle: "התורים והיסטוריית ההזמנות שלי", oldBookingsSubtitle: "כאן מופיעים תורים עתידיים וישנים, ואפשר לבטל לפי מדיניות הסלון.", loading: "טוען...", noOldBookings: "אין עדיין תורים שמורים.", loginRequiredTitle: "צריך להתחבר קודם", loginRequiredText: "התחברי מהעמוד הראשי כדי לראות את התורים שלך.", backHome: "חזרה לעמוד הראשי", serviceWord: "שירות:", timeWord: "שעה:", unspecified: "לא מוגדר", pendingStatus: "ממתין לאישור", confirmedStatus: "אושר", rejectedStatus: "נדחה", accountInfoButton: "פרטי החשבון שלי" },
+            en: { home: "Home", book: "Book", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", oldBookingsTitle: "My Bookings and Appointment History", oldBookingsSubtitle: "Upcoming and past appointments are shown here, with cancellation according to salon policy.", loading: "Loading...", noOldBookings: "No saved bookings yet.", loginRequiredTitle: "Please log in first", loginRequiredText: "Log in from the home page to see your bookings.", backHome: "Back to home page", serviceWord: "Service:", timeWord: "Time:", unspecified: "Not specified", pendingStatus: "Pending", confirmedStatus: "Confirmed", rejectedStatus: "Rejected", accountInfoButton: "My account info" }
         };
         Object.assign(uiText.ar, { noShowStatus: "غائب" });
         Object.assign(uiText.he, { noShowStatus: "לא הגיע/ה" });
         Object.assign(uiText.en, { noShowStatus: "No-show" });
+        Object.assign(uiText.ar, { cancelledStatus: "تم الإلغاء", cancelBooking: "إلغاء الحجز", cancelConfirm: "هل تريد إلغاء هذا الحجز؟", cancelSuccess: "تم إلغاء الحجز وحفظ السجل.", cancelError: "تعذر إلغاء الحجز: ", freeCancellation: "إلغاء مجاني لأن الموعد بعد أكثر من 24 ساعة.", lateCancellation: "إلغاء متأخر: سيقوم الصالون بمراجعة أي عربون أو رسوم.", cancellationSaved: "تم حفظ الإلغاء في السجل.", refundEligible: "قابل للاسترجاع إذا كان مدفوعاً", refundReview: "يحتاج مراجعة للاسترجاع" });
+        Object.assign(uiText.he, { cancelledStatus: "בוטל", cancelBooking: "ביטול תור", cancelConfirm: "לבטל את התור הזה?", cancelSuccess: "התור בוטל ונשמר בהיסטוריה.", cancelError: "לא ניתן לבטל את התור: ", freeCancellation: "ביטול ללא חיוב כי התור בעוד יותר מ-24 שעות.", lateCancellation: "ביטול מאוחר: הסלון יבדוק מקדמה או חיוב.", cancellationSaved: "הביטול נשמר בהיסטוריה.", refundEligible: "זכאי להחזר אם שולם", refundReview: "נדרש בדיקת החזר" });
+        Object.assign(uiText.en, { cancelledStatus: "Cancelled", cancelBooking: "Cancel booking", cancelConfirm: "Cancel this booking?", cancelSuccess: "The booking was cancelled and kept in history.", cancelError: "Could not cancel booking: ", freeCancellation: "Free cancellation because the appointment is more than 24 hours away.", lateCancellation: "Late cancellation: the salon will review any deposit or fee.", cancellationSaved: "Cancellation was saved in the record.", refundEligible: "Refund eligible if paid", refundReview: "Refund review required" });
+        Object.assign(uiText.ar, { paymentRecordsTitle: "سجل الطلبات والفواتير", noPaymentRecords: "لا توجد طلبات أو فواتير محفوظة بعد.", orderWord: "الطلب:", amountWord: "المبلغ:", vatWord: "VAT:", invoiceWord: "الفاتورة:", paymentStatusWord: "حالة الدفع:" });
+        Object.assign(uiText.he, { paymentRecordsTitle: "היסטוריית הזמנות וחשבוניות", noPaymentRecords: "אין עדיין הזמנות או חשבוניות שמורות.", orderWord: "הזמנה:", amountWord: "סכום:", vatWord: "מע\"מ:", invoiceWord: "חשבונית:", paymentStatusWord: "סטטוס תשלום:" });
+        Object.assign(uiText.en, { paymentRecordsTitle: "Orders and Invoice History", noPaymentRecords: "No saved orders or invoices yet.", orderWord: "Order:", amountWord: "Amount:", vatWord: "VAT:", invoiceWord: "Invoice:", paymentStatusWord: "Payment status:" });
 
         function uiT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -163,11 +190,35 @@
 
         function displayAppointmentStatus(status) {
             const value = String(status || "").toLowerCase();
+            if (value.includes("cancel") || value.includes("إلغاء") || value.includes("בוטל")) return uiT("cancelledStatus", "Cancelled");
             if (value === "no_show" || value.includes("no-show") || value.includes("no show") || value.includes("absent") || value.includes("غائب") || value.includes("לא הגיע")) return uiT("noShowStatus", "No-show");
             if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return uiT("confirmedStatus", "تم التأكيد");
             if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return uiT("rejectedStatus", "تم الرفض");
             if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return uiT("pendingStatus", "قيد الانتظار");
             return status;
+        }
+
+        async function createNotification(payload) {
+            if (!payload?.userId) return;
+            const createdAtMs = Date.now();
+            try {
+                await addDoc(collection(db, "Notifications"), {
+                    userId: String(payload.userId),
+                    targetType: payload.targetType || (payload.userId === "admin" ? "admin" : "user"),
+                    title: payload.title || "",
+                    body: payload.body || "",
+                    type: payload.type || "info",
+                    link: payload.link || "",
+                    sourceCollection: payload.sourceCollection || "",
+                    sourceId: payload.sourceId || "",
+                    read: false,
+                    createdAt: new Date(createdAtMs).toISOString(),
+                    createdAtMs,
+                    meta: payload.meta || {}
+                });
+            } catch (error) {
+                console.warn("Notification was not saved:", error);
+            }
         }
 
         function getAppointmentDateTime(appointment) {
@@ -196,13 +247,37 @@
         }
 
         function renderBooking(appointment) {
+            const assessment = getCancellationAssessment(appointment);
+            const policyText = assessment.cancellable
+                ? (assessment.freeCancellation ? uiT("freeCancellation", "Free cancellation.") : uiT("lateCancellation", "Late cancellation review."))
+                : (appointment.cancellationSaved ? uiT("cancellationSaved", "Cancellation saved.") : "");
+            const refundText = appointment.refundStatus
+                ? (String(appointment.refundStatus).includes("eligible") ? uiT("refundEligible", "Refund eligible if paid") : uiT("refundReview", "Refund review required"))
+                : "";
             return `
                 <div class="booking-card">
                     <div class="booking-info">
                         <strong>${uiT("serviceWord", "الخدمة:")} ${appointment.service || uiT("unspecified", "غير محدد")}</strong>
                         <small>${appointment.date || "-"} | ${uiT("timeWord", "الساعة:")} ${appointment.time || uiT("unspecified", "غير محدد")}</small>
+                        ${policyText ? `<small class="booking-policy">${policyText}</small>` : ""}
+                        ${refundText ? `<small class="booking-policy">${refundText}</small>` : ""}
+                        ${assessment.cancellable ? `<div class="booking-actions"><button class="btn btn-danger-outline" type="button" onclick="cancelBooking('${appointment.id}')">${uiT("cancelBooking", "Cancel booking")}</button></div>` : ""}
                     </div>
                     <span class="status-pill">${displayAppointmentStatus(appointment.status)}</span>
+                </div>
+            `;
+        }
+
+        function renderPaymentRecord(order) {
+            return `
+                <div class="booking-card">
+                    <div class="booking-info">
+                        <strong>${uiT("orderWord", "Order:")} ${order.productName || uiT("unspecified", "غير محدد")}</strong>
+                        <small>${uiT("amountWord", "Amount:")} ${formatIls(order.totalGross ?? order.price ?? 0)} | ${uiT("vatWord", "VAT:")} ${formatIls(order.vatAmount || 0)}</small>
+                        <small>${uiT("invoiceWord", "Invoice:")} ${order.invoiceNumber || "-"}</small>
+                        <small>${uiT("paymentStatusWord", "Payment status:")} ${order.paymentStatus || "-"}</small>
+                    </div>
+                    <span class="status-pill">${order.status || "-"}</span>
                 </div>
             `;
         }
@@ -213,22 +288,94 @@
                 return;
             }
             const querySnapshot = await getDocs(collection(db, "Appointments"));
-            const now = new Date();
-            const oldBookings = [];
+            userAppointments = [];
             querySnapshot.forEach((documentSnap) => {
-                const appointment = documentSnap.data();
+                const appointment = { id: documentSnap.id, ...documentSnap.data() };
                 if (!isSameLoggedInUser(appointment)) return;
-                const appointmentDateTime = getAppointmentDateTime(appointment);
-                if (appointmentDateTime && appointmentDateTime <= now) oldBookings.push(appointment);
+                userAppointments.push(appointment);
             });
 
-            oldBookings.sort((a, b) => `${b.date || ""} ${b.time || ""}`.localeCompare(`${a.date || ""} ${a.time || ""}`));
+            userAppointments.sort((a, b) => `${b.date || ""} ${b.time || ""}`.localeCompare(`${a.date || ""} ${a.time || ""}`));
             const list = document.getElementById("oldBookingsList");
-            if (oldBookings.length === 0) {
+            if (userAppointments.length === 0) {
                 list.innerHTML = `<div class="empty-state">${uiT("noOldBookings", "لا توجد حجوزات قديمة بعد.")}</div>`;
                 return;
             }
-            list.innerHTML = oldBookings.map(renderBooking).join("");
+            list.innerHTML = userAppointments.map(renderBooking).join("");
+        }
+
+        async function loadPaymentRecords() {
+            const list = document.getElementById("paymentRecordsList");
+            if (!currentUser) {
+                list.innerHTML = `<div class="empty-state">${uiT("loginRequiredText", "Log in to see your records.")}</div>`;
+                return;
+            }
+            const ordersSnapshot = await getDocs(collection(db, "Orders"));
+            const orders = [];
+            ordersSnapshot.forEach((documentSnap) => {
+                const order = { id: documentSnap.id, ...documentSnap.data() };
+                if (!isSameLoggedInUser(order)) return;
+                orders.push(order);
+            });
+            orders.sort((a, b) => String(b.createdAt || b.invoiceNumber || "").localeCompare(String(a.createdAt || a.invoiceNumber || "")));
+            if (!orders.length) {
+                list.innerHTML = `<div class="empty-state">${uiT("noPaymentRecords", "No saved orders or invoices yet.")}</div>`;
+                return;
+            }
+            list.innerHTML = orders.map(renderPaymentRecord).join("");
+        }
+
+        window.cancelBooking = async function(appointmentId) {
+            const appointment = userAppointments.find((item) => item.id === appointmentId);
+            if (!appointment || !currentUser) return;
+            const assessment = getCancellationAssessment(appointment);
+            if (!assessment.cancellable) return;
+            if (!confirm(`${uiT("cancelConfirm", "Cancel this booking?")}\n\n${assessment.freeCancellation ? uiT("freeCancellation", "Free cancellation.") : uiT("lateCancellation", "Late cancellation review.")}`)) return;
+
+            try {
+                const cancelledAt = new Date().toISOString();
+                await updateDoc(doc(db, "Appointments", appointmentId), {
+                    status: "cancelled_by_user",
+                    cancelledAt,
+                    cancelledBy: currentUser.uid,
+                    cancellationWindowHours: assessment.hoursBefore,
+                    cancellationPolicyHours: assessment.policyWindowHours,
+                    cancellationFeeStatus: assessment.cancellationFeeStatus,
+                    refundStatus: assessment.refundStatus,
+                    cancellationSaved: true,
+                    legalLocked: true,
+                    retention: {
+                        keepForBookingHistory: true,
+                        source: "Firestore Appointments"
+                    }
+                });
+                await createNotification({
+                    userId: "admin",
+                    targetType: "admin",
+                    title: "تم إلغاء حجز من الزبون",
+                    body: `${appointment.customerName || currentUser.email || "زبون"} ألغى حجز ${appointment.service || "-"} بتاريخ ${appointment.date || "-"} الساعة ${appointment.time || "-"}.`,
+                    type: "booking",
+                    link: "admin.html#appointments",
+                    sourceCollection: "Appointments",
+                    sourceId: appointmentId,
+                    meta: { refundStatus: assessment.refundStatus, cancellationFeeStatus: assessment.cancellationFeeStatus }
+                });
+                await createNotification({
+                    userId: currentUser.uid,
+                    targetType: "user",
+                    title: "تم إلغاء الحجز",
+                    body: `${uiT("cancelSuccess", "The booking was cancelled and kept in history.")} ${assessment.freeCancellation ? uiT("freeCancellation", "") : uiT("lateCancellation", "")}`,
+                    type: "booking",
+                    link: "old-bookings.html",
+                    sourceCollection: "Appointments",
+                    sourceId: appointmentId
+                });
+                alert(uiT("cancelSuccess", "The booking was cancelled and kept in history."));
+                loadOldBookings();
+            } catch (error) {
+                console.error(error);
+                alert(uiT("cancelError", "Could not cancel booking: ") + error.message);
+            }
         }
 
         document.getElementById("settingsBtn").addEventListener("click", () => document.getElementById("settingsModal").classList.add("open"));
@@ -243,6 +390,7 @@
             localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
             applySettings();
             loadOldBookings();
+            loadPaymentRecords();
         }));
 
         applySettings();
@@ -254,6 +402,7 @@
                 loggedInUserData = userSnap.exists() ? { ...userSnap.data(), email: user.email } : { email: user.email };
             }
             loadOldBookings();
+            loadPaymentRecords();
         });
     </script>
     <script type="module" src="assets/notifications.js"></script>

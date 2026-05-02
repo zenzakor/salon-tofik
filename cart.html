@@ -79,9 +79,11 @@
         .footer-text { color: #888; font-size: 14px; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;}
         .footer-text strong { color: #fff; letter-spacing: 1px;}
     </style>
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/mobile-layout.css">
 </head>
 <body>
+    <a class="skip-link" href="#cartWrapper">تخطي إلى السلة</a>
 
     <header>
         <a href="index.html"><img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR"></a>
@@ -110,7 +112,30 @@
             <div id="cartItemsList"></div>
             
             <div id="cartSummary" class="cart-summary" style="display: none;">
-                <div class="total-price"><span data-i18n="totalLabel">المجموع الكلي:</span> <span id="totalAmount">0</span> ₪</div>
+                <div id="paymentSecurityNotice" class="compliance-panel">
+                    <strong data-i18n="securePaymentTitle">الدفع الآمن</strong>
+                    <p data-i18n="securePaymentText">الدفع يتم عبر مزود خارجي آمن. لا يتم تخزين بيانات بطاقات الائتمان في الموقع.</p>
+                    <p id="securePaymentStatus" class="secure-payment-notice" aria-live="polite"></p>
+                </div>
+                <div class="price-breakdown" aria-label="تفصيل السعر والضريبة">
+                    <div class="price-row">
+                        <span data-i18n="netLabel">السعر قبل VAT</span>
+                        <strong id="netAmount">0 ₪</strong>
+                    </div>
+                    <div class="price-row">
+                        <span data-i18n="vatLabel">VAT 18%</span>
+                        <strong id="vatAmount">0 ₪</strong>
+                    </div>
+                    <div class="price-row total">
+                        <span data-i18n="totalLabel">المجموع الكلي:</span>
+                        <strong id="totalAmount">0 ₪</strong>
+                    </div>
+                    <small data-i18n="vatIncludedNotice">الأسعار تشمل VAT ولا توجد رسوم مخفية.</small>
+                </div>
+                <label class="terms-consent">
+                    <input id="termsConsent" type="checkbox">
+                    <span><span data-i18n="termsConsentText">أوافق على الشروط، سياسة الإلغاء، سياسة الاسترجاع، وسياسة الخصوصية قبل الدفع.</span> <a href="terms.html" target="_blank" rel="noopener" data-i18n="termsLink">قراءة الشروط</a></span>
+                </label>
                 <button id="checkoutBtn" class="btn-checkout" data-i18n="checkout">تأكيد الطلب والدفع</button>
                 <div id="loader" class="loader" data-i18n="checkoutLoader">جاري إرسال الطلب... ⏳</div>
             </div>
@@ -153,14 +178,18 @@
         <img src="assets/logo-white.png" class="footer-logo" alt="صالون توفيق">
         <p style="color: #ccc; margin-bottom: 25px; font-size: 15px;">الجمال الذي تستحقينه، بين يديك.</p>
         <div class="social-icons">
-            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
         </div>
         <div class="footer-text">
             © 2026 صالون توفيق. جميع الحقوق محفوظة. <br><br>
             Made by <strong>ZINEDINE ZAKOR</strong>
             <span class="footer-version-switch">| <a href="#" data-device-switch>Mobile Version</a></span>
+        </div>
+        <div class="legal-links" aria-label="روابط قانونية">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Conditions</a>
         </div>
     </footer>
 
@@ -168,6 +197,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, getDoc, setDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { calculateVatBreakdown, createInvoiceDraft, createPaymentRecordDraft, formatIls, getPaymentSecurityStatus } from "./assets/compliance.js";
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
         const app = initializeApp(firebaseConfig);
@@ -185,6 +215,9 @@
         Object.assign(uiText.ar, { quantityLimit: "لا يمكنك اختيار أكثر من الكمية المتوفرة:", loginBeforeCheckout: "يجب تسجيل الدخول قبل تأكيد الطلب.", orderSuccess: "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.", orderError: "حدث خطأ أثناء إرسال الطلب: ", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي" });
         Object.assign(uiText.he, { quantityLimit: "אי אפשר לבחור יותר מהכמות הזמינה:", loginBeforeCheckout: "צריך להתחבר לפני אישור ההזמנה.", orderSuccess: "ההזמנה נשלחה בהצלחה! ניצור איתך קשר בקרוב.", orderError: "אירעה שגיאה בשליחת ההזמנה: ", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי" });
         Object.assign(uiText.en, { quantityLimit: "You cannot choose more than the available quantity:", loginBeforeCheckout: "Please log in before confirming the order.", orderSuccess: "Your order was sent successfully! We will contact you soon.", orderError: "Error while sending the order: ", oldBookingsButton: "Old bookings", accountInfoButton: "My account info" });
+        Object.assign(uiText.ar, { netLabel: "السعر قبل VAT", vatLabel: "VAT 18%", vatIncludedNotice: "الأسعار تشمل VAT ولا توجد رسوم مخفية.", securePaymentTitle: "الدفع الآمن", securePaymentText: "الدفع يتم عبر مزود خارجي آمن. لا يتم تخزين بيانات بطاقات الائتمان في الموقع.", securePaymentOk: "بيئة الدفع آمنة أو محلية للاختبار. في الإنتاج يجب استخدام HTTPS.", securePaymentBlocked: "يجب تشغيل صفحة الدفع عبر HTTPS قبل الدفع.", termsConsentText: "أوافق على الشروط، سياسة الإلغاء، سياسة الاسترجاع، وسياسة الخصوصية قبل الدفع.", termsLink: "قراءة الشروط", termsRequired: "يجب الموافقة على الشروط وسياسة الإلغاء والاسترجاع قبل الدفع.", paymentPrepared: "تم تجهيز سجل الدفع والفاتورة. سيتم تحويل الدفع إلى مزود خارجي آمن عند الربط الإنتاجي." });
+        Object.assign(uiText.he, { netLabel: "מחיר לפני מע\"מ", vatLabel: "מע\"מ 18%", vatIncludedNotice: "המחירים כוללים מע\"מ ואין עמלות נסתרות.", securePaymentTitle: "תשלום מאובטח", securePaymentText: "התשלום מתבצע דרך ספק חיצוני מאובטח. פרטי כרטיס אשראי אינם נשמרים באתר.", securePaymentOk: "סביבת התשלום מאובטחת או מקומית לבדיקה. בפרודקשן חובה HTTPS.", securePaymentBlocked: "יש להפעיל את עמוד התשלום דרך HTTPS לפני תשלום.", termsConsentText: "אני מאשר/ת את התנאים, מדיניות הביטול, מדיניות ההחזרים ומדיניות הפרטיות לפני התשלום.", termsLink: "קריאת התנאים", termsRequired: "יש לאשר את התנאים ומדיניות הביטול וההחזרים לפני התשלום.", paymentPrepared: "רשומת התשלום והחשבונית הוכנו. בפרודקשן התשלום יועבר לספק חיצוני מאובטח." });
+        Object.assign(uiText.en, { netLabel: "Price before VAT", vatLabel: "VAT 18%", vatIncludedNotice: "Prices include VAT and there are no hidden fees.", securePaymentTitle: "Secure payment", securePaymentText: "Payment is handled by an external secure provider. Credit card data is not stored on this site.", securePaymentOk: "Payment environment is secure or local for testing. Production checkout must use HTTPS.", securePaymentBlocked: "Checkout must run over HTTPS before payment.", termsConsentText: "I agree to the terms, cancellation policy, refund policy, and privacy policy before payment.", termsLink: "Read terms", termsRequired: "You must agree to the terms, cancellation policy, and refund policy before payment.", paymentPrepared: "Payment and invoice records were prepared. Production payment will redirect to a secure external provider." });
 
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
@@ -198,6 +231,7 @@
             document.getElementById("langSelect").value = lang;
             document.getElementById("textSizeSelect").value = textSize;
             document.querySelectorAll("[data-i18n]").forEach((element) => { const key = element.dataset.i18n; if (uiText[lang]?.[key]) element.textContent = uiText[lang][key]; });
+            updatePaymentSecurityNotice();
             renderCart();
         }
 
@@ -309,6 +343,16 @@
             checkoutBtn.style.display = loggedInUserData ? "block" : "none";
             loginWarning.style.display = loggedInUserData ? "none" : "block";
         }
+
+        function updatePaymentSecurityNotice() {
+            const statusElement = document.getElementById("securePaymentStatus");
+            if (!statusElement) return;
+            const lang = localStorage.getItem("salonLang") || "ar";
+            const text = uiText[lang] || uiText.ar;
+            const status = getPaymentSecurityStatus(window.location);
+            statusElement.textContent = status.secure ? text.securePaymentOk : text.securePaymentBlocked;
+            statusElement.classList.toggle("warning", !status.secure);
+        }
         window.openSettings = () => { document.getElementById("settingsModal").classList.add("open"); };
         window.closeSettings = () => { document.getElementById("settingsModal").classList.remove("open"); };
         document.getElementById("settingsModal").addEventListener("click", (event) => { if (event.target === document.getElementById("settingsModal")) closeSettings(); });
@@ -352,6 +396,8 @@
             const summary = document.getElementById("cartSummary");
             const emptyMsg = document.getElementById("emptyCartMsg");
             const totalAmountSpan = document.getElementById("totalAmount");
+            const netAmountSpan = document.getElementById("netAmount");
+            const vatAmountSpan = document.getElementById("vatAmount");
             const lang = localStorage.getItem("salonLang") || "ar";
             const text = uiText[lang] || uiText.ar;
 
@@ -371,24 +417,28 @@
                 const itemDiv = document.createElement("div"); itemDiv.className = "cart-item";
                 itemDiv.innerHTML = `
                     <div class="item-info">
-                        <img src="${product.image}" class="item-img">
+                        <img src="${product.image}" class="item-img" alt="${product.name || ""}">
                         <div class="item-details">
                             <h3>${product.name}</h3>
-                            <p>${product.price} ₪ ${text.each}</p>
+                            <p>${formatIls(product.price)} ${text.each}</p>
                             <small style="color:#666;">${text.available}: ${product.stock ?? 0}</small>
                         </div>
                     </div>
                     <div class="qty-controls">
-                        <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                        <button class="qty-btn" type="button" onclick="updateQuantity(${index}, 1)">+</button>
                         <span class="qty-num">${qty}</span>
-                        <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                        <button class="qty-btn" type="button" onclick="updateQuantity(${index}, -1)">-</button>
                     </div>
-                    <div style="font-weight: bold; width: 80px; text-align: center;">${itemTotal} ₪</div>
-                    <button class="btn-remove" onclick="removeItem(${index})">${text.remove}</button>
+                    <div style="font-weight: bold; width: 96px; text-align: center;">${formatIls(itemTotal)}</div>
+                    <button class="btn-remove" type="button" onclick="removeItem(${index})">${text.remove}</button>
                 `;
                 itemsList.appendChild(itemDiv);
             });
-            totalAmountSpan.innerText = total;
+            const vat = calculateVatBreakdown(total);
+            if (netAmountSpan) netAmountSpan.innerText = formatIls(vat.net);
+            if (vatAmountSpan) vatAmountSpan.innerText = formatIls(vat.vat);
+            totalAmountSpan.innerText = formatIls(vat.gross);
+            updatePaymentSecurityNotice();
         }
 
         window.updateQuantity = function(index, change) {
@@ -416,6 +466,12 @@
             const lang = localStorage.getItem("salonLang") || "ar";
             const text = uiText[lang] || uiText.ar;
             if (!loggedInUserData || !currentUserId) return alert(text.loginBeforeCheckout);
+            const securityStatus = getPaymentSecurityStatus(window.location);
+            if (!securityStatus.secure) {
+                updatePaymentSecurityNotice();
+                return alert(text.securePaymentBlocked);
+            }
+            if (!document.getElementById("termsConsent").checked) return alert(text.termsRequired);
             document.getElementById("loader").style.display = "block"; document.getElementById("checkoutBtn").disabled = true;
 
             try {
@@ -434,18 +490,75 @@
 
                 const productNames = cart.map(p => `${p.quantity || 1}x ${p.name}`).join(' + ');
                 const totalPrice = cart.reduce((sum, p) => sum + (Number(p.price) * (p.quantity || 1)), 0);
+                const vatBreakdown = calculateVatBreakdown(totalPrice);
+                const customer = {
+                    userId: currentUserId,
+                    email: loggedInUserData.email || "",
+                    name: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
+                    phone: loggedInUserData.phone || ""
+                };
+                const invoiceItems = cart.map((product) => ({
+                    productId: product.id,
+                    name: product.name,
+                    quantity: product.quantity || 1,
+                    unitPriceGross: Number(product.price || 0)
+                }));
                 const batch = writeBatch(db);
                 const orderRef = doc(collection(db, "Orders"));
+                const paymentRef = doc(collection(db, "PaymentRecords"));
+                const invoiceRef = doc(collection(db, "Invoices"));
+                const acceptedPolicies = { terms: true, cancellation: true, refund: true };
+                const paymentRecord = createPaymentRecordDraft({
+                    sourceCollection: "Orders",
+                    sourceId: orderRef.id,
+                    customer,
+                    items: invoiceItems,
+                    totalGross: totalPrice,
+                    acceptedPolicies
+                });
+                const invoiceDraft = createInvoiceDraft({
+                    sourceCollection: "Orders",
+                    sourceId: orderRef.id,
+                    customer,
+                    items: invoiceItems,
+                    totalGross: totalPrice,
+                    paymentRecordId: paymentRef.id
+                });
 
                 batch.set(orderRef, {
                     userId: currentUserId,
-                    email: loggedInUserData.email || "",
+                    email: customer.email,
                     productName: productNames,
                     price: totalPrice,
-                    customerName: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
-                    phone: loggedInUserData.phone || "",
-                    status: "طلب جديد (من السلة)"
+                    totalGross: vatBreakdown.gross,
+                    totalNet: vatBreakdown.net,
+                    vatAmount: vatBreakdown.vat,
+                    vatRate: vatBreakdown.rate,
+                    vatIncluded: true,
+                    currency: "ILS",
+                    customerName: customer.name,
+                    phone: customer.phone,
+                    status: "طلب جديد (من السلة)",
+                    paymentStatus: "pending_external_provider",
+                    paymentProvider: "external_hosted_checkout",
+                    paymentRecordId: paymentRef.id,
+                    invoiceId: invoiceRef.id,
+                    invoiceNumber: invoiceDraft.invoiceNumber,
+                    invoiceStatus: invoiceDraft.invoiceStatus,
+                    allocationNumberStatus: invoiceDraft.allocationNumber.status,
+                    noCreditCardDataStored: true,
+                    termsAccepted: true,
+                    cancellationPolicyAccepted: true,
+                    refundPolicyAccepted: true,
+                    termsAcceptedAt: new Date().toISOString(),
+                    createdAt: new Date().toISOString(),
+                    retention: {
+                        keepForAccountingAudit: true,
+                        source: "Firestore Orders"
+                    }
                 });
+                batch.set(paymentRef, paymentRecord);
+                batch.set(invoiceRef, invoiceDraft);
 
                 productUpdates.forEach((productUpdate) => {
                     batch.update(productUpdate.ref, { stock: productUpdate.newStock });
@@ -457,7 +570,7 @@
                     userId: "admin",
                     targetType: "admin",
                     title: "طلب شراء جديد",
-                    body: `${customerName} اشترى: ${productNames}. المبلغ: ${totalPrice} ₪.`,
+                    body: `${customerName} اشترى: ${productNames}. المبلغ: ${formatIls(totalPrice)} شامل VAT. الفاتورة: ${invoiceDraft.invoiceNumber}.`,
                     type: "order",
                     link: "admin.html#orders",
                     sourceCollection: "Orders",
@@ -468,7 +581,7 @@
                     userId: currentUserId,
                     targetType: "user",
                     title: "تم إرسال طلب الشراء بنجاح",
-                    body: `وصل طلبك (${productNames}) وسنتواصل معك قريبًا.`,
+                    body: `وصل طلبك (${productNames}). ${text.paymentPrepared} رقم الفاتورة: ${invoiceDraft.invoiceNumber}.`,
                     type: "order",
                     link: "account.html",
                     sourceCollection: "Orders",

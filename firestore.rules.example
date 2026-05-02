@@ -1,0 +1,103 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userProfile(uid) {
+      return get(/databases/$(database)/documents/Users/$(uid));
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/Users/$(request.auth.uid))
+        && (
+          userProfile(request.auth.uid).data.role == "admin"
+          || userProfile(request.auth.uid).data.isAdmin == true
+        );
+    }
+
+    function ownsUserRecord(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function ownsResourceByUserId() {
+      return signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    function createsOwnResourceByUserId() {
+      return signedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /Users/{userId} {
+      allow create: if ownsUserRecord(userId) || isAdmin();
+      allow read, update: if ownsUserRecord(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /Appointments/{appointmentId} {
+      allow create: if createsOwnResourceByUserId() || isAdmin();
+      allow read, update: if ownsResourceByUserId() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /Orders/{orderId} {
+      allow create: if createsOwnResourceByUserId() || isAdmin();
+      allow read, update: if ownsResourceByUserId() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /PaymentRecords/{paymentId} {
+      allow create: if signedIn()
+        && request.resource.data.customer.userId == request.auth.uid;
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.customer.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /Invoices/{invoiceId} {
+      allow create: if signedIn()
+        && request.resource.data.customer.userId == request.auth.uid;
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.customer.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    match /Carts/{cartUserId} {
+      allow read, write: if ownsUserRecord(cartUserId);
+    }
+
+    match /Notifications/{notificationId} {
+      allow create: if signedIn();
+      allow read, update: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /Products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /Reviews/{reviewId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /SiteContent/{documentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /Workers/{workerId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /WorkerShifts/{shiftId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

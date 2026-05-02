@@ -90,9 +90,11 @@
         .footer-text { color: #888; font-size: 14px; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;}
         .footer-text strong { color: #fff; letter-spacing: 1px;}
     </style>
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/mobile-layout.css">
 </head>
 <body>
+    <a class="skip-link" href="#productsContainer">تخطي إلى المنتجات</a>
 
     <header>
         <a href="index.html"><img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR"></a>
@@ -171,14 +173,18 @@
         <img src="assets/logo-white.png" class="footer-logo" alt="صالون توفيق">
         <p style="color: #ccc; margin-bottom: 25px; font-size: 15px;">الجمال الذي تستحقينه، بين يديك.</p>
         <div class="social-icons">
-            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
         </div>
         <div class="footer-text">
             © 2026 صالون توفيق. جميع الحقوق محفوظة. <br><br>
             Made by <strong>ZINEDINE ZAKOR</strong>
             <span class="footer-version-switch">| <a href="#" data-device-switch>Mobile Version</a></span>
+        </div>
+        <div class="legal-links" aria-label="روابط قانونية">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Conditions</a>
         </div>
     </footer>
 
@@ -186,6 +192,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, doc, getDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { calculateVatBreakdown, formatIls } from "./assets/compliance.js";
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
         const app = initializeApp(firebaseConfig);
@@ -201,6 +208,9 @@
         Object.assign(uiText.ar, { saleBadge: "خصم", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي", searchPlaceholder: "ابحثي عن اسم منتج...", clearSearch: "مسح البحث", noSearchResults: "لا توجد منتجات بهذا الاسم." });
         Object.assign(uiText.he, { saleBadge: "הנחה", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי", searchPlaceholder: "חפשי מוצר לפי שם...", clearSearch: "נקה חיפוש", noSearchResults: "לא נמצאו מוצרים בשם הזה." });
         Object.assign(uiText.en, { saleBadge: "Sale", oldBookingsButton: "Old bookings", accountInfoButton: "My account info", searchPlaceholder: "Search product name...", clearSearch: "Clear search", noSearchResults: "No products found with this name." });
+        Object.assign(uiText.ar, { vatIncluded: "السعر يشمل VAT 18%", vatAmountLabel: "VAT ضمن السعر" });
+        Object.assign(uiText.he, { vatIncluded: "המחיר כולל מע\"מ 18%", vatAmountLabel: "מע\"מ כלול במחיר" });
+        Object.assign(uiText.en, { vatIncluded: "Price includes 18% VAT", vatAmountLabel: "VAT included" });
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -377,22 +387,24 @@
                 const safeDesc = desc.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n').replace(/\r/g, '');
                 
                 // ترتيب السعر (مع أو بدون خصم)
-                let priceHtml = `<p class="price">${data.price} ₪</p>`;
+                const vatBreakdown = calculateVatBreakdown(Number(data.price || 0));
+                let priceHtml = `<p class="price">${formatIls(data.price)}</p>`;
                 if (data.originalPrice) {
-                    priceHtml = `<p class="price"><span class="sale-badge">${uiText[lang].saleBadge}</span> ${data.price} ₪ <span class="old-price">${data.originalPrice} ₪</span></p>`;
+                    priceHtml = `<p class="price"><span class="sale-badge">${uiText[lang].saleBadge}</span> ${formatIls(data.price)} <span class="old-price">${formatIls(data.originalPrice)}</span></p>`;
                 }
                 
                 const card = document.createElement("div"); card.className = "product-card";
                 card.dataset.productName = data.name || "";
                 card.innerHTML = `
-                    <div class="info-btn" onclick="openInfoModal('${safeName}', '${safeDesc}', '${imgUrl}')">i</div>
-                    <img src="${imgUrl}">
+                    <button class="info-btn" type="button" onclick="openInfoModal('${safeName}', '${safeDesc}', '${imgUrl}')" aria-label="Product details">i</button>
+                    <img src="${imgUrl}" alt="${safeName}">
                     <h3>${data.name}</h3>
                     ${priceHtml}
+                    <small>${uiText[lang].vatIncluded} (${uiText[lang].vatAmountLabel}: ${formatIls(vatBreakdown.vat)})</small>
                     <p class="product-stock ${stock > 0 ? 'in-stock' : 'out-of-stock'}">${stock > 0 ? `${uiText[lang].available}: ${stock}` : uiText[lang].unavailable}</p>
                 `;
                 
-                const addBtn = document.createElement("button"); addBtn.className = "btn-add"; addBtn.innerText = uiText[lang].addToCart;
+                const addBtn = document.createElement("button"); addBtn.type = "button"; addBtn.className = "btn-add"; addBtn.innerText = uiText[lang].addToCart;
                 if (stock <= 0) {
                     addBtn.disabled = true;
                     addBtn.innerText = uiText[lang].outOfStock;

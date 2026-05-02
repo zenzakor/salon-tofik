@@ -124,9 +124,11 @@
         .splash-hidden { opacity: 0 !important; pointer-events: none; }
         .appointment-item { background: #fff; padding: 15px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #eee; border-right: 5px solid #000; display: flex; justify-content: space-between; align-items: center;}
     </style>
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/mobile-layout.css">
 </head>
 <body class="splash-active">
+    <a class="skip-link" href="#home">تخطي إلى المحتوى</a>
 
     <div id="splash-screen">
         <img src="assets/logo-white.png" id="splash-logo" alt="TOFIK ZAKOR">
@@ -335,14 +337,18 @@
         <img src="assets/logo-white.png" class="footer-logo" alt="صالون توفيق">
         <p style="color: #ccc; margin-bottom: 25px; font-size: 15px;">الجمال الذي تستحقينه، بين يديك.</p>
         <div class="social-icons">
-            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
         </div>
         <div class="footer-text">
             © 2026 صالون توفيق. جميع الحقوق محفوظة. <br><br>
             Made by <strong>ZINEDINE ZAKOR</strong>
             <span class="footer-version-switch">| <a href="#" data-device-switch>Mobile Version</a></span>
+        </div>
+        <div class="legal-links" aria-label="روابط قانونية">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Conditions</a>
         </div>
     </footer>
 
@@ -1119,6 +1125,7 @@
                             phone: signupData.phone,
                             birthDate: signupData.birthDate,
                             gender: signupData.gender,
+                            role: "user",
                             phoneVerified: true,
                             penaltyPoints: 0,
                             manualPrepaymentRequired: false,
@@ -1153,7 +1160,7 @@
                     if (!user) throw new Error("Please sign in with Google again.");
                     if (await phoneExists(profileData.phone, user.uid)) throw new Error("This phone number is already registered.");
                     await applyPhoneCredential(user, phoneCredential);
-                    await setDoc(doc(db, "Users", user.uid), { ...profileData, email: user.email || profileData.email || "", phoneVerified: true }, { merge: true });
+                    await setDoc(doc(db, "Users", user.uid), { ...profileData, email: user.email || profileData.email || "", role: "user", phoneVerified: true }, { merge: true });
                     currentUserId = user.uid;
                     loggedInUserData = { ...profileData, email: user.email || profileData.email || "", phoneVerified: true };
                     document.getElementById("profileName").innerText = loggedInUserData.firstName;

@@ -76,9 +76,11 @@
         .footer-text { color: #888; font-size: 14px; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;}
         .footer-text strong { color: #fff; letter-spacing: 1px;}
     </style>
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/mobile-layout.css">
 </head>
 <body>
+    <a class="skip-link" href="#bookingFormContainer">تخطي إلى نموذج الحجز</a>
 
     <header>
         <a href="index.html"><img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR"></a>
@@ -140,6 +142,12 @@
             <label data-i18n="notesLabel">ملاحظات إضافية أو طلب خاص (اختياري):</label>
             <textarea id="notes" rows="3" placeholder="مثال: أريد صبغة بلون أشقر رمادي..." data-i18n-placeholder="notesPlaceholder"></textarea>
 
+            <div class="policy-note">
+                <strong data-i18n="bookingPolicyTitle">سياسة الإلغاء</strong>
+                <p data-i18n="bookingPolicyText">يمكن إلغاء الحجز قبل 24 ساعة بدون رسوم. الإلغاء المتأخر يخضع لمراجعة الصالون.</p>
+                <a href="terms.html" target="_blank" rel="noopener" data-i18n="readTerms">قراءة الشروط وسياسة الإلغاء</a>
+            </div>
+
             <button id="submitBookBtn" class="btn" data-i18n="submitBook">تأكيد الحجز</button>
             <div id="loader" class="loader" data-i18n="bookingLoader">جاري التحقق من توفر الموعد... ⏳</div>
         </div>
@@ -176,14 +184,18 @@
         <img src="assets/logo-white.png" class="footer-logo" alt="صالون توفيق">
         <p style="color: #ccc; margin-bottom: 25px; font-size: 15px;">الجمال الذي تستحقينه، بين يديك.</p>
         <div class="social-icons">
-            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
         </div>
         <div class="footer-text">
             © 2026 صالون توفيق. جميع الحقوق محفوظة. <br><br>
             Made by <strong>ZINEDINE ZAKOR</strong>
             <span class="footer-version-switch">| <a href="#" data-device-switch>Mobile Version</a></span>
+        </div>
+        <div class="legal-links" aria-label="روابط قانونية">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Conditions</a>
         </div>
     </footer>
 
@@ -229,6 +241,9 @@
         Object.assign(uiText.ar, { prepaymentTitle: "مطلوب دفعة مسبقة جزئية", prepaymentText: "بسبب سجل الغياب، يجب دفع عربون جزئي قبل حجز الموعد القادم.", prepaymentFuture: "النظام جاهز للربط لاحقاً مع Stripe أو PayPal لإتمام الدفع.", prepaymentAlert: "هذا الحساب يحتاج دفعة مسبقة قبل إنشاء حجز جديد. سيتم تفعيل الدفع الإلكتروني قريباً." });
         Object.assign(uiText.he, { prepaymentTitle: "נדרשת מקדמה חלקית", prepaymentText: "בגלל היסטוריית היעדרויות, יש לשלם מקדמה חלקית לפני הזמנת התור הבא.", prepaymentFuture: "המערכת מוכנה לחיבור עתידי ל-Stripe או PayPal.", prepaymentAlert: "החשבון הזה דורש מקדמה לפני יצירת תור חדש. תשלום אונליין יופעל בקרוב." });
         Object.assign(uiText.en, { prepaymentTitle: "Partial deposit required", prepaymentText: "Because of missed appointments, a partial deposit is required before booking the next appointment.", prepaymentFuture: "The system is ready for a future Stripe or PayPal payment gateway.", prepaymentAlert: "This account requires a partial deposit before a new booking. Online payment will be enabled soon." });
+        Object.assign(uiText.ar, { bookingPolicyTitle: "سياسة الإلغاء", bookingPolicyText: "يمكن إلغاء الحجز قبل 24 ساعة بدون رسوم. الإلغاء المتأخر يخضع لمراجعة الصالون.", readTerms: "قراءة الشروط وسياسة الإلغاء" });
+        Object.assign(uiText.he, { bookingPolicyTitle: "מדיניות ביטול", bookingPolicyText: "אפשר לבטל עד 24 שעות לפני התור ללא דמי ביטול. ביטול מאוחר ייבדק על ידי הסלון.", readTerms: "קריאת התנאים ומדיניות הביטול" });
+        Object.assign(uiText.en, { bookingPolicyTitle: "Cancellation policy", bookingPolicyText: "You can cancel up to 24 hours before the appointment with no fee. Late cancellation is reviewed by the salon.", readTerms: "Read terms and cancellation policy" });
 
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
@@ -364,7 +379,18 @@
                     date: date,
                     time: finalTime,
                     notes: notes,
-                    status: "قيد الانتظار"
+                    status: "قيد الانتظار",
+                    paymentRequirement: requiresPartialPrepayment(loggedInUserData) ? "deposit_required" : "not_required",
+                    cancellationPolicy: {
+                        freeCancellationHours: 24,
+                        lateCancellationReview: true,
+                        acceptedByUser: true
+                    },
+                    createdAt: new Date().toISOString(),
+                    retention: {
+                        keepForBookingHistory: true,
+                        source: "Firestore Appointments"
+                    }
                 });
                 alert("✅ تم تأكيد حجزك بنجاح! سيتم مراجعته من قبل الإدارة.");
                 const customerName = `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim() || "زبون";

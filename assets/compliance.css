@@ -1,0 +1,156 @@
+.skip-link {
+    position: absolute;
+    top: 8px;
+    inset-inline-start: 8px;
+    z-index: 10000;
+    transform: translateY(-140%);
+    padding: 10px 14px;
+    background: #fff;
+    color: #000;
+    border: 2px solid #000;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid #d4af37;
+    outline-offset: 3px;
+}
+
+.legal-links {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 18px auto 0;
+    color: #ddd;
+    font-size: 14px;
+}
+
+.legal-links a {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.compliance-panel,
+.price-breakdown,
+.terms-consent,
+.policy-note {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    background: #fafafa;
+    color: #222;
+    padding: 14px;
+    line-height: 1.6;
+}
+
+.compliance-panel {
+    margin: 16px 0;
+}
+
+.compliance-panel strong,
+.price-breakdown strong {
+    color: #000;
+}
+
+.price-breakdown {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.price-row.total {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    font-size: 18px;
+}
+
+.terms-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 16px 0;
+    text-align: start;
+}
+
+.terms-consent input {
+    width: auto;
+    min-width: 18px;
+    margin-top: 5px;
+    accent-color: #111;
+}
+
+.terms-consent a,
+.policy-note a,
+.compliance-panel a {
+    color: #000;
+    font-weight: bold;
+}
+
+.secure-payment-notice {
+    margin: 10px 0 0;
+    color: #14532d;
+    font-weight: bold;
+}
+
+.secure-payment-notice.warning {
+    color: #b42318;
+}
+
+.btn-danger-outline {
+    background: #fff;
+    color: #b42318;
+    border: 1px solid #b42318;
+}
+
+.btn-danger-outline:hover {
+    background: #b42318;
+    color: #fff;
+}
+
+body.dark-mode .compliance-panel,
+body.dark-mode .price-breakdown,
+body.dark-mode .terms-consent,
+body.dark-mode .policy-note {
+    background: #181818;
+    color: #f3f3f3;
+    border-color: #444;
+}
+
+body.dark-mode .compliance-panel strong,
+body.dark-mode .price-breakdown strong,
+body.dark-mode .terms-consent a,
+body.dark-mode .policy-note a,
+body.dark-mode .compliance-panel a {
+    color: #fff;
+}
+
+body.dark-mode .price-row.total {
+    border-top-color: #444;
+}
+
+@media (max-width: 640px) {
+    .price-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+    }
+}

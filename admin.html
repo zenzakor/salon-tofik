@@ -46,6 +46,16 @@
         .sidebar-logo img { max-width: 150px; }
         .nav-link { padding: 15px 20px; color: #aaa; text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; font-size: 16px; font-weight: bold; border-right: 4px solid transparent;}
         .nav-link:hover, .nav-link.active { background-color: #222; color: white; border-right-color: #fff; }
+        .nav-group { display: grid; }
+        .nav-link.nav-toggle { width: 100%; border: 0; border-right: 4px solid transparent; background: transparent; font-family: inherit; text-align: inherit; }
+        .nav-caret { margin-inline-start: auto; transition: transform 0.2s ease; }
+        .nav-group.open .nav-caret { transform: rotate(180deg); }
+        .nav-submenu { display: none; padding: 8px 0 10px; background: #171717; }
+        .nav-group.open .nav-submenu { display: grid; }
+        .nav-sub-link { padding: 13px 34px 13px 20px; color: #aaa; text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; font-weight: bold; border-right: 4px solid transparent; }
+        .nav-sub-link:hover, .nav-sub-link.active { color: #fff; background: #222; border-right-color: #d4af37; }
+        .nav-sub-link .material-symbols-outlined { color: #777; }
+        .nav-sub-link:hover .material-symbols-outlined, .nav-sub-link.active .material-symbols-outlined { color: #d4af37; }
         .logout-btn { margin-top: auto; background: #ff4d4d; color: white; text-align: center; padding: 15px; cursor: pointer; font-weight: bold; transition: 0.3s;}
         .logout-btn:hover { background: #cc0000; }
 
@@ -68,6 +78,8 @@
         .btn-update { background-color: #4CAF50; }
         .btn-sale { background-color: #FF9800; }
         .btn-restore { background: linear-gradient(135deg, #64748b, #334155); }
+        .btn-payment { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .legal-lock-note { display: inline-flex; align-items: center; justify-content: center; margin: 2px; padding: 6px 10px; border-radius: 999px; background: #f3f4f6; color: #4b5563; font-size: 12px; font-weight: bold; }
         .btn-absent { background: linear-gradient(135deg, #334155, #0f172a); border-radius: 999px; box-shadow: 0 8px 18px rgba(15,23,42,0.18); }
         .btn-absent:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,0.24); }
         .booking-card.no-show, .calendar-booking.no-show { position: relative; overflow: hidden; opacity: 0.88; filter: grayscale(0.28); border-right-color: #64748b; background: linear-gradient(135deg, #f8fafc, #f1f5f9); transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease, background 0.35s ease; }
@@ -130,6 +142,20 @@
         .customer-risk-modal .penalty-stepper { margin: 14px 0; }
         .customer-risk-modal .penalty-stepper button { width: 42px; height: 42px; font-size: 20px; }
         .customer-risk-modal .prepay-toggle { justify-content: center; margin-top: 12px; padding: 12px; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; }
+        .payment-modal { width: min(520px, 100%); text-align: start; }
+        .payment-modal h2, .payment-modal h3 { text-align: center; }
+        .payment-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+        .payment-field { display: grid; gap: 6px; font-weight: bold; font-size: 13px; color: #444; }
+        .payment-field.full { grid-column: 1 / -1; }
+        .payment-field input, .payment-field select, .payment-field textarea { width: 100%; margin: 0; padding: 11px 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .payment-summary-box { display: grid; gap: 7px; margin-top: 14px; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: #f8fafc; color: #111827; font-size: 13px; }
+        .payment-summary-row { display: flex; justify-content: space-between; gap: 12px; }
+        .payment-summary-row strong { white-space: nowrap; }
+        .payment-modal-actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+        .payment-status-pill { display: inline-flex; align-items: center; justify-content: center; margin-top: 4px; padding: 4px 9px; border-radius: 999px; background: #fff7ed; color: #c2410c; font-size: 12px; font-weight: bold; }
+        .payment-status-pill.paid { background: #ecfdf5; color: #047857; }
+        .payment-status-pill.partial { background: #eff6ff; color: #1d4ed8; }
+        .payment-status-pill.locked { background: #f3f4f6; color: #4b5563; }
         body.dark-mode .review-comment-preview { color: #ddd; }
         body.dark-mode .review-more-btn { background: #181818; color: #f3f3f3; border-color: #444; }
         body.dark-mode .review-more-btn:hover { background: #fff; color: #111; border-color: #fff; }
@@ -138,6 +164,14 @@
         body.dark-mode .review-modal-text { background: #181818; color: #ddd; border-color: #333; }
         body.dark-mode .review-status-badge.hidden { background: #303030; color: #ddd; }
         body.dark-mode .customer-risk-modal .prepay-toggle { background: #181818; border-color: #333; }
+        body.dark-mode .legal-lock-note { background: #303030; color: #ddd; }
+        body.dark-mode .payment-field { color: #f3f3f3; }
+        body.dark-mode .payment-field input, body.dark-mode .payment-field select, body.dark-mode .payment-field textarea { background: #181818; color: #f3f3f3; border-color: #444; }
+        body.dark-mode .payment-summary-box { background: #181818; color: #f3f3f3; border-color: #333; }
+        @media (max-width: 640px) {
+            .payment-grid { grid-template-columns: 1fr; }
+            .payment-field.full { grid-column: auto; }
+        }
         .nav-badge { background: #ff4d4d; color: white; border-radius: 999px; min-width: 22px; height: 22px; padding: 0 7px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: auto; }
         .appointments-topbar { background: white; padding: 16px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
         .appointments-topbar label { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
@@ -319,11 +353,53 @@
         .settings-row label { display: block; font-weight: bold; margin-bottom: 8px; }
         .settings-row select { display: block; width: 100%; min-height: 44px; padding: 10px 12px; margin: 8px 0 0; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; color: #222; box-sizing: border-box; font-family: inherit; text-align: right; }
         body.dark-mode .settings-row select { background: #181818; color: #f3f3f3; border-color: #444; }
+        .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(160px, 1fr)); gap: 14px; margin: 18px 0; }
+        .summary-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .summary-card small { display: block; color: #666; font-weight: bold; margin-bottom: 8px; }
+        .summary-card strong { color: #111; font-size: 24px; }
+        body.dark-mode .summary-card { background: #202020; border-color: #333; }
+        body.dark-mode .summary-card small { color: #cfcfcf; }
+        body.dark-mode .summary-card strong { color: #fff; }
+        .work-hours-grid { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 18px; align-items: start; }
+        .work-form { display: grid; gap: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .work-form h2 { margin: 0 0 6px; color: #111; }
+        .work-form label { display: grid; gap: 6px; color: #444; font-weight: bold; }
+        .work-form input, .work-form select, .work-form textarea { width: 100%; margin: 0; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .work-filter-grid { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; align-items: end; }
+        .work-filter-grid label { display: grid; gap: 6px; font-weight: bold; color: #444; }
+        .work-filter-grid select, .work-filter-grid input { width: 100%; margin: 0; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .manual-shift-panel { display: none; margin-top: 18px; }
+        .manual-shift-panel.open { display: block; }
+        .worker-rate-row { display: grid; grid-template-columns: 1fr minmax(105px, 140px) auto; gap: 8px; align-items: center; width: 100%; }
+        .worker-rate-row input { min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
+        .worker-mini-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+        .worker-list { display: grid; gap: 8px; margin-top: 8px; }
+        .worker-row { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 9px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa; }
+        .worker-row strong { display: block; }
+        .worker-row small { color: #666; }
+        .attendance-layout { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 18px; align-items: start; }
+        .attendance-status { display: grid; gap: 8px; padding: 14px; border-radius: 8px; background: #f8fafc; border: 1px solid #e5e7eb; color: #111; font-weight: bold; }
+        .attendance-status small { color: #666; font-weight: normal; line-height: 1.6; }
+        .attendance-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .attendance-actions .btn-action { width: 100%; justify-content: center; }
+        .readonly-note { color: #666; font-weight: bold; margin: 8px 0 14px; }
+        body.dark-mode .work-form, body.dark-mode .worker-row { background: #202020; color: #f3f3f3; border-color: #333; }
+        body.dark-mode .work-form h2, body.dark-mode .work-form label { color: #f3f3f3; }
+        body.dark-mode .work-filter-grid label { color: #f3f3f3; }
+        body.dark-mode .worker-row small { color: #cfcfcf; }
+        body.dark-mode .attendance-status { background: #181818; color: #f3f3f3; border-color: #333; }
+        body.dark-mode .attendance-status small, body.dark-mode .readonly-note { color: #cfcfcf; }
+        @media (max-width: 980px) {
+            .summary-grid, .work-hours-grid, .attendance-layout, .work-filter-grid { grid-template-columns: 1fr; }
+            .worker-rate-row { grid-template-columns: 1fr; }
+        }
     </style>
     <link rel="stylesheet" href="assets/mobile-layout.css">
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/admin-mobile.css">
 </head>
 <body class="admin-page">
+    <a class="skip-link" href="#adminContent">تخطي إلى لوحة الإدارة</a>
 
     <div id="adminLoginSection">
         <div class="login-box">
@@ -356,6 +432,20 @@
             </div>
             
             <a class="nav-link active" onclick="switchTab('appointments')"><span class="material-symbols-outlined">calendar_month</span> <span data-i18n="appointments">المواعيد</span> <span id="pendingBookingsBadge" class="nav-badge" style="display:none;">0</span></a>
+            <a class="nav-link" onclick="switchTab('attendance')"><span class="material-symbols-outlined">how_to_reg</span> <span data-admin-text="attendanceNav">حضور</span></a>
+            <div class="nav-group" id="reportsNavGroup">
+                <button class="nav-link nav-toggle" type="button" onclick="toggleReportsMenu()">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span data-admin-text="quickReports">تقارير</span>
+                    <span class="material-symbols-outlined nav-caret">expand_more</span>
+                </button>
+                <div class="nav-submenu">
+                    <a class="nav-sub-link" onclick="switchTab('reports-dashboard')"><span class="material-symbols-outlined">bar_chart</span> <span data-admin-text="quickReports">تقارير</span></a>
+                    <a class="nav-sub-link" onclick="switchTab('invoices-report')"><span class="material-symbols-outlined">receipt_long</span> <span data-admin-text="quickInvoices">فواتير</span></a>
+                    <a class="nav-sub-link" onclick="switchTab('work-hours')"><span class="material-symbols-outlined">hourglass_top</span> <span data-admin-text="quickWorkHours">ساعات عمل</span></a>
+                    <a class="nav-sub-link" onclick="switchTab('sales-report')"><span class="material-symbols-outlined">payments</span> <span data-admin-text="quickSales">مبيعات</span></a>
+                </div>
+            </div>
             <a class="nav-link" onclick="switchTab('orders')"><span class="material-symbols-outlined">shopping_cart</span> <span data-i18n="orders">الطلبات المشتراة</span></a>
             <a class="nav-link" onclick="switchTab('products')"><span class="material-symbols-outlined">inventory_2</span> <span data-i18n="products">المتجر والمنتجات</span></a>
             <a class="nav-link" onclick="switchTab('home-builder')"><span class="material-symbols-outlined">dashboard_customize</span> <span data-admin-text="homeBuilderNav">تعديل الصفحة الرئيسية</span></a>
@@ -434,6 +524,131 @@
             <div id="orders" class="admin-section">
                 <h1 data-i18n="ordersTitle">📦 إدارة طلبات الشراء</h1>
                 <table id="ordersTable"></table>
+            </div>
+
+            <div id="attendance" class="admin-section">
+                <h1 data-admin-text="attendanceTitle">حضور العاملات</h1>
+                <p class="readonly-note" data-admin-text="attendanceReadonlyNote">هذه الصفحة لتسجيل الدخول والخروج فقط. تعديل أو حذف الساعات يتم من تقارير / ساعات عمل.</p>
+                <div class="attendance-layout">
+                    <div class="work-form">
+                        <h2 data-admin-text="attendanceRegisterTitle">تسجيل حضور وخروج</h2>
+                        <label>
+                            <span data-admin-text="workerLabel">العامل</span>
+                            <select id="attendanceWorkerSelect"></select>
+                        </label>
+                        <div id="attendanceStatusBox" class="attendance-status"></div>
+                        <div class="attendance-actions">
+                            <button id="clockInBtn" class="btn-action btn-update" type="button" data-admin-text="clockInButton">تسجيل دخول</button>
+                            <button id="clockOutBtn" class="btn-action btn-delete" type="button" data-admin-text="clockOutButton">تسجيل خروج</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="attendanceSummary" class="summary-grid"></div>
+                        <table id="attendanceTable"></table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reports-dashboard" class="admin-section">
+                <h1 data-admin-text="reportsTitle">تقارير</h1>
+                <div id="reportsSummary" class="summary-grid"></div>
+                <table id="reportsTable"></table>
+            </div>
+
+            <div id="invoices-report" class="admin-section">
+                <h1 data-admin-text="invoicesTitle">فواتير</h1>
+                <div id="invoicesSummary" class="summary-grid"></div>
+                <table id="invoicesTable"></table>
+            </div>
+
+            <div id="sales-report" class="admin-section">
+                <h1 data-admin-text="salesTitle">مبيعات</h1>
+                <div id="salesSummary" class="summary-grid"></div>
+                <table id="salesTable"></table>
+            </div>
+
+            <div id="work-hours" class="admin-section">
+                <h1 data-admin-text="workHoursTitle">ساعات عمل</h1>
+                <div class="work-form">
+                    <h2 data-admin-text="workHoursFiltersTitle">حساب الساعات والرواتب</h2>
+                    <div class="work-filter-grid">
+                        <label>
+                            <span data-admin-text="workerLabel">العامل</span>
+                            <select id="workHoursWorkerFilter"></select>
+                        </label>
+                        <label>
+                            <span data-admin-text="periodLabel">الفترة</span>
+                            <select id="workHoursPeriodFilter">
+                                <option value="today" data-admin-text="periodToday">اليوم</option>
+                                <option value="2days" data-admin-text="periodTwoDays">يومين</option>
+                                <option value="3days" data-admin-text="periodThreeDays">3 أيام</option>
+                                <option value="week" data-admin-text="periodWeek">أسبوع</option>
+                                <option value="month" data-admin-text="periodMonth">شهر</option>
+                                <option value="all" data-admin-text="periodAll">كل السجل</option>
+                                <option value="custom" data-admin-text="periodCustom">تحديد يدوي</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span data-admin-text="fromDateLabel">من تاريخ</span>
+                            <input id="workHoursFromDate" type="date">
+                        </label>
+                        <label>
+                            <span data-admin-text="toDateLabel">إلى تاريخ</span>
+                            <input id="workHoursToDate" type="date">
+                        </label>
+                    </div>
+                </div>
+                <div id="workHoursSummary" class="summary-grid"></div>
+                <table id="workerTotalsTable"></table>
+                <table id="workHoursTable"></table>
+                <div class="work-hours-grid" style="margin-top:18px;">
+                    <div class="work-form">
+                        <h2 data-admin-text="workersTitle">العاملون</h2>
+                        <label>
+                            <span data-admin-text="workerNameLabel">اسم العامل</span>
+                            <input id="workerNameInput" type="text">
+                        </label>
+                        <label>
+                            <span data-admin-text="workerRoleLabel">الوظيفة</span>
+                            <input id="workerRoleInput" type="text">
+                        </label>
+                        <label>
+                            <span data-admin-text="workerHourlyRateLabel">أجر الساعة</span>
+                            <input id="workerHourlyRateInput" type="number" min="0" step="0.01" placeholder="35">
+                        </label>
+                        <button id="addWorkerBtn" class="btn-action btn-update" type="button" data-admin-text="addWorkerButton">إضافة عامل</button>
+                        <div id="workersList" class="worker-list"></div>
+                    </div>
+                </div>
+                <button id="toggleManualShiftPanelBtn" class="notification-btn" type="button" style="margin-top:18px;" data-admin-text="manualShiftPanelButton">لوحة تسجيل ساعات العمل</button>
+                <div id="manualShiftPanel" class="manual-shift-panel">
+                    <div class="work-form">
+                        <h2 data-admin-text="workerShiftTitle">تسجيل ساعات</h2>
+                        <div class="work-filter-grid">
+                            <label>
+                                <span data-admin-text="workerLabel">العامل</span>
+                                <select id="shiftWorkerSelect"></select>
+                            </label>
+                            <label>
+                                <span data-admin-text="shiftDateLabel">التاريخ</span>
+                                <input id="shiftDateInput" type="date">
+                            </label>
+                            <label>
+                                <span data-admin-text="shiftStartLabel">بداية العمل</span>
+                                <input id="shiftStartInput" type="time">
+                            </label>
+                            <label>
+                                <span data-admin-text="shiftEndLabel">نهاية العمل</span>
+                                <input id="shiftEndInput" type="time">
+                            </label>
+                        </div>
+                        <label>
+                            <span data-admin-text="shiftNotesLabel">ملاحظات</span>
+                            <textarea id="shiftNotesInput" rows="2"></textarea>
+                        </label>
+                        <button id="addShiftBtn" class="btn-action btn-payment" type="button" data-admin-text="addShiftButton">حفظ الساعات</button>
+                    </div>
+                </div>
             </div>
 
             <div id="products" class="admin-section">
@@ -671,6 +886,57 @@
         </div>
     </div>
 
+    <div id="appointmentPaymentModal" class="admin-modal-overlay">
+        <div class="admin-mini-modal payment-modal" role="dialog" aria-modal="true" aria-labelledby="appointmentPaymentTitle">
+            <button id="closeAppointmentPaymentBtn" class="admin-mini-close" type="button">&times;</button>
+            <h2 id="appointmentPaymentTitle" data-admin-text="appointmentPaymentTitle">تسجيل دفع للحجز</h2>
+            <h3 id="appointmentPaymentCustomer" class="review-modal-title"></h3>
+            <div id="appointmentPaymentSummary" class="payment-summary-box"></div>
+            <div class="payment-grid">
+                <label class="payment-field">
+                    <span data-admin-text="paymentAmountLabel">المبلغ الكلي للحجز</span>
+                    <input id="appointmentPaymentTotal" type="number" min="0" step="0.01" inputmode="decimal">
+                </label>
+                <label class="payment-field">
+                    <span data-admin-text="paymentNowLabel">المبلغ المدفوع الآن</span>
+                    <input id="appointmentPaymentNow" type="number" min="0" step="0.01" inputmode="decimal">
+                </label>
+                <label class="payment-field">
+                    <span data-admin-text="paymentMethodLabel">طريقة الدفع</span>
+                    <select id="appointmentPaymentMethod">
+                        <option value="cash" data-admin-text="paymentMethodCash">نقدًا</option>
+                        <option value="credit_card_external" data-admin-text="paymentMethodCard">بطاقة عبر مزود خارجي</option>
+                        <option value="bank_transfer" data-admin-text="paymentMethodBank">تحويل بنكي</option>
+                        <option value="bit" data-admin-text="paymentMethodBit">Bit</option>
+                        <option value="paybox" data-admin-text="paymentMethodPaybox">PayBox</option>
+                        <option value="kavanu" data-admin-text="paymentMethodKavanu">Kavanu</option>
+                    </select>
+                </label>
+                <label class="payment-field">
+                    <span data-admin-text="paymentTotalInstallmentsLabel">عدد الدفعات الكلي</span>
+                    <input id="appointmentPaymentInstallmentsTotal" type="number" min="1" step="1">
+                </label>
+                <label class="payment-field">
+                    <span data-admin-text="paymentPaidInstallmentsLabel">كم دفعة دُفعت الآن</span>
+                    <input id="appointmentPaymentInstallmentsPaid" type="number" min="1" step="1">
+                </label>
+                <label class="payment-field">
+                    <span data-admin-text="paymentReferenceLabel">رقم مرجع / ملاحظة</span>
+                    <input id="appointmentPaymentReference" type="text">
+                </label>
+                <label class="payment-field full">
+                    <span data-admin-text="paymentNotesLabel">ملاحظات الدفع</span>
+                    <textarea id="appointmentPaymentNotes" rows="2"></textarea>
+                </label>
+            </div>
+            <div id="appointmentPaymentComputed" class="payment-summary-box" aria-live="polite"></div>
+            <div class="payment-modal-actions">
+                <button id="saveAppointmentPaymentBtn" class="btn-action btn-payment" type="button" data-admin-text="savePaymentButton">حفظ الدفع والفاتورة</button>
+                <button id="cancelAppointmentPaymentBtn" class="btn-action btn-delete" type="button" data-admin-text="cancelPaymentButton">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
     <div id="adminSettingsDrawer" class="settings-drawer-overlay">
         <div class="settings-drawer">
             <span id="closeAdminSettingsBtn" class="settings-close">&times;</span>
@@ -694,6 +960,7 @@
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, addDoc, setDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword, deleteUser as deleteAuthUser, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { calculateVatBreakdown, createInvoiceDraft, createPaymentRecordDraft, formatIls } from "./assets/compliance.js";
 
         const THE_ADMIN_EMAIL = "admin@tofik.com"; 
 
@@ -705,12 +972,15 @@
         let allAppointments = [];
         let selectedAppointmentDate = "";
         let selectedPenaltyUserId = "";
+        let selectedPaymentAppointmentId = "";
         let adminRealtimeUnsubscribes = [];
         let homeBuilderSections = [];
         let homeBuilderProducts = [];
         let selectedHomeSectionId = "";
         let draggedHomeSectionId = "";
         let homeBuilderLoaded = false;
+        let allWorkers = [];
+        let allWorkerShifts = [];
 
         const adminText = {
             ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
@@ -765,7 +1035,7 @@
             adminPanelLabel: "لوحة الإدارة",
             adminLoginMissing: "الرجاء إدخال البريد وكلمة المرور.",
             adminLoginInvalid: "البيانات غير صحيحة!",
-            deleteUserDoneAlert: "تم حذف الحساب. الحجوزات القديمة بقيت محفوظة، وتم حذف الحجوزات القادمة والطلبات والتقييمات المرتبطة به.",
+            deleteUserDoneAlert: "تم حذف الحساب. سجلات الحجوزات والطلبات بقيت محفوظة، وتم إلغاء القادم منها.",
             editDatePrompt: "تاريخ الموعد الجديد:",
             editTimePrompt: "وقت الموعد الجديد:",
             editServicePrompt: "الخدمة المطلوبة:",
@@ -774,6 +1044,100 @@
             deleteAppointmentConfirm: "هل تريد حذف هذا الحجز؟",
             updateStatusPrompt: "تحديث الحالة:",
             deleteOrderConfirm: "حذف الطلب؟",
+            taxHeader: "VAT",
+            invoiceHeader: "الفاتورة",
+            paymentHeader: "الدفع",
+            cancelledStatus: "تم الإلغاء",
+            refundHeader: "الاسترجاع",
+            appointmentPaymentTitle: "تسجيل دفع للحجز",
+            paymentAmountLabel: "المبلغ الكلي للحجز",
+            paymentNowLabel: "المبلغ المدفوع الآن",
+            paymentMethodLabel: "طريقة الدفع",
+            paymentMethodCash: "نقدًا",
+            paymentMethodCard: "بطاقة عبر مزود خارجي",
+            paymentMethodBank: "تحويل بنكي",
+            paymentMethodBit: "Bit",
+            paymentMethodPaybox: "PayBox",
+            paymentMethodKavanu: "Kavanu",
+            paymentTotalInstallmentsLabel: "عدد الدفعات الكلي",
+            paymentPaidInstallmentsLabel: "كم دفعة دُفعت الآن",
+            paymentReferenceLabel: "رقم مرجع / ملاحظة",
+            paymentNotesLabel: "ملاحظات الدفع",
+            savePaymentButton: "حفظ الدفع والفاتورة",
+            cancelPaymentButton: "إغلاق",
+            payButton: "دفع",
+            paidStatus: "مدفوع",
+            partialPaidStatus: "مدفوع جزئياً",
+            unpaidPastStatus: "دفع مطلوب",
+            unpaidStatus: "غير مدفوع",
+            legalLocked: "سجل قانوني مقفل",
+            paymentSavedAlert: "تم حفظ الدفع والفاتورة للحجز.",
+            paymentAmountAlert: "أدخل مبلغًا صحيحًا للدفع.",
+            paymentInstallmentsAlert: "عدد الدفعات المدفوعة لا يمكن أن يتجاوز عدد الدفعات الكلي.",
+            paymentSummaryPaid: "المدفوع",
+            paymentSummaryRemaining: "المتبقي",
+            paymentSummaryFuture: "دفعات مستقبلية",
+            quickReports: "تقارير",
+            quickInvoices: "فواتير",
+            quickWorkHours: "ساعات عمل",
+            quickSales: "مبيعات",
+            attendanceNav: "حضور",
+            attendanceTitle: "حضور العاملات",
+            attendanceRegisterTitle: "تسجيل حضور وخروج",
+            attendanceReadonlyNote: "هذه الصفحة لتسجيل الدخول والخروج فقط. تعديل أو حذف الساعات يتم من تقارير / ساعات عمل.",
+            clockInButton: "تسجيل دخول",
+            clockOutButton: "تسجيل خروج",
+            attendanceOpenStatus: "مسجلة دخول الآن",
+            attendanceClosedStatus: "لا يوجد دوام مفتوح",
+            clockInAlert: "تم تسجيل الدخول.",
+            clockOutAlert: "تم تسجيل الخروج.",
+            clockInExistsAlert: "هذه العاملة لديها دوام مفتوح بالفعل.",
+            clockOutMissingAlert: "لا يوجد تسجيل دخول مفتوح لهذه العاملة.",
+            quickToolNotice: "تم فتح القسم المناسب من لوحة الإدارة.",
+            reportsTitle: "تقارير",
+            invoicesTitle: "فواتير",
+            salesTitle: "مبيعات",
+            workHoursTitle: "ساعات عمل",
+            workersTitle: "العاملون",
+            workerNameLabel: "اسم العامل",
+            workerRoleLabel: "الوظيفة",
+            workerHourlyRateLabel: "أجر الساعة",
+            addWorkerButton: "إضافة عامل",
+            workerShiftTitle: "تسجيل ساعات",
+            workerLabel: "العامل",
+            shiftDateLabel: "التاريخ",
+            shiftStartLabel: "بداية العمل",
+            shiftEndLabel: "نهاية العمل",
+            shiftNotesLabel: "ملاحظات",
+            addShiftButton: "حفظ الساعات",
+            totalSalesLabel: "إجمالي المبيعات",
+            paidAppointmentsLabel: "حجوزات مدفوعة",
+            invoicesCountLabel: "عدد الفواتير",
+            hoursTodayLabel: "ساعات اليوم",
+            workHoursFiltersTitle: "حساب الساعات والرواتب",
+            periodLabel: "الفترة",
+            periodToday: "اليوم",
+            periodTwoDays: "يومين",
+            periodThreeDays: "3 أيام",
+            periodWeek: "أسبوع",
+            periodMonth: "شهر",
+            periodAll: "كل السجل",
+            periodCustom: "تحديد يدوي",
+            fromDateLabel: "من تاريخ",
+            toDateLabel: "إلى تاريخ",
+            manualShiftPanelButton: "لوحة تسجيل ساعات العمل",
+            hourlyRateHeader: "أجر الساعة",
+            hoursHeader: "الساعات",
+            salaryDueHeader: "المبلغ للدفع",
+            workerTotalsTitle: "ملخص العاملات",
+            editShiftButton: "تعديل الساعات",
+            workerRateUpdatedAlert: "تم تحديث أجر الساعة.",
+            workerAddedAlert: "تمت إضافة العامل.",
+            shiftAddedAlert: "تم حفظ ساعات العمل.",
+            workerRequiredAlert: "أدخل اسم العامل أولاً.",
+            shiftRequiredAlert: "اختر العامل والتاريخ وبداية ونهاية العمل.",
+            deleteWorkerConfirm: "حذف العامل؟ سيبقى سجل الساعات محفوظاً.",
+            deleteShiftConfirm: "حذف سجل الساعات؟",
             featuredLimitAlert: "لا يمكنك اختيار أكثر من 3 منتجات لتظهر في الصفحة الرئيسية!",
             salePricePrompt: "أدخل السعر الجديد بعد الخصم:",
             salePriceError: "يجب أن يكون سعر الخصم أقل من السعر الأصلي!",
@@ -792,7 +1156,7 @@
             adminPanelLabel: "לוח ניהול",
             adminLoginMissing: "נא להזין אימייל וסיסמה.",
             adminLoginInvalid: "הפרטים לא נכונים!",
-            deleteUserDoneAlert: "החשבון נמחק. תורים ישנים נשארו שמורים, ותורים עתידיים, הזמנות וביקורות קשורות נמחקו.",
+            deleteUserDoneAlert: "החשבון נמחק. רשומות תורים והזמנות נשארו שמורות, ותורים עתידיים בוטלו.",
             editDatePrompt: "תאריך חדש לתור:",
             editTimePrompt: "שעה חדשה לתור:",
             editServicePrompt: "שירות מבוקש:",
@@ -801,6 +1165,100 @@
             deleteAppointmentConfirm: "למחוק את התור הזה?",
             updateStatusPrompt: "עדכון סטטוס:",
             deleteOrderConfirm: "למחוק את ההזמנה?",
+            taxHeader: "מע\"מ",
+            invoiceHeader: "חשבונית",
+            paymentHeader: "תשלום",
+            cancelledStatus: "בוטל",
+            refundHeader: "החזר",
+            appointmentPaymentTitle: "רישום תשלום לתור",
+            paymentAmountLabel: "סכום כולל לתור",
+            paymentNowLabel: "סכום ששולם עכשיו",
+            paymentMethodLabel: "אמצעי תשלום",
+            paymentMethodCash: "מזומן",
+            paymentMethodCard: "כרטיס דרך ספק חיצוני",
+            paymentMethodBank: "העברה בנקאית",
+            paymentMethodBit: "Bit",
+            paymentMethodPaybox: "PayBox",
+            paymentMethodKavanu: "Kavanu",
+            paymentTotalInstallmentsLabel: "מספר תשלומים כולל",
+            paymentPaidInstallmentsLabel: "כמה תשלומים שולמו עכשיו",
+            paymentReferenceLabel: "אסמכתא / הערה",
+            paymentNotesLabel: "הערות תשלום",
+            savePaymentButton: "שמירת תשלום וחשבונית",
+            cancelPaymentButton: "סגירה",
+            payButton: "תשלום",
+            paidStatus: "שולם",
+            partialPaidStatus: "שולם חלקית",
+            unpaidPastStatus: "נדרש תשלום",
+            unpaidStatus: "לא שולם",
+            legalLocked: "רשומה משפטית נעולה",
+            paymentSavedAlert: "התשלום והחשבונית נשמרו לתור.",
+            paymentAmountAlert: "יש להזין סכום תשלום תקין.",
+            paymentInstallmentsAlert: "מספר התשלומים ששולמו לא יכול להיות גדול מהמספר הכולל.",
+            paymentSummaryPaid: "שולם",
+            paymentSummaryRemaining: "נותר",
+            paymentSummaryFuture: "תשלומים עתידיים",
+            quickReports: "דוחות",
+            quickInvoices: "חשבוניות",
+            quickWorkHours: "שעות עבודה",
+            quickSales: "מכירות",
+            attendanceNav: "נוכחות",
+            attendanceTitle: "נוכחות עובדות",
+            attendanceRegisterTitle: "כניסה ויציאה",
+            attendanceReadonlyNote: "העמוד הזה מיועד לרישום כניסה ויציאה בלבד. עריכה או מחיקה מתבצעת בדוחות / שעות עבודה.",
+            clockInButton: "כניסה",
+            clockOutButton: "יציאה",
+            attendanceOpenStatus: "נמצאת בעבודה עכשיו",
+            attendanceClosedStatus: "אין משמרת פתוחה",
+            clockInAlert: "הכניסה נרשמה.",
+            clockOutAlert: "היציאה נרשמה.",
+            clockInExistsAlert: "לעובדת הזאת כבר יש משמרת פתוחה.",
+            clockOutMissingAlert: "אין כניסה פתוחה לעובדת הזאת.",
+            quickToolNotice: "החלק המתאים בלוח הניהול נפתח.",
+            reportsTitle: "דוחות",
+            invoicesTitle: "חשבוניות",
+            salesTitle: "מכירות",
+            workHoursTitle: "שעות עבודה",
+            workersTitle: "עובדים",
+            workerNameLabel: "שם העובד",
+            workerRoleLabel: "תפקיד",
+            workerHourlyRateLabel: "שכר לשעה",
+            addWorkerButton: "הוספת עובד",
+            workerShiftTitle: "רישום שעות",
+            workerLabel: "עובד",
+            shiftDateLabel: "תאריך",
+            shiftStartLabel: "תחילת עבודה",
+            shiftEndLabel: "סיום עבודה",
+            shiftNotesLabel: "הערות",
+            addShiftButton: "שמירת שעות",
+            totalSalesLabel: "סה\"כ מכירות",
+            paidAppointmentsLabel: "תורים ששולמו",
+            invoicesCountLabel: "מספר חשבוניות",
+            hoursTodayLabel: "שעות היום",
+            workHoursFiltersTitle: "חישוב שעות ושכר",
+            periodLabel: "תקופה",
+            periodToday: "היום",
+            periodTwoDays: "יומיים",
+            periodThreeDays: "3 ימים",
+            periodWeek: "שבוע",
+            periodMonth: "חודש",
+            periodAll: "כל הרשומות",
+            periodCustom: "בחירה ידנית",
+            fromDateLabel: "מתאריך",
+            toDateLabel: "עד תאריך",
+            manualShiftPanelButton: "לוח רישום שעות עבודה",
+            hourlyRateHeader: "שכר לשעה",
+            hoursHeader: "שעות",
+            salaryDueHeader: "לתשלום",
+            workerTotalsTitle: "סיכום עובדים",
+            editShiftButton: "עריכת שעות",
+            workerRateUpdatedAlert: "השכר לשעה עודכן.",
+            workerAddedAlert: "העובד נוסף.",
+            shiftAddedAlert: "שעות העבודה נשמרו.",
+            workerRequiredAlert: "יש להזין שם עובד.",
+            shiftRequiredAlert: "בחר עובד, תאריך, התחלה וסיום.",
+            deleteWorkerConfirm: "למחוק את העובד? היסטוריית השעות תישמר.",
+            deleteShiftConfirm: "למחוק רשומת שעות?",
             featuredLimitAlert: "אי אפשר לבחור יותר מ-3 מוצרים להצגה בעמוד הראשי!",
             salePricePrompt: "הכניסי מחיר חדש אחרי הנחה:",
             salePriceError: "מחיר ההנחה חייב להיות נמוך מהמחיר המקורי!",
@@ -819,7 +1277,7 @@
             adminPanelLabel: "Admin Panel",
             adminLoginMissing: "Please enter email and password.",
             adminLoginInvalid: "The details are incorrect!",
-            deleteUserDoneAlert: "The account was deleted. Old bookings stayed saved, and future bookings, orders, and linked reviews were deleted.",
+            deleteUserDoneAlert: "The account was deleted. Booking and order records stayed saved, and future bookings were cancelled.",
             editDatePrompt: "New appointment date:",
             editTimePrompt: "New appointment time:",
             editServicePrompt: "Requested service:",
@@ -828,6 +1286,100 @@
             deleteAppointmentConfirm: "Delete this booking?",
             updateStatusPrompt: "Update status:",
             deleteOrderConfirm: "Delete this order?",
+            taxHeader: "VAT",
+            invoiceHeader: "Invoice",
+            paymentHeader: "Payment",
+            cancelledStatus: "Cancelled",
+            refundHeader: "Refund",
+            appointmentPaymentTitle: "Record appointment payment",
+            paymentAmountLabel: "Appointment total amount",
+            paymentNowLabel: "Amount paid now",
+            paymentMethodLabel: "Payment method",
+            paymentMethodCash: "Cash",
+            paymentMethodCard: "Card through external provider",
+            paymentMethodBank: "Bank transfer",
+            paymentMethodBit: "Bit",
+            paymentMethodPaybox: "PayBox",
+            paymentMethodKavanu: "Kavanu",
+            paymentTotalInstallmentsLabel: "Total installments",
+            paymentPaidInstallmentsLabel: "Installments paid now",
+            paymentReferenceLabel: "Reference / note",
+            paymentNotesLabel: "Payment notes",
+            savePaymentButton: "Save payment and invoice",
+            cancelPaymentButton: "Close",
+            payButton: "Pay",
+            paidStatus: "Paid",
+            partialPaidStatus: "Partially paid",
+            unpaidPastStatus: "Payment required",
+            unpaidStatus: "Unpaid",
+            legalLocked: "Legal record locked",
+            paymentSavedAlert: "Payment and invoice were saved for this appointment.",
+            paymentAmountAlert: "Enter a valid payment amount.",
+            paymentInstallmentsAlert: "Paid installments cannot exceed total installments.",
+            paymentSummaryPaid: "Paid",
+            paymentSummaryRemaining: "Remaining",
+            paymentSummaryFuture: "Future installments",
+            quickReports: "Reports",
+            quickInvoices: "Invoices",
+            quickWorkHours: "Work hours",
+            quickSales: "Sales",
+            attendanceNav: "Attendance",
+            attendanceTitle: "Worker attendance",
+            attendanceRegisterTitle: "Clock in and out",
+            attendanceReadonlyNote: "This page is only for clock-in and clock-out. Editing or deleting hours is done from Reports / Work hours.",
+            clockInButton: "Clock in",
+            clockOutButton: "Clock out",
+            attendanceOpenStatus: "Clocked in now",
+            attendanceClosedStatus: "No open shift",
+            clockInAlert: "Clock-in saved.",
+            clockOutAlert: "Clock-out saved.",
+            clockInExistsAlert: "This worker already has an open shift.",
+            clockOutMissingAlert: "There is no open clock-in for this worker.",
+            quickToolNotice: "Opened the matching admin section.",
+            reportsTitle: "Reports",
+            invoicesTitle: "Invoices",
+            salesTitle: "Sales",
+            workHoursTitle: "Work hours",
+            workersTitle: "Workers",
+            workerNameLabel: "Worker name",
+            workerRoleLabel: "Role",
+            workerHourlyRateLabel: "Hourly rate",
+            addWorkerButton: "Add worker",
+            workerShiftTitle: "Record hours",
+            workerLabel: "Worker",
+            shiftDateLabel: "Date",
+            shiftStartLabel: "Start time",
+            shiftEndLabel: "End time",
+            shiftNotesLabel: "Notes",
+            addShiftButton: "Save hours",
+            totalSalesLabel: "Total sales",
+            paidAppointmentsLabel: "Paid appointments",
+            invoicesCountLabel: "Invoices",
+            hoursTodayLabel: "Today hours",
+            workHoursFiltersTitle: "Calculate hours and pay",
+            periodLabel: "Period",
+            periodToday: "Today",
+            periodTwoDays: "2 days",
+            periodThreeDays: "3 days",
+            periodWeek: "Week",
+            periodMonth: "Month",
+            periodAll: "All records",
+            periodCustom: "Custom",
+            fromDateLabel: "From date",
+            toDateLabel: "To date",
+            manualShiftPanelButton: "Work hours entry panel",
+            hourlyRateHeader: "Hourly rate",
+            hoursHeader: "Hours",
+            salaryDueHeader: "Pay due",
+            workerTotalsTitle: "Worker totals",
+            editShiftButton: "Edit hours",
+            workerRateUpdatedAlert: "Hourly rate updated.",
+            workerAddedAlert: "Worker added.",
+            shiftAddedAlert: "Work hours saved.",
+            workerRequiredAlert: "Enter worker name first.",
+            shiftRequiredAlert: "Choose worker, date, start, and end time.",
+            deleteWorkerConfirm: "Delete worker? Hour history will remain saved.",
+            deleteShiftConfirm: "Delete this hour record?",
             featuredLimitAlert: "You cannot choose more than 3 products for the home page!",
             salePricePrompt: "Enter the new sale price:",
             salePriceError: "The sale price must be lower than the original price!",
@@ -1119,10 +1671,16 @@
         function displayAppointmentStatus(status) {
             if (isNoShowStatus(status)) return adminT("noShowStatus", "No-show");
             const value = String(status || "").toLowerCase();
+            if (isCancelledAppointment({ status })) return adminT("cancelledStatus", "Cancelled");
             if (value.includes("تأكيد") || value.includes("confirm") || value.includes("אושר")) return adminT("confirmedStatus", "تم التأكيد");
             if (value.includes("رفض") || value.includes("reject") || value.includes("נדחה")) return adminT("rejectedStatus", "تم الرفض");
             if (!status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין")) return adminT("pendingStatus", "قيد الانتظار");
             return status;
+        }
+
+        function isCancelledAppointment(appointment) {
+            const value = String(appointment?.status || "").toLowerCase();
+            return value.includes("cancel") || value.includes("إلغاء") || value.includes("בוטל");
         }
 
         function isConfirmedAppointment(status) {
@@ -1137,6 +1695,7 @@
 
         function isPendingAppointment(status) {
             const value = String(status || "").toLowerCase();
+            if (value.includes("cancel") || value.includes("إلغاء") || value.includes("בוטל")) return false;
             return !status || value.includes("انتظار") || value.includes("جديد") || value.includes("pending") || value.includes("new") || value.includes("ממתין");
         }
 
@@ -1147,6 +1706,55 @@
 
         function isNoShowAppointment(appointment) {
             return !!appointment?.noShow || isNoShowStatus(appointment?.status);
+        }
+
+        function getAppointmentDateTime(appointment) {
+            if (!appointment?.date) return null;
+            const [year, month, day] = String(appointment.date).split("-").map(Number);
+            if (!year || !month || !day) return null;
+            const [hour = 23, minute = 59] = String(appointment.time || "23:59").split(":").map(Number);
+            return new Date(year, month - 1, day, hour || 0, minute || 0, 0, 0);
+        }
+
+        function isPastAppointment(appointment) {
+            const appointmentDate = getAppointmentDateTime(appointment);
+            return !!appointmentDate && appointmentDate <= new Date();
+        }
+
+        function isAppointmentLegallyLocked(appointment) {
+            return !!appointment?.legalLocked || !!appointment?.cancellationSaved || isCancelledAppointment(appointment);
+        }
+
+        function isAppointmentPaymentLocked(appointment) {
+            return !!appointment?.paymentLocked ||
+                Math.max(0, Number(appointment?.paymentPaidGross || 0)) > 0 ||
+                ["paid", "partial", "recorded_by_admin"].includes(String(appointment?.paymentStatus || "").toLowerCase());
+        }
+
+        function isAppointmentProtectedFromChanges(appointment) {
+            return isAppointmentLegallyLocked(appointment) || isAppointmentPaymentLocked(appointment);
+        }
+
+        function getAppointmentPaymentSummary(appointment) {
+            const total = Math.max(0, Number(appointment?.paymentTotalGross || appointment?.appointmentPrice || appointment?.price || 0));
+            const paid = Math.max(0, Number(appointment?.paymentPaidGross || 0));
+            const remaining = Math.max(0, Number(appointment?.paymentRemainingGross ?? (total - paid)));
+            const totalInstallments = Math.max(1, Number(appointment?.paymentInstallmentsTotal || 1));
+            const paidInstallments = Math.max(0, Number(appointment?.paymentInstallmentsPaid || 0));
+            const futureInstallments = Math.max(0, totalInstallments - paidInstallments);
+            const status = remaining <= 0 && total > 0
+                ? "paid"
+                : (paid > 0 ? "partial" : (isPastAppointment(appointment) ? "past_due" : "unpaid"));
+            return { total, paid, remaining, totalInstallments, paidInstallments, futureInstallments, status };
+        }
+
+        function getAppointmentPaymentLabel(appointment) {
+            const summary = getAppointmentPaymentSummary(appointment);
+            if (isAppointmentLegallyLocked(appointment)) return { text: adminT("legalLocked", "Legal record locked"), className: "locked" };
+            if (summary.status === "paid") return { text: adminT("paidStatus", "Paid"), className: "paid" };
+            if (summary.status === "partial") return { text: adminT("partialPaidStatus", "Partially paid"), className: "partial" };
+            if (summary.status === "past_due") return { text: adminT("unpaidPastStatus", "Payment required"), className: "" };
+            return { text: adminT("unpaidStatus", "Unpaid"), className: "" };
         }
 
         function getPenaltyPoints(user) {
@@ -1275,7 +1883,10 @@
             const realtimeTargets = [
                 { name: "Appointments", refresh: loadAppointments },
                 { name: "Orders", refresh: loadOrders },
-                { name: "Reviews", refresh: loadAdminReviews }
+                { name: "Reviews", refresh: loadAdminReviews },
+                { name: "Workers", refresh: loadWorkHours },
+                { name: "WorkerShifts", refresh: loadWorkHours },
+                { name: "Invoices", refresh: loadInvoicesReport }
             ];
             realtimeTargets.forEach(({ name, refresh }) => {
                 const unsubscribe = onSnapshot(collection(db, name), () => {
@@ -1474,10 +2085,24 @@
             const trigger = window.event?.currentTarget;
             document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.nav-sub-link').forEach(link => link.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
             if (trigger?.classList) trigger.classList.add('active');
+            if (["reports-dashboard", "invoices-report", "work-hours", "sales-report"].includes(tabId)) {
+                document.getElementById("reportsNavGroup")?.classList.add("open");
+                if (trigger?.classList?.contains("nav-sub-link")) trigger.classList.add("active");
+            }
             closeAdminSidebar();
+            if (tabId === "reports-dashboard") loadReportsDashboard();
+            if (tabId === "invoices-report") loadInvoicesReport();
+            if (tabId === "sales-report") loadSalesReport();
+            if (tabId === "work-hours") loadWorkHours();
+            if (tabId === "attendance") loadWorkHours();
+        }
+
+        window.toggleReportsMenu = function() {
+            document.getElementById("reportsNavGroup")?.classList.toggle("open");
         }
 
         function openAdminHashTab() {
@@ -1488,12 +2113,32 @@
                 const handler = link.getAttribute("onclick") || "";
                 if (handler.includes(`'${tabId}'`) || handler.includes(`"${tabId}"`)) link.classList.add("active");
             });
+            document.querySelectorAll(".nav-sub-link").forEach((link) => {
+                const handler = link.getAttribute("onclick") || "";
+                if (handler.includes(`'${tabId}'`) || handler.includes(`"${tabId}"`)) {
+                    document.getElementById("reportsNavGroup")?.classList.add("open");
+                    link.classList.add("active");
+                }
+            });
         }
         window.addEventListener("hashchange", openAdminHashTab);
 
+        async function isAdminUser(user) {
+            if (!user) return false;
+            if (user.email === THE_ADMIN_EMAIL) return true;
+            try {
+                const userSnap = await getDoc(doc(db, "Users", user.uid));
+                const data = userSnap.exists() ? userSnap.data() : {};
+                return data.role === "admin" || data.isAdmin === true || (Array.isArray(data.permissions) && data.permissions.includes("admin"));
+            } catch (error) {
+                console.warn("Admin role check failed:", error);
+                return false;
+            }
+        }
+
         // تسجيل الدخول والخروج
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.email === THE_ADMIN_EMAIL) {
+        onAuthStateChanged(auth, async (user) => {
+            if (await isAdminUser(user)) {
                 document.getElementById("adminLoginSection").style.display = "none"; 
                 document.getElementById("adminContent").style.display = "flex";
                 loadAllData();
@@ -1518,10 +2163,13 @@
 
         function loadAllData() {
             ensureAdminNavBadges();
-            loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews(); loadHomePageBuilder();
+            loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews(); loadHomePageBuilder(); loadWorkHours(); loadReportsDashboard(); loadInvoicesReport(); loadSalesReport();
             startAdminRealtimeListeners();
             populateAdminTimeSelects();
             document.getElementById("adminBookingDate").value = getTodayValue();
+            document.getElementById("shiftDateInput").value = getTodayValue();
+            document.getElementById("workHoursPeriodFilter").value = "today";
+            syncWorkHoursDateFilters();
         }
 
         const HOME_PAGE_DOC = ["SiteContent", "homePage"];
@@ -2089,6 +2737,7 @@
         // ================= 1. المواعيد =================
         function getAppointmentStatusClass(status) {
             if (isNoShowStatus(status)) return "no-show";
+            if (isCancelledAppointment({ status })) return "rejected";
             if (isConfirmedAppointment(status)) return "accepted";
             if (isRejectedAppointment(status)) return "rejected";
             return "pending";
@@ -2300,7 +2949,210 @@
             await loadUsers();
         }
 
+        function getSelectedPaymentAppointment() {
+            return allAppointments.find((appointment) => appointment.id === selectedPaymentAppointmentId) || null;
+        }
+
+        function renderPaymentModalSummary() {
+            const appointment = getSelectedPaymentAppointment();
+            const summary = getAppointmentPaymentSummary(appointment);
+            const totalInput = document.getElementById("appointmentPaymentTotal");
+            const nowInput = document.getElementById("appointmentPaymentNow");
+            const installmentsTotalInput = document.getElementById("appointmentPaymentInstallmentsTotal");
+            const installmentsPaidInput = document.getElementById("appointmentPaymentInstallmentsPaid");
+            const total = Math.max(0, Number(totalInput.value || 0));
+            const payNow = Math.max(0, Number(nowInput.value || 0));
+            const totalInstallments = Math.max(1, Number(installmentsTotalInput.value || 1));
+            const paidNowInstallments = Math.max(0, Number(installmentsPaidInput.value || 0));
+            const paidAfter = Math.min(total, summary.paid + payNow);
+            const remainingAfter = Math.max(0, total - paidAfter);
+            const installmentsAfter = Math.min(totalInstallments, summary.paidInstallments + paidNowInstallments);
+            const futureInstallments = Math.max(0, totalInstallments - installmentsAfter);
+            const perFutureInstallment = futureInstallments ? remainingAfter / futureInstallments : 0;
+            const vat = calculateVatBreakdown(payNow);
+
+            document.getElementById("appointmentPaymentComputed").innerHTML = `
+                <div class="payment-summary-row"><span>${adminT("paymentSummaryPaid", "Paid")}</span><strong>${formatIls(paidAfter)}</strong></div>
+                <div class="payment-summary-row"><span>${adminT("paymentSummaryRemaining", "Remaining")}</span><strong>${formatIls(remainingAfter)}</strong></div>
+                <div class="payment-summary-row"><span>${adminT("paymentSummaryFuture", "Future installments")}</span><strong>${futureInstallments} × ${formatIls(perFutureInstallment)}</strong></div>
+                <div class="payment-summary-row"><span>VAT 18%</span><strong>${formatIls(vat.vat)}</strong></div>
+            `;
+        }
+
+        window.openAppointmentPayment = function(appointmentId) {
+            const appointment = allAppointments.find((item) => item.id === appointmentId);
+            if (!appointment || isAppointmentLegallyLocked(appointment)) return;
+            selectedPaymentAppointmentId = appointmentId;
+            const summary = getAppointmentPaymentSummary(appointment);
+            const total = summary.total || 0;
+            const suggestedNow = Math.max(0, summary.remaining || total);
+
+            document.getElementById("appointmentPaymentCustomer").textContent = `${appointment.customerName || adminT("unnamedCustomer", "Customer")} | ${appointment.date || "-"} ${appointment.time || ""}`;
+            document.getElementById("appointmentPaymentSummary").innerHTML = `
+                <div class="payment-summary-row"><span>${appointment.service || adminT("unspecifiedService", "Service")}</span><strong>${formatIls(summary.total)}</strong></div>
+                <div class="payment-summary-row"><span>${adminT("paymentSummaryPaid", "Paid")}</span><strong>${formatIls(summary.paid)}</strong></div>
+                <div class="payment-summary-row"><span>${adminT("paymentSummaryRemaining", "Remaining")}</span><strong>${formatIls(summary.remaining)}</strong></div>
+                <div class="payment-summary-row"><span>${adminT("paymentSummaryFuture", "Future installments")}</span><strong>${summary.futureInstallments}</strong></div>
+            `;
+            document.getElementById("appointmentPaymentTotal").value = total ? total.toFixed(2) : "";
+            document.getElementById("appointmentPaymentNow").value = suggestedNow ? suggestedNow.toFixed(2) : "";
+            document.getElementById("appointmentPaymentMethod").value = appointment.paymentMethod || "cash";
+            document.getElementById("appointmentPaymentInstallmentsTotal").value = summary.totalInstallments || 1;
+            document.getElementById("appointmentPaymentInstallmentsPaid").value = summary.remaining > 0 ? 1 : Math.max(1, summary.paidInstallments || 1);
+            document.getElementById("appointmentPaymentReference").value = "";
+            document.getElementById("appointmentPaymentNotes").value = "";
+            renderPaymentModalSummary();
+            document.getElementById("appointmentPaymentModal").classList.add("open");
+        }
+
+        function closeAppointmentPaymentModal() {
+            selectedPaymentAppointmentId = "";
+            document.getElementById("appointmentPaymentModal").classList.remove("open");
+        }
+
+        async function saveAppointmentPayment() {
+            const appointment = getSelectedPaymentAppointment();
+            if (!appointment || isAppointmentLegallyLocked(appointment)) return;
+            const currentSummary = getAppointmentPaymentSummary(appointment);
+            const total = Math.max(0, Number(document.getElementById("appointmentPaymentTotal").value || 0));
+            const payNow = Math.max(0, Number(document.getElementById("appointmentPaymentNow").value || 0));
+            const totalInstallments = Math.max(1, Number(document.getElementById("appointmentPaymentInstallmentsTotal").value || 1));
+            const paidNowInstallments = Math.max(1, Number(document.getElementById("appointmentPaymentInstallmentsPaid").value || 1));
+            const method = document.getElementById("appointmentPaymentMethod").value;
+            const reference = document.getElementById("appointmentPaymentReference").value.trim();
+            const notes = document.getElementById("appointmentPaymentNotes").value.trim();
+            if (total <= 0 || payNow <= 0) return alert(adminT("paymentAmountAlert", "Enter a valid payment amount."));
+            if (paidNowInstallments > totalInstallments) return alert(adminT("paymentInstallmentsAlert", "Paid installments cannot exceed total installments."));
+
+            const paidAfter = Math.min(total, currentSummary.paid + payNow);
+            const remainingAfter = Math.max(0, total - paidAfter);
+            const installmentsAfter = Math.min(totalInstallments, currentSummary.paidInstallments + paidNowInstallments);
+            const futureInstallments = Math.max(0, totalInstallments - installmentsAfter);
+            const customer = {
+                userId: appointment.userId || "",
+                email: appointment.email || "",
+                name: appointment.customerName || "",
+                phone: appointment.phone || ""
+            };
+            const invoiceItems = [{
+                productId: appointment.id,
+                name: appointment.service || adminT("unspecifiedService", "Appointment"),
+                quantity: 1,
+                unitPriceGross: payNow
+            }];
+            const paymentRef = doc(collection(db, "PaymentRecords"));
+            const invoiceRef = doc(collection(db, "Invoices"));
+            const paymentRecord = createPaymentRecordDraft({
+                sourceCollection: "Appointments",
+                sourceId: appointment.id,
+                customer,
+                items: invoiceItems,
+                totalGross: payNow,
+                acceptedPolicies: { terms: true, cancellation: true, refund: true }
+            });
+            const invoiceDraft = createInvoiceDraft({
+                sourceCollection: "Appointments",
+                sourceId: appointment.id,
+                customer,
+                items: invoiceItems,
+                totalGross: payNow,
+                paymentRecordId: paymentRef.id
+            });
+            const paymentRecordIds = Array.isArray(appointment.paymentRecordIds) ? [...appointment.paymentRecordIds, paymentRef.id] : [paymentRef.id];
+            const invoiceIds = Array.isArray(appointment.invoiceIds) ? [...appointment.invoiceIds, invoiceRef.id] : [invoiceRef.id];
+            const paymentStatus = remainingAfter <= 0 ? "paid" : "partial";
+            const nowIso = new Date().toISOString();
+
+            await setDoc(paymentRef, {
+                ...paymentRecord,
+                paymentMethod: method,
+                paymentStatus: "recorded_by_admin",
+                appointmentTotalGross: total,
+                paidBeforeGross: currentSummary.paid,
+                paidNowGross: payNow,
+                paidAfterGross: paidAfter,
+                remainingGross: remainingAfter,
+                installmentsTotal: totalInstallments,
+                installmentsPaidNow: paidNowInstallments,
+                installmentsPaidTotal: installmentsAfter,
+                installmentsFuture: futureInstallments,
+                reference,
+                notes
+            });
+            await setDoc(invoiceRef, invoiceDraft);
+            await updateDoc(doc(db, "Appointments", appointment.id), {
+                appointmentPrice: total,
+                paymentTotalGross: total,
+                paymentPaidGross: paidAfter,
+                paymentRemainingGross: remainingAfter,
+                paymentStatus,
+                paymentMethod: method,
+                paymentInstallmentsTotal: totalInstallments,
+                paymentInstallmentsPaid: installmentsAfter,
+                paymentInstallmentsRemaining: futureInstallments,
+                paymentRecordIds,
+                invoiceIds,
+                lastPaymentRecordId: paymentRef.id,
+                lastInvoiceId: invoiceRef.id,
+                lastInvoiceNumber: invoiceDraft.invoiceNumber,
+                lastPaymentAt: nowIso,
+                paymentReference: reference,
+                paymentNotes: notes,
+                vatRate: 0.18,
+                vatIncluded: true,
+                paymentLocked: true
+            });
+            await notifyUser(appointment.userId, {
+                title: "تم تسجيل دفعة للحجز",
+                body: `تم تسجيل دفعة ${formatIls(payNow)} للحجز بتاريخ ${appointment.date || "-"}، والمتبقي ${formatIls(remainingAfter)}.`,
+                type: "payment",
+                link: "old-bookings.html",
+                sourceCollection: "Appointments",
+                sourceId: appointment.id,
+                meta: { paymentRecordId: paymentRef.id, invoiceId: invoiceRef.id, invoiceNumber: invoiceDraft.invoiceNumber }
+            });
+            closeAppointmentPaymentModal();
+            await loadAppointments();
+            alert(adminT("paymentSavedAlert", "Payment and invoice were saved for this appointment."));
+        }
+
+        ["appointmentPaymentTotal", "appointmentPaymentNow", "appointmentPaymentInstallmentsTotal", "appointmentPaymentInstallmentsPaid"].forEach((id) => {
+            document.getElementById(id)?.addEventListener("input", renderPaymentModalSummary);
+        });
+        document.getElementById("closeAppointmentPaymentBtn")?.addEventListener("click", closeAppointmentPaymentModal);
+        document.getElementById("cancelAppointmentPaymentBtn")?.addEventListener("click", closeAppointmentPaymentModal);
+        document.getElementById("appointmentPaymentModal")?.addEventListener("click", (event) => {
+            if (event.target === document.getElementById("appointmentPaymentModal")) closeAppointmentPaymentModal();
+        });
+        document.getElementById("saveAppointmentPaymentBtn")?.addEventListener("click", saveAppointmentPayment);
+
         function renderAppointmentActions(container, appointment) {
+            if (isAppointmentLegallyLocked(appointment)) {
+                const locked = document.createElement("span");
+                locked.className = "legal-lock-note";
+                locked.innerText = adminT("legalLocked", "Legal record locked");
+                container.appendChild(locked);
+                return;
+            }
+
+            const summary = getAppointmentPaymentSummary(appointment);
+            const canAddPayment = summary.remaining > 0 || summary.total === 0 || !isAppointmentPaymentLocked(appointment);
+            if (canAddPayment) {
+                const paymentBtn = document.createElement("button");
+                paymentBtn.innerText = adminT("payButton", "Pay");
+                paymentBtn.className = "btn-action btn-payment";
+                paymentBtn.onclick = () => openAppointmentPayment(appointment.id);
+                container.appendChild(paymentBtn);
+            }
+
+            if (isAppointmentPaymentLocked(appointment)) {
+                const locked = document.createElement("span");
+                locked.className = "legal-lock-note";
+                locked.innerText = adminT("legalLocked", "Legal record locked");
+                container.appendChild(locked);
+                return;
+            }
+
             if (isPendingAppointment(appointment.status)) {
                 const acceptBtn = document.createElement("button");
                 acceptBtn.innerText = adminT("accept", "قبول");
@@ -2345,6 +3197,7 @@
         function renderAppointmentCard(appointment) {
             const card = document.createElement("div");
             card.className = `booking-card ${getAppointmentStatusClass(appointment.status)}`;
+            const paymentLabel = getAppointmentPaymentLabel(appointment);
             card.innerHTML = `
                 <strong>${renderCustomerNameWithPenalty(appointment)}</strong>
                 <small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>
@@ -2352,6 +3205,8 @@
                 <small>${appointment.service || adminT("unspecifiedService", "خدمة غير محددة")}</small>
                 <small>${appointment.notes || adminT("noNotes", "لا توجد ملاحظات")}</small>
                 <small><b>${displayAppointmentStatus(appointment.status)}</b></small>
+                <span class="payment-status-pill ${paymentLabel.className}">${paymentLabel.text}</span>
+                ${appointment.refundStatus ? `<small><b>${adminT("refundHeader", "Refund")}:</b> ${appointment.refundStatus}</small>` : ""}
             `;
             const actions = document.createElement("div");
             actions.className = "booking-actions";
@@ -2403,7 +3258,7 @@
                         item.onclick = (event) => {
                             event.stopPropagation();
                             selectAppointmentDate(dateKey);
-                            editAppointment(appointment);
+                            if (!isAppointmentProtectedFromChanges(appointment)) editAppointment(appointment);
                         };
                         dayBox.appendChild(item);
                     });
@@ -2431,6 +3286,7 @@
 
             selectedBookings.forEach((appointment) => {
                 const statusClass = getAppointmentStatusClass(appointment.status);
+                const paymentLabel = getAppointmentPaymentLabel(appointment);
                 const row = table.insertRow();
                 if (isNoShowAppointment(appointment)) row.classList.add("appointment-no-show-row");
                 const customerCell = row.insertCell(0);
@@ -2451,13 +3307,13 @@
                 const notesCell = row.insertCell(3);
                 notesCell.className = "appointment-glass-cell";
                 notesCell.dataset.label = adminT("notesHeader", "Notes");
-                notesCell.innerHTML = appointment.notes || "-";
+                notesCell.innerHTML = `${appointment.notes || "-"}${appointment.refundStatus ? `<br><small><b>${adminT("refundHeader", "Refund")}:</b> ${appointment.refundStatus}</small>` : ""}`;
 
                 const statusColor = statusClass === "accepted" ? "green" : (statusClass === "rejected" ? "red" : (statusClass === "no-show" ? "#64748b" : "#FF9800"));
                 const statusCell = row.insertCell(4);
                 statusCell.className = "appointment-glass-cell";
                 statusCell.dataset.label = adminT("statusHeader", "Status");
-                statusCell.innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span>`;
+                statusCell.innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span><br><span class="payment-status-pill ${paymentLabel.className}">${paymentLabel.text}</span>`;
 
                 const actionsCell = row.insertCell(5);
                 actionsCell.className = "appointment-no-glass-cell";
@@ -2484,6 +3340,7 @@
 
         window.acceptAppointment = async function(appointmentId) {
             const appointment = allAppointments.find((item) => item.id === appointmentId);
+            if (isAppointmentProtectedFromChanges(appointment)) return alert(adminT("legalLocked", "Legal record locked"));
             await updateDoc(doc(db, "Appointments", appointmentId), { status: "تم التأكيد" });
             await notifyUser(appointment?.userId, {
                 title: "تم تأكيد حجزك",
@@ -2497,6 +3354,7 @@
         }
 
         window.editAppointment = async function(appointment) {
+            if (isAppointmentProtectedFromChanges(appointment)) return alert(adminT("legalLocked", "Legal record locked"));
             const newDate = prompt(adminT("editDatePrompt", "تاريخ الموعد الجديد:"), appointment.date || "");
             if (newDate === null) return;
             const newTime = prompt(adminT("editTimePrompt", "وقت الموعد الجديد:"), appointment.time || "");
@@ -2527,10 +3385,21 @@
         }
 
         window.deleteAppointment = async function(appointmentId) {
-            if (!confirm(adminT("deleteAppointmentConfirm", "هل تريد حذف هذا الحجز؟"))) return;
             const appointment = allAppointments.find((item) => item.id === appointmentId);
+            if (isAppointmentProtectedFromChanges(appointment)) return alert(adminT("legalLocked", "Legal record locked"));
+            if (!confirm(adminT("deleteAppointmentConfirm", "هل تريد حذف هذا الحجز؟"))) return;
             const reversedPenalty = await reverseAppointmentPenalty(appointment);
-            await deleteDoc(doc(db, "Appointments", appointmentId));
+            await updateDoc(doc(db, "Appointments", appointmentId), {
+                status: "cancelled_by_admin",
+                cancelledAt: new Date().toISOString(),
+                cancelledBy: auth.currentUser?.uid || THE_ADMIN_EMAIL,
+                cancellationSaved: true,
+                legalLocked: true,
+                retention: {
+                    keepForBookingHistory: true,
+                    source: "Firestore Appointments"
+                }
+            });
             await notifyUser(appointment?.userId, {
                 title: "تم إلغاء حجزك",
                 body: `تم إلغاء الحجز بتاريخ ${appointment?.date || "-"} الساعة ${appointment?.time || "-"}.`,
@@ -2557,21 +3426,24 @@
         // ================= 2. الطلبات =================
         async function loadOrders() {
             const table = document.getElementById("ordersTable"); 
-            table.innerHTML = renderAdminHeaders(["orderHeader", "amountHeader", "customerHeader", "statusHeader", "actionsHeader"]);
+            table.innerHTML = renderAdminHeaders(["orderHeader", "amountHeader", "taxHeader", "invoiceHeader", "paymentHeader", "customerHeader", "statusHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Orders"));
             const orders = querySnapshot.docs.map((docSnap) => ({ id: docSnap.id, data: docSnap.data() }));
             setNavBadge("newOrdersBadge", orders.filter(({ data }) => isNewOrder(data)).length);
             orders.forEach(({ id, data }) => {
                 const row = table.insertRow();
                 row.insertCell(0).innerHTML = data.productName; 
-                row.insertCell(1).innerHTML = `<strong>${data.price} ₪</strong>`; 
-                row.insertCell(2).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
-                row.insertCell(3).innerHTML = data.status;
-                const actionsCell = row.insertCell(4);
+                row.insertCell(1).innerHTML = `<strong>${formatIls(data.totalGross ?? data.price)}</strong><br><small>${adminT("amountHeader", "Amount")}</small>`;
+                row.insertCell(2).innerHTML = `<strong>${formatIls(data.vatAmount || 0)}</strong><br><small>18%</small>`;
+                row.insertCell(3).innerHTML = `<strong>${data.invoiceNumber || "-"}</strong><br><small>${data.invoiceStatus || "pending_certified_provider_sync"}</small><br><small>${data.allocationNumberStatus || "prepared_for_tax_authority_api"}</small>`;
+                row.insertCell(4).innerHTML = `<strong>${data.paymentStatus || "pending_external_provider"}</strong><br><small>${data.paymentProvider || "external_hosted_checkout"}</small><br><small>${data.noCreditCardDataStored === false ? "Card storage risk" : "No card data stored"}</small>`;
+                row.insertCell(5).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
+                row.insertCell(6).innerHTML = data.status;
+                const actionsCell = row.insertCell(7);
                 const updateBtn = document.createElement("button"); updateBtn.innerText = adminT("update", "تعديل"); updateBtn.className = "btn-action btn-update";
                 updateBtn.onclick = async () => { const newStatus = prompt(adminT("updateStatusPrompt", "تحديث الحالة:"), data.status); if (newStatus) { await updateDoc(doc(db, "Orders", id), { status: newStatus }); loadOrders(); } };
                 const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("delete", "حذف"); deleteBtn.className = "btn-action btn-delete";
-                deleteBtn.onclick = async () => { if (confirm(adminT("deleteOrderConfirm", "حذف الطلب؟"))) { await deleteDoc(doc(db, "Orders", id)); loadOrders(); } };
+                deleteBtn.onclick = async () => { if (confirm(adminT("deleteOrderConfirm", "حذف الطلب؟"))) { await updateDoc(doc(db, "Orders", id), { status: "cancelled_by_admin", cancelledAt: new Date().toISOString(), retention: { keepForAccountingAudit: true, source: "Firestore Orders" } }); loadOrders(); } };
                 updateBtn.onclick = async () => {
                     const newStatus = prompt(adminT("updateStatusPrompt", "Update status:"), data.status);
                     if (!newStatus) return;
@@ -2588,7 +3460,14 @@
                 };
                 deleteBtn.onclick = async () => {
                     if (!confirm(adminT("deleteOrderConfirm", "Delete this order?"))) return;
-                    await deleteDoc(doc(db, "Orders", id));
+                    await updateDoc(doc(db, "Orders", id), {
+                        status: "cancelled_by_admin",
+                        cancelledAt: new Date().toISOString(),
+                        retention: {
+                            keepForAccountingAudit: true,
+                            source: "Firestore Orders"
+                        }
+                    });
                     await notifyUser(data.userId, {
                         title: "تم إلغاء طلبك",
                         body: `تم إلغاء طلب ${data.productName || "المنتج"}.`,
@@ -2602,6 +3481,508 @@
                 actionsCell.appendChild(updateBtn); actionsCell.appendChild(deleteBtn);
             });
         }
+
+        function moneyValue(value) {
+            return Math.max(0, Number(value || 0));
+        }
+
+        function renderSummary(containerId, cards) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = cards.map((card) => `
+                <div class="summary-card">
+                    <small>${card.label}</small>
+                    <strong>${card.value}</strong>
+                </div>
+            `).join("");
+        }
+
+        async function getOrdersForReports() {
+            const snapshot = await getDocs(collection(db, "Orders"));
+            return snapshot.docs.map((orderDoc) => ({ id: orderDoc.id, ...orderDoc.data() }));
+        }
+
+        async function getInvoicesForReports() {
+            const snapshot = await getDocs(collection(db, "Invoices"));
+            return snapshot.docs.map((invoiceDoc) => ({ id: invoiceDoc.id, ...invoiceDoc.data() }));
+        }
+
+        async function loadReportsDashboard() {
+            const [orders, invoices] = await Promise.all([getOrdersForReports(), getInvoicesForReports()]);
+            const paidAppointments = allAppointments.filter((appointment) => getAppointmentPaymentSummary(appointment).paid > 0);
+            const totalSales = orders.reduce((sum, order) => sum + moneyValue(order.totalGross ?? order.price), 0) +
+                allAppointments.reduce((sum, appointment) => sum + moneyValue(appointment.paymentPaidGross), 0);
+            renderSummary("reportsSummary", [
+                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(totalSales) },
+                { label: adminT("invoicesCountLabel", "Invoices"), value: invoices.length },
+                { label: adminT("paidAppointmentsLabel", "Paid appointments"), value: paidAppointments.length },
+                { label: adminT("hoursTodayLabel", "Today hours"), value: `${getTodayWorkHours().toFixed(2)}h` }
+            ]);
+            const table = document.getElementById("reportsTable");
+            table.innerHTML = renderAdminHeaders(["invoiceHeader", "amountHeader", "paymentHeader", "dateTimeHeader"]);
+            const rows = [
+                ...orders.map((order) => ({ title: order.invoiceNumber || order.productName || "Order", amount: moneyValue(order.totalGross ?? order.price), status: order.paymentStatus || order.status || "-", date: order.createdAt || "-" })),
+                ...paidAppointments.map((appointment) => ({ title: appointment.lastInvoiceNumber || appointment.service || "Appointment", amount: moneyValue(appointment.paymentPaidGross), status: appointment.paymentStatus || "-", date: appointment.lastPaymentAt || appointment.date || "-" }))
+            ].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 50);
+            if (!rows.length) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 4;
+                cell.className = "empty-row";
+                cell.innerText = "-";
+                return;
+            }
+            rows.forEach((item) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = safeText(item.title);
+                row.insertCell(1).innerHTML = `<strong>${formatIls(item.amount)}</strong>`;
+                row.insertCell(2).innerHTML = safeText(item.status);
+                row.insertCell(3).innerHTML = safeText(String(item.date).slice(0, 16));
+            });
+        }
+
+        async function loadInvoicesReport() {
+            const invoices = await getInvoicesForReports();
+            renderSummary("invoicesSummary", [
+                { label: adminT("invoicesCountLabel", "Invoices"), value: invoices.length },
+                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(invoices.reduce((sum, invoice) => sum + moneyValue(invoice.totals?.gross), 0)) }
+            ]);
+            const table = document.getElementById("invoicesTable");
+            table.innerHTML = renderAdminHeaders(["invoiceHeader", "customerHeader", "amountHeader", "taxHeader", "statusHeader"]);
+            if (!invoices.length) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 5;
+                cell.className = "empty-row";
+                cell.innerText = "-";
+                return;
+            }
+            invoices.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || ""))).forEach((invoice) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${safeText(invoice.invoiceNumber || invoice.id)}</strong><br><small>${safeText(invoice.issueDate || "-")}</small>`;
+                row.insertCell(1).innerHTML = `${safeText(invoice.customer?.name || "-")}<br><small dir="ltr">${safeText(invoice.customer?.phone || invoice.customer?.email || "")}</small>`;
+                row.insertCell(2).innerHTML = `<strong>${formatIls(invoice.totals?.gross || 0)}</strong>`;
+                row.insertCell(3).innerHTML = `${formatIls(invoice.totals?.vat || 0)}<br><small>18%</small>`;
+                row.insertCell(4).innerHTML = safeText(invoice.invoiceStatus || "-");
+            });
+        }
+
+        async function loadSalesReport() {
+            const orders = await getOrdersForReports();
+            const appointmentPayments = allAppointments.filter((appointment) => moneyValue(appointment.paymentPaidGross) > 0);
+            const totalSales = orders.reduce((sum, order) => sum + moneyValue(order.totalGross ?? order.price), 0) +
+                appointmentPayments.reduce((sum, appointment) => sum + moneyValue(appointment.paymentPaidGross), 0);
+            renderSummary("salesSummary", [
+                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(totalSales) },
+                { label: adminT("ordersTitle", "Orders"), value: orders.length },
+                { label: adminT("paidAppointmentsLabel", "Paid appointments"), value: appointmentPayments.length }
+            ]);
+            const table = document.getElementById("salesTable");
+            table.innerHTML = renderAdminHeaders(["orderHeader", "amountHeader", "paymentHeader", "dateTimeHeader"]);
+            const rows = [
+                ...orders.map((order) => ({ title: order.productName || "Order", amount: moneyValue(order.totalGross ?? order.price), status: order.status || "-", date: order.createdAt || "-" })),
+                ...appointmentPayments.map((appointment) => ({ title: appointment.service || "Appointment", amount: moneyValue(appointment.paymentPaidGross), status: appointment.paymentStatus || "-", date: appointment.lastPaymentAt || appointment.date || "-" }))
+            ].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+            if (!rows.length) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 4;
+                cell.className = "empty-row";
+                cell.innerText = "-";
+                return;
+            }
+            rows.forEach((item) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = safeText(item.title);
+                row.insertCell(1).innerHTML = `<strong>${formatIls(item.amount)}</strong>`;
+                row.insertCell(2).innerHTML = safeText(item.status);
+                row.insertCell(3).innerHTML = safeText(String(item.date).slice(0, 16));
+            });
+        }
+
+        function getShiftHours(shift) {
+            if (!shift?.date || !shift?.startTime) return 0;
+            const start = new Date(`${shift.date}T${shift.startTime}`);
+            let end = shift.endTime ? new Date(`${shift.date}T${shift.endTime}`) : new Date();
+            if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return 0;
+            if (end < start) end.setDate(end.getDate() + 1);
+            return Math.max(0, (end - start) / 36e5);
+        }
+
+        function getTodayWorkHours() {
+            const today = getTodayValue();
+            return allWorkerShifts.filter((shift) => shift.date === today).reduce((sum, shift) => sum + getShiftHours(shift), 0);
+        }
+
+        async function loadWorkHours() {
+            const workersSnapshot = await getDocs(collection(db, "Workers"));
+            allWorkers = workersSnapshot.docs.map((workerDoc) => ({ id: workerDoc.id, ...workerDoc.data() })).filter((worker) => worker.isActive !== false);
+            const shiftsSnapshot = await getDocs(collection(db, "WorkerShifts"));
+            allWorkerShifts = shiftsSnapshot.docs.map((shiftDoc) => ({ id: shiftDoc.id, ...shiftDoc.data() }));
+            renderWorkers();
+            renderWorkHours();
+            renderAttendance();
+        }
+
+        function renderWorkers() {
+            const list = document.getElementById("workersList");
+            const select = document.getElementById("shiftWorkerSelect");
+            const attendanceSelect = document.getElementById("attendanceWorkerSelect");
+            const reportFilter = document.getElementById("workHoursWorkerFilter");
+            if (!list || !select) return;
+            const selectedAttendanceWorker = attendanceSelect?.value || "";
+            const selectedReportWorker = reportFilter?.value || "all";
+            list.innerHTML = allWorkers.length ? "" : `<div class="empty-row">${adminT("noUsersSearch", "No records")}</div>`;
+            select.innerHTML = `<option value="">${adminT("workerLabel", "Worker")}</option>`;
+            if (attendanceSelect) attendanceSelect.innerHTML = `<option value="">${adminT("workerLabel", "Worker")}</option>`;
+            if (reportFilter) reportFilter.innerHTML = `<option value="all">${adminT("periodAll", "All records")}</option>`;
+            allWorkers.forEach((worker) => {
+                const row = document.createElement("div");
+                row.className = "worker-row";
+                row.innerHTML = `
+                    <div class="worker-rate-row">
+                        <div><strong>${safeText(worker.name)}</strong><small>${safeText(worker.role || "-")}</small></div>
+                        <input type="number" min="0" step="0.01" value="${Number(worker.hourlyRate || 0)}" aria-label="${adminT("workerHourlyRateLabel", "Hourly rate")}">
+                        <div class="worker-mini-actions"></div>
+                    </div>`;
+                const rateInput = row.querySelector("input");
+                const actionWrap = row.querySelector(".worker-mini-actions");
+                const saveRateBtn = document.createElement("button");
+                saveRateBtn.className = "btn-action btn-update";
+                saveRateBtn.type = "button";
+                saveRateBtn.innerText = adminT("save", "Save");
+                saveRateBtn.onclick = () => updateWorkerRate(worker.id, rateInput.value);
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.type = "button";
+                deleteBtn.innerText = adminT("delete", "Delete");
+                deleteBtn.onclick = () => deleteWorker(worker.id);
+                actionWrap.append(saveRateBtn, deleteBtn);
+                list.appendChild(row);
+
+                const option = document.createElement("option");
+                option.value = worker.id;
+                option.textContent = `${worker.name}${worker.role ? ` | ${worker.role}` : ""}`;
+                select.appendChild(option);
+                if (attendanceSelect) {
+                    const attendanceOption = option.cloneNode(true);
+                    attendanceSelect.appendChild(attendanceOption);
+                }
+                if (reportFilter) reportFilter.appendChild(option.cloneNode(true));
+            });
+            if (attendanceSelect && allWorkers.some((worker) => worker.id === selectedAttendanceWorker)) attendanceSelect.value = selectedAttendanceWorker;
+            if (reportFilter && (selectedReportWorker === "all" || allWorkers.some((worker) => worker.id === selectedReportWorker))) reportFilter.value = selectedReportWorker;
+        }
+
+        function renderWorkHours() {
+            const table = document.getElementById("workHoursTable");
+            const totalsTable = document.getElementById("workerTotalsTable");
+            if (!table || !totalsTable) return;
+            syncWorkHoursDateFilters();
+            const shifts = getFilteredWorkShifts();
+            const totals = getWorkerTotals(shifts);
+            const totalHours = totals.reduce((sum, item) => sum + item.hours, 0);
+            const totalPay = totals.reduce((sum, item) => sum + item.pay, 0);
+            renderSummary("workHoursSummary", [
+                { label: adminT("hoursHeader", "Hours"), value: `${totalHours.toFixed(2)}h` },
+                { label: adminT("salaryDueHeader", "Pay due"), value: formatIls(totalPay) },
+                { label: adminT("workersTitle", "Workers"), value: totals.length },
+                { label: adminT("workerTotalsTitle", "Worker totals"), value: shifts.length }
+            ]);
+            totalsTable.innerHTML = `<tr><th>${adminT("workerTotalsTitle", "Worker totals")}</th><th>${adminT("hoursHeader", "Hours")}</th><th>${adminT("hourlyRateHeader", "Hourly rate")}</th><th>${adminT("salaryDueHeader", "Pay due")}</th></tr>`;
+            if (!totals.length) {
+                const row = totalsTable.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 4;
+                cell.className = "empty-row";
+                cell.innerText = "-";
+            } else {
+                totals.forEach((item) => {
+                    const row = totalsTable.insertRow();
+                    row.insertCell(0).innerHTML = `<strong>${safeText(item.worker.name || "-")}</strong><br><small>${safeText(item.worker.role || "")}</small>`;
+                    row.insertCell(1).innerHTML = `<strong>${item.hours.toFixed(2)}h</strong>`;
+                    row.insertCell(2).innerHTML = formatIls(item.rate);
+                    row.insertCell(3).innerHTML = `<strong>${formatIls(item.pay)}</strong>`;
+                });
+            }
+            table.innerHTML = `<tr><th>${adminT("workerLabel", "Worker")}</th><th>${adminT("dateTimeHeader", "Date/time")}</th><th>${adminT("notesHeader", "Notes")}</th><th>${adminT("hoursHeader", "Hours")}</th><th>${adminT("salaryDueHeader", "Pay due")}</th><th>${adminT("actionsHeader", "Actions")}</th></tr>`;
+            if (!shifts.length) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 6;
+                cell.className = "empty-row";
+                cell.innerText = "-";
+                return;
+            }
+            shifts.forEach((shift) => {
+                const worker = allWorkers.find((item) => item.id === shift.workerId) || {};
+                const hours = getShiftHours(shift);
+                const rate = Number(worker.hourlyRate || shift.hourlyRate || 0);
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${safeText(shift.workerName || worker.name || "-")}</strong><br><small>${safeText(shift.workerRole || worker.role || "")}</small>`;
+                row.insertCell(1).innerHTML = `${safeText(shift.date || "-")}<br>${safeText(shift.startTime || "-")} - ${safeText(shift.endTime || "-")}`;
+                row.insertCell(2).innerHTML = safeText(shift.notes || "-");
+                row.insertCell(3).innerHTML = `<strong>${hours.toFixed(2)}h</strong>`;
+                row.insertCell(4).innerHTML = `<strong>${formatIls(hours * rate)}</strong>`;
+                const actionsCell = row.insertCell(5);
+                const editBtn = document.createElement("button");
+                editBtn.className = "btn-action btn-update";
+                editBtn.type = "button";
+                editBtn.innerText = adminT("editShiftButton", "Edit hours");
+                editBtn.onclick = () => editWorkerShift(shift.id);
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.type = "button";
+                deleteBtn.innerText = adminT("delete", "Delete");
+                deleteBtn.onclick = () => deleteWorkerShift(shift.id);
+                actionsCell.append(editBtn, deleteBtn);
+            });
+        }
+
+        function syncWorkHoursDateFilters() {
+            const period = document.getElementById("workHoursPeriodFilter")?.value || "today";
+            const fromInput = document.getElementById("workHoursFromDate");
+            const toInput = document.getElementById("workHoursToDate");
+            if (!fromInput || !toInput || period === "custom") return;
+            const today = new Date();
+            const from = new Date(today);
+            if (period === "2days") from.setDate(today.getDate() - 1);
+            else if (period === "3days") from.setDate(today.getDate() - 2);
+            else if (period === "week") from.setDate(today.getDate() - 6);
+            else if (period === "month") from.setMonth(today.getMonth() - 1);
+            else if (period === "all") {
+                fromInput.value = "";
+                toInput.value = "";
+                return;
+            }
+            fromInput.value = from.toISOString().slice(0, 10);
+            toInput.value = today.toISOString().slice(0, 10);
+        }
+
+        function getFilteredWorkShifts() {
+            const workerFilter = document.getElementById("workHoursWorkerFilter")?.value || "all";
+            const from = document.getElementById("workHoursFromDate")?.value || "";
+            const to = document.getElementById("workHoursToDate")?.value || "";
+            return allWorkerShifts
+                .filter((shift) => workerFilter === "all" || shift.workerId === workerFilter)
+                .filter((shift) => !from || String(shift.date || "") >= from)
+                .filter((shift) => !to || String(shift.date || "") <= to)
+                .sort((a, b) => `${b.date || ""} ${b.startTime || ""}`.localeCompare(`${a.date || ""} ${a.startTime || ""}`));
+        }
+
+        function getWorkerTotals(shifts) {
+            const map = new Map();
+            shifts.forEach((shift) => {
+                const worker = allWorkers.find((item) => item.id === shift.workerId) || { id: shift.workerId, name: shift.workerName, role: shift.workerRole, hourlyRate: shift.hourlyRate || 0 };
+                const current = map.get(worker.id) || { worker, hours: 0, rate: Number(worker.hourlyRate || 0), pay: 0 };
+                current.hours += getShiftHours(shift);
+                current.pay = current.hours * current.rate;
+                map.set(worker.id, current);
+            });
+            return [...map.values()].sort((a, b) => String(a.worker.name || "").localeCompare(String(b.worker.name || "")));
+        }
+
+        function getOpenWorkerShift(workerId) {
+            return allWorkerShifts.find((shift) => shift.workerId === workerId && !shift.endTime && shift.status !== "closed");
+        }
+
+        function renderAttendance() {
+            const select = document.getElementById("attendanceWorkerSelect");
+            const statusBox = document.getElementById("attendanceStatusBox");
+            const table = document.getElementById("attendanceTable");
+            if (!select || !statusBox || !table) return;
+            const workerId = select.value;
+            const worker = allWorkers.find((item) => item.id === workerId);
+            const openShift = workerId ? getOpenWorkerShift(workerId) : null;
+            renderSummary("attendanceSummary", [
+                { label: adminT("hoursTodayLabel", "Today hours"), value: `${getTodayWorkHours().toFixed(2)}h` },
+                { label: adminT("workersTitle", "Workers"), value: allWorkers.length }
+            ]);
+            statusBox.innerHTML = worker
+                ? `<strong>${safeText(worker.name)}</strong><small>${openShift ? `${adminT("attendanceOpenStatus", "Clocked in now")}: ${safeText(openShift.date)} ${safeText(openShift.startTime)}` : adminT("attendanceClosedStatus", "No open shift")}</small>`
+                : `<strong>${adminT("workerLabel", "Worker")}</strong><small>${adminT("attendanceClosedStatus", "No open shift")}</small>`;
+            document.getElementById("clockInBtn").disabled = !worker || Boolean(openShift);
+            document.getElementById("clockOutBtn").disabled = !worker || !openShift;
+            table.innerHTML = `<tr><th>${adminT("workerLabel", "Worker")}</th><th>${adminT("dateTimeHeader", "Date/time")}</th><th>${adminT("notesHeader", "Notes")}</th><th>${adminT("hoursHeader", "Hours")}</th></tr>`;
+            const today = getTodayValue();
+            const shifts = allWorkerShifts
+                .filter((shift) => shift.date === today)
+                .sort((a, b) => `${b.date || ""} ${b.startTime || ""}`.localeCompare(`${a.date || ""} ${a.startTime || ""}`));
+            if (!shifts.length) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 4;
+                cell.className = "empty-row";
+                cell.innerText = "-";
+                return;
+            }
+            shifts.forEach((shift) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${safeText(shift.workerName || "-")}</strong><br><small>${safeText(shift.workerRole || "")}</small>`;
+                row.insertCell(1).innerHTML = `${safeText(shift.date || "-")}<br>${safeText(shift.startTime || "-")} - ${safeText(shift.endTime || adminT("attendanceOpenStatus", "Clocked in now"))}`;
+                row.insertCell(2).innerHTML = safeText(shift.source === "attendance" ? adminT("attendanceRegisterTitle", "Clock in and out") : (shift.notes || "-"));
+                row.insertCell(3).innerHTML = `<strong>${getShiftHours(shift).toFixed(2)}h</strong>`;
+            });
+        }
+
+        async function clockInWorker() {
+            const workerId = document.getElementById("attendanceWorkerSelect").value;
+            const worker = allWorkers.find((item) => item.id === workerId);
+            if (!worker) return alert(adminT("workerRequiredAlert", "Enter worker name first."));
+            if (getOpenWorkerShift(workerId)) return alert(adminT("clockInExistsAlert", "This worker already has an open shift."));
+            const now = new Date();
+            const date = getTodayValue();
+            const startTime = now.toTimeString().slice(0, 5);
+            await addDoc(collection(db, "WorkerShifts"), {
+                workerId,
+                workerName: worker.name || "",
+                workerRole: worker.role || "",
+                date,
+                startTime,
+                endTime: "",
+                hours: 0,
+                notes: "",
+                source: "attendance",
+                status: "open",
+                clockInAt: now.toISOString(),
+                createdAt: now.toISOString(),
+                createdBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+            });
+            await loadWorkHours();
+            alert(adminT("clockInAlert", "Clock-in saved."));
+        }
+
+        async function clockOutWorker() {
+            const workerId = document.getElementById("attendanceWorkerSelect").value;
+            const openShift = getOpenWorkerShift(workerId);
+            if (!openShift) return alert(adminT("clockOutMissingAlert", "There is no open clock-in for this worker."));
+            const now = new Date();
+            const endTime = now.toTimeString().slice(0, 5);
+            const closedShift = { ...openShift, endTime };
+            await updateDoc(doc(db, "WorkerShifts", openShift.id), {
+                endTime,
+                hours: getShiftHours(closedShift),
+                status: "closed",
+                clockOutAt: now.toISOString(),
+                updatedAt: now.toISOString(),
+                updatedBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+            });
+            await loadWorkHours();
+            alert(adminT("clockOutAlert", "Clock-out saved."));
+        }
+
+        async function addWorker() {
+            const name = document.getElementById("workerNameInput").value.trim();
+            const role = document.getElementById("workerRoleInput").value.trim();
+            const hourlyRate = Math.max(0, Number(document.getElementById("workerHourlyRateInput")?.value || 0));
+            if (!name) return alert(adminT("workerRequiredAlert", "Enter worker name first."));
+            await addDoc(collection(db, "Workers"), {
+                name,
+                role,
+                hourlyRate,
+                isActive: true,
+                createdAt: new Date().toISOString(),
+                createdBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+            });
+            document.getElementById("workerNameInput").value = "";
+            document.getElementById("workerRoleInput").value = "";
+            document.getElementById("workerHourlyRateInput").value = "";
+            await loadWorkHours();
+            alert(adminT("workerAddedAlert", "Worker added."));
+        }
+
+        async function updateWorkerRate(workerId, value) {
+            await updateDoc(doc(db, "Workers", workerId), {
+                hourlyRate: Math.max(0, Number(value || 0)),
+                updatedAt: new Date().toISOString()
+            });
+            await loadWorkHours();
+            alert(adminT("workerRateUpdatedAlert", "Hourly rate updated."));
+        }
+
+        async function deleteWorker(workerId) {
+            if (!confirm(adminT("deleteWorkerConfirm", "Delete worker? Hour history will remain saved."))) return;
+            await updateDoc(doc(db, "Workers", workerId), {
+                isActive: false,
+                deletedAt: new Date().toISOString()
+            });
+            loadWorkHours();
+        }
+
+        async function addWorkerShift() {
+            const workerId = document.getElementById("shiftWorkerSelect").value;
+            const date = document.getElementById("shiftDateInput").value;
+            const startTime = document.getElementById("shiftStartInput").value;
+            const endTime = document.getElementById("shiftEndInput").value;
+            const notes = document.getElementById("shiftNotesInput").value.trim();
+            const worker = allWorkers.find((item) => item.id === workerId);
+            if (!worker || !date || !startTime || !endTime) return alert(adminT("shiftRequiredAlert", "Choose worker, date, start, and end time."));
+            await addDoc(collection(db, "WorkerShifts"), {
+                workerId,
+                workerName: worker.name || "",
+                workerRole: worker.role || "",
+                hourlyRate: Number(worker.hourlyRate || 0),
+                date,
+                startTime,
+                endTime,
+                hours: getShiftHours({ date, startTime, endTime }),
+                notes,
+                source: "manual",
+                status: "closed",
+                createdAt: new Date().toISOString(),
+                createdBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+            });
+            document.getElementById("shiftStartInput").value = "";
+            document.getElementById("shiftEndInput").value = "";
+            document.getElementById("shiftNotesInput").value = "";
+            await loadWorkHours();
+            alert(adminT("shiftAddedAlert", "Work hours saved."));
+        }
+
+        async function editWorkerShift(shiftId) {
+            const shift = allWorkerShifts.find((item) => item.id === shiftId);
+            if (!shift) return;
+            const date = prompt(adminT("shiftDateLabel", "Date"), shift.date || getTodayValue());
+            if (!date) return;
+            const startTime = prompt(adminT("shiftStartLabel", "Start time"), shift.startTime || "");
+            if (!startTime) return;
+            const endTime = prompt(adminT("shiftEndLabel", "End time"), shift.endTime || "");
+            if (!endTime) return;
+            const notes = prompt(adminT("shiftNotesLabel", "Notes"), shift.notes || "") ?? "";
+            await updateDoc(doc(db, "WorkerShifts", shiftId), {
+                date,
+                startTime,
+                endTime,
+                hours: getShiftHours({ date, startTime, endTime }),
+                notes,
+                status: "closed",
+                updatedAt: new Date().toISOString(),
+                updatedBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+            });
+            await loadWorkHours();
+        }
+
+        async function deleteWorkerShift(shiftId) {
+            if (!confirm(adminT("deleteShiftConfirm", "Delete this hour record?"))) return;
+            await deleteDoc(doc(db, "WorkerShifts", shiftId));
+            loadWorkHours();
+        }
+
+        document.getElementById("addWorkerBtn")?.addEventListener("click", addWorker);
+        document.getElementById("addShiftBtn")?.addEventListener("click", addWorkerShift);
+        document.getElementById("attendanceWorkerSelect")?.addEventListener("change", renderAttendance);
+        document.getElementById("clockInBtn")?.addEventListener("click", clockInWorker);
+        document.getElementById("clockOutBtn")?.addEventListener("click", clockOutWorker);
+        ["workHoursWorkerFilter", "workHoursFromDate", "workHoursToDate"].forEach((id) => {
+            document.getElementById(id)?.addEventListener("change", renderWorkHours);
+        });
+        document.getElementById("workHoursPeriodFilter")?.addEventListener("change", () => {
+            syncWorkHoursDateFilters();
+            renderWorkHours();
+        });
+        document.getElementById("toggleManualShiftPanelBtn")?.addEventListener("click", () => {
+            document.getElementById("manualShiftPanel")?.classList.toggle("open");
+        });
 
         // ================= 3. المنتجات (المربعات + الخصومات) =================
         window.toggleFeatured = async function(checkbox, productId) {
@@ -2826,6 +4207,7 @@
                     phone,
                     birthDate,
                     gender,
+                    role: "user",
                     phoneVerified: false,
                     emailVerified: false,
                     createdByAdmin: true,
@@ -2987,15 +4369,15 @@
             });
 
             let confirmMessage = `هل أنت متأكد من حذف حساب ${displayName}؟\n\n`;
-            confirmMessage += "الحجوزات القديمة ستبقى محفوظة.\n";
+            confirmMessage += "سجلات الحجوزات والطلبات ستبقى محفوظة لأغراض المحاسبة والرجوع لاحقًا، مع إلغاء القادم منها.\n";
             if (futureAppointments.length) {
-                confirmMessage += `\nسيتم حذف ${futureAppointments.length} حجز قادم:\n`;
+                confirmMessage += `\nسيتم إلغاء ${futureAppointments.length} حجز قادم:\n`;
                 confirmMessage += futureAppointments.slice(0, 6).map((appointment) => `- ${appointment.date || "-"} ${appointment.time || "-"} | ${appointment.service || "-"}`).join("\n");
                 if (futureAppointments.length > 6) confirmMessage += `\n- و ${futureAppointments.length - 6} حجوزات أخرى`;
             }
             if (userOrders.length) {
-                confirmMessage += `\n\nهذا الحساب لديه ${userOrders.length} طلب شراء وسيتم حذفه:\n`;
-                confirmMessage += userOrders.slice(0, 6).map((order) => `- ${order.productName || "طلب"} | ${order.price || "-"} ₪ | ${order.status || "-"}`).join("\n");
+                confirmMessage += `\n\nهذا الحساب لديه ${userOrders.length} طلب شراء وسيتم وضعها كسجلات محفوظة/ملغاة:\n`;
+                confirmMessage += userOrders.slice(0, 6).map((order) => `- ${order.productName || "طلب"} | ${formatIls(order.totalGross ?? order.price)} | ${order.status || "-"}`).join("\n");
                 if (userOrders.length > 6) confirmMessage += `\n- و ${userOrders.length - 6} طلبات أخرى`;
             }
             confirmMessage += "\n\nهل تريد المتابعة؟";
@@ -3003,11 +4385,27 @@
             if (!confirm(confirmMessage)) return;
 
             for (const appointment of futureAppointments) {
-                await deleteDoc(doc(db, "Appointments", appointment.id));
+                await updateDoc(doc(db, "Appointments", appointment.id), {
+                    status: "cancelled_by_admin_user_deleted",
+                    cancelledAt: new Date().toISOString(),
+                    cancellationSaved: true,
+                    legalLocked: true,
+                    retention: {
+                        keepForBookingHistory: true,
+                        source: "Firestore Appointments"
+                    }
+                });
             }
 
             for (const order of userOrders) {
-                await deleteDoc(doc(db, "Orders", order.id));
+                await updateDoc(doc(db, "Orders", order.id), {
+                    status: "cancelled_by_admin_user_deleted",
+                    cancelledAt: new Date().toISOString(),
+                    retention: {
+                        keepForAccountingAudit: true,
+                        source: "Firestore Orders"
+                    }
+                });
             }
 
             const reviewsSnapshot = await getDocs(collection(db, "Reviews"));

@@ -74,9 +74,11 @@
             .form-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/mobile-layout.css">
 </head>
 <body>
+    <a class="skip-link" href="#accountMain">تخطي إلى الحساب</a>
     <header>
         <img src="assets/logo-white.png" class="header-logo" alt="TOFIK ZAKOR">
         <nav>
@@ -125,7 +127,7 @@
         </div>
     </div>
 
-    <main class="container">
+    <main class="container" id="accountMain">
         <section class="account-card">
             <h1 data-i18n="accountInfoTitle">معلومات حسابي</h1>
             <p class="subtitle" data-i18n="accountInfoSubtitle">يمكنك رؤية وتعديل بياناتك هنا. قبل حفظ التعديل سنطلب تأكيد SMS، وتغيير كلمة المرور يتم عبر رسالة بريد إلكتروني.</p>
@@ -193,6 +195,10 @@
                 </div>
             </form>
         </section>
+        <div class="legal-links" aria-label="روابط قانونية" style="background:#000;padding:16px;border-radius:8px;">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms & Conditions</a>
+        </div>
     </main>
 
     <script type="module">
