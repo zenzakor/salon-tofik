@@ -12,7 +12,7 @@
         body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; display: flex; min-height: 100vh;}
         body.dark-mode { background-color: #151515; color: #f3f3f3; }
         body.dark-mode .main-content, body.dark-mode .add-box, body.dark-mode .appointments-topbar, body.dark-mode .pending-panel, body.dark-mode .calendar-panel, body.dark-mode .admin-booking-panel, body.dark-mode .user-tools, body.dark-mode .product-note, body.dark-mode table { background-color: #202020; color: #f3f3f3; border-color: #333; }
-        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode .sub-heading, body.dark-mode .pending-panel h2, body.dark-mode .calendar-panel h2, body.dark-mode .admin-booking-panel h2, body.dark-mode .appointments-topbar label, body.dark-mode .admin-booking-grid label, body.dark-mode .users-count { color: #f3f3f3; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode .sub-heading, body.dark-mode .pending-panel h2, body.dark-mode .calendar-panel h2, body.dark-mode .admin-booking-panel h2, body.dark-mode .appointments-topbar label, body.dark-mode .calendar-month-control, body.dark-mode .admin-booking-grid label, body.dark-mode .users-count { color: #f3f3f3; }
         body.dark-mode tr:hover { background-color: #252525; }
         body.dark-mode .calendar-day, body.dark-mode .booking-card, body.dark-mode .calendar-booking { background: #181818; border-color: #333; color: #f3f3f3; }
         body.dark-mode .calendar-day.selected { background: #1d1d2c; border-color: #7c7cff; box-shadow: inset 0 0 0 1px #7c7cff; }
@@ -86,6 +86,7 @@
         .penalty-badge.warning { background: linear-gradient(135deg, #92400e, #b45309); color: #fff7ed; }
         .deposit-badge { background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; margin-top: 6px; }
         .deposit-badge.active { background: #111827; color: #f8fafc; border-color: #c9a227; }
+        .customer-prepay-badge { margin-top: 0; margin-inline-start: 8px; vertical-align: middle; }
         .customer-risk-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #111827; color: #fff; border: 1px solid #111827; border-radius: 999px; padding: 8px 12px; font-weight: 800; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .customer-risk-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,0.18); }
         .customer-risk-btn .material-symbols-outlined { font-size: 18px; }
@@ -139,6 +140,10 @@
         .notification-btn { background: #000; color: white; border: none; padding: 11px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; }
         .notification-btn span { background: #ff4d4d; min-width: 24px; height: 24px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; padding: 0 7px; }
         .appointments-layout { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 18px; align-items: start; }
+        .calendar-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .calendar-panel-header h2 { margin: 0; }
+        .calendar-month-control { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
+        .calendar-month-control input { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; }
         .pending-panel, .calendar-panel { background: white; padding: 18px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; }
         .pending-panel h2, .calendar-panel h2, .sub-heading { margin-top: 0; font-size: 20px; color: #111; }
         .admin-booking-panel { background: white; padding: 18px; border-radius: 8px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd; }
@@ -325,6 +330,9 @@
                         <div id="pendingBookingsList" class="booking-list"></div>
                     </div>
                     <div class="calendar-panel">
+                        <div class="calendar-panel-header">
+                            <div id="calendarMonthSlot"></div>
+                        </div>
                         <h2 data-i18n="calendarTitle">تقويم الحجوزات</h2>
                         <div id="appointmentsCalendar" class="appointments-calendar"></div>
                     </div>
@@ -802,9 +810,8 @@
         function renderCustomerNameWithPenalty(appointment) {
             const customer = findUserForAppointment(appointment);
             const displayName = safeText(appointment?.customerName || adminT("unnamedCustomer", "Customer"));
-            if (!customer || isNoShowAppointment(appointment)) return displayName;
-            const points = getPenaltyPoints(customer);
-            return `${displayName} <span class="penalty-badge ${points >= 3 ? "warning" : ""}" title="${adminT("penaltyLabel", "points")}">${points}</span>`;
+            if (!customer || !requiresPartialPrepayment(customer)) return displayName;
+            return `${displayName} <span class="deposit-badge active customer-prepay-badge">${adminT("prepayToggle", "دفعة مسبقة")}</span>`;
         }
 
         function showAdminToast(title, body) {
@@ -890,7 +897,7 @@
             const depositState = document.getElementById("customerDepositState");
             depositState.textContent = prepaymentRequired ? adminT("prepayRequired", "Deposit required") : adminT("prepayNotRequired", "No deposit");
             depositState.classList.toggle("active", prepaymentRequired);
-            document.getElementById("customerPrepayToggle").checked = !!user.manualPrepaymentRequired;
+            document.getElementById("customerPrepayToggle").checked = prepaymentRequired;
         }
 
         function openCustomerPenaltyModal(userId) {
@@ -940,6 +947,15 @@
             populateAdminTimeSelects();
         }
 
+        function moveMonthChooserToCalendar() {
+            const monthInput = document.getElementById("appointmentsMonth");
+            const monthSlot = document.getElementById("calendarMonthSlot");
+            const monthLabel = monthInput?.closest("label");
+            if (!monthInput || !monthSlot || !monthLabel || monthLabel.parentElement === monthSlot) return;
+            monthLabel.classList.add("calendar-month-control");
+            monthSlot.appendChild(monthLabel);
+        }
+
         const adminContentElement = document.getElementById("adminContent");
         const adminMenuToggle = document.getElementById("adminMenuToggle");
         const adminSidebarBackdrop = document.getElementById("adminSidebarBackdrop");
@@ -979,6 +995,7 @@
             });
         });
         applyAdminSettings();
+        moveMonthChooserToCalendar();
 
         // نظام التبديل بين الأقسام
         window.switchTab = function(tabId) {
@@ -1178,19 +1195,27 @@
             await loadUsers();
         }
 
+        async function reverseAppointmentPenalty(appointment) {
+            if (!appointment?.penaltyApplied) return false;
+            if (!allUsers.length) await loadUsers();
+            const customer = findUserForAppointment(appointment);
+            if (!customer) return false;
+
+            const nextPoints = Math.max(0, getPenaltyPoints(customer) - 1);
+            const partialPrepaymentRequired = nextPoints >= 3 || !!customer.manualPrepaymentRequired;
+            await updateDoc(doc(db, "Users", customer.id), {
+                penaltyPoints: nextPoints,
+                partialPrepaymentRequired
+            });
+            customer.penaltyPoints = nextPoints;
+            customer.partialPrepaymentRequired = partialPrepaymentRequired;
+            return true;
+        }
+
         async function cancelAppointmentAbsence(appointment) {
             if (!appointment || !isNoShowAppointment(appointment)) return;
             if (!confirm(adminT("cancelAbsenceConfirm", "Cancel the absence mark for this booking?"))) return;
-            if (!allUsers.length) await loadUsers();
-            const customer = findUserForAppointment(appointment);
-            if (customer && appointment.penaltyApplied) {
-                const nextPoints = Math.max(0, getPenaltyPoints(customer) - 1);
-                const partialPrepaymentRequired = nextPoints >= 3 || !!customer.manualPrepaymentRequired;
-                await updateDoc(doc(db, "Users", customer.id), {
-                    penaltyPoints: nextPoints,
-                    partialPrepaymentRequired
-                });
-            }
+            await reverseAppointmentPenalty(appointment);
             await updateDoc(doc(db, "Appointments", appointment.id), {
                 status: "تم التأكيد",
                 noShow: false,
@@ -1301,7 +1326,7 @@
                     dayAppointments.forEach((appointment) => {
                         const item = document.createElement("div");
                         item.className = `calendar-booking ${getAppointmentStatusClass(appointment.status)}`;
-                        item.innerHTML = `<b>${appointment.time || "-"}</b><br>${renderCustomerNameWithPenalty(appointment)}<br>${appointment.service || "-"}`;
+                        item.innerHTML = `<b>${appointment.time || "-"}</b><br>${safeText(appointment.customerName || adminT("unnamedCustomer", "Customer"))}<br>${appointment.service || "-"}`;
                         item.onclick = (event) => {
                             event.stopPropagation();
                             selectAppointmentDate(dateKey);
@@ -1336,27 +1361,33 @@
                 const row = table.insertRow();
                 if (isNoShowAppointment(appointment)) row.classList.add("appointment-no-show-row");
                 const customerCell = row.insertCell(0);
+                customerCell.className = "appointment-no-glass-cell";
                 customerCell.dataset.label = adminT("customerHeader", "Customer");
                 customerCell.innerHTML = `<strong>${renderCustomerNameWithPenalty(appointment)}</strong><br><small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>`;
 
                 const serviceCell = row.insertCell(1);
+                serviceCell.className = "appointment-glass-cell";
                 serviceCell.dataset.label = adminT("serviceHeader", "Service");
                 serviceCell.innerHTML = appointment.service || "-";
 
                 const dateTimeCell = row.insertCell(2);
+                dateTimeCell.className = "appointment-glass-cell";
                 dateTimeCell.dataset.label = adminT("dateTimeHeader", "Date and time");
                 dateTimeCell.innerHTML = `${appointment.date || "-"}<br>${appointment.time || "-"}`;
 
                 const notesCell = row.insertCell(3);
+                notesCell.className = "appointment-glass-cell";
                 notesCell.dataset.label = adminT("notesHeader", "Notes");
                 notesCell.innerHTML = appointment.notes || "-";
 
                 const statusColor = statusClass === "accepted" ? "green" : (statusClass === "rejected" ? "red" : (statusClass === "no-show" ? "#64748b" : "#FF9800"));
                 const statusCell = row.insertCell(4);
+                statusCell.className = "appointment-glass-cell";
                 statusCell.dataset.label = adminT("statusHeader", "Status");
                 statusCell.innerHTML = `<span style="color:${statusColor}; font-weight:bold;">${displayAppointmentStatus(appointment.status)}</span>`;
 
                 const actionsCell = row.insertCell(5);
+                actionsCell.className = "appointment-no-glass-cell";
                 actionsCell.dataset.label = adminT("actionsHeader", "Actions");
                 renderAppointmentActions(actionsCell, appointment);
             });
@@ -1407,8 +1438,11 @@
 
         window.deleteAppointment = async function(appointmentId) {
             if (!confirm(adminT("deleteAppointmentConfirm", "هل تريد حذف هذا الحجز؟"))) return;
+            const appointment = allAppointments.find((item) => item.id === appointmentId);
+            const reversedPenalty = await reverseAppointmentPenalty(appointment);
             await deleteDoc(doc(db, "Appointments", appointmentId));
-            loadAppointments();
+            await loadAppointments();
+            if (reversedPenalty) await loadUsers();
         }
 
         document.getElementById("appointmentsMonth").addEventListener("change", () => {

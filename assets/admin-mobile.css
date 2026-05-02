@@ -531,10 +531,52 @@ html.mobile-view #selectedDayAppointmentsTable td:last-child::before {
     flex-basis: 100%;
 }
 
+html.mobile-view #selectedDayAppointmentsTable .appointment-no-show-row {
+    overflow: hidden;
+}
+
 html.mobile-view #selectedDayAppointmentsTable .appointment-no-show-row::after {
-    inset: 10px 16px;
+    inset: 86px 16px 92px;
     border-radius: 16px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     font-size: 124px;
+    z-index: 5;
+}
+
+html.mobile-view #selectedDayAppointmentsTable .appointment-no-show-row .appointment-glass-cell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    padding-inline: 8px;
+}
+
+html.mobile-view #selectedDayAppointmentsTable .appointment-no-show-row .appointment-glass-cell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    border: 1px solid rgba(100, 116, 139, 0.16);
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+}
+
+html.mobile-view #selectedDayAppointmentsTable .appointment-no-show-row .appointment-no-glass-cell {
+    filter: none;
+    color: inherit;
+}
+
+html.mobile-view body.dark-mode #selectedDayAppointmentsTable .appointment-no-show-row .appointment-glass-cell::after {
+    background: rgba(15, 23, 42, 0.22);
+    border-color: rgba(148, 163, 184, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.15);
 }
 
 html.mobile-view #selectedDayAppointmentsTable .empty-row {
