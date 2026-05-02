@@ -1055,6 +1055,7 @@
         let reviewsUnsubscribe = null;
         let reviewsRefreshTimer = null;
         let lastReviewsSignature = "";
+        const REVIEW_SLIDE_MS = 5000;
 
         function showNextReview() {
             const container = document.getElementById("reviewsSliderContainer");
@@ -1069,16 +1070,24 @@
             return review && review.status !== "pending" && review.status !== "hidden" && review.isPublished !== false;
         }
 
+        function ensureReviewSliderInterval() {
+            if (sliderInterval) return;
+            sliderInterval = setInterval(showNextReview, REVIEW_SLIDE_MS);
+        }
+
         function renderRealtimeReviews(publishedReviews) {
             const nextSignature = publishedReviews.map((review) => `${review.userId || ""}:${review.createdAt || ""}:${review.status || ""}:${review.isPublished}`).join("|");
+            const reviewsChanged = nextSignature !== lastReviewsSignature;
             allReviews = publishedReviews.length ? publishedReviews : fallbackReviews;
-            if (nextSignature !== lastReviewsSignature || reviewIndex >= allReviews.length) {
+            if (reviewsChanged || reviewIndex >= allReviews.length) {
                 reviewIndex = 0;
                 lastReviewsSignature = nextSignature;
+                showNextReview();
+                if(sliderInterval) clearInterval(sliderInterval);
+                sliderInterval = setInterval(showNextReview, REVIEW_SLIDE_MS);
+                return;
             }
-            showNextReview();
-            if(sliderInterval) clearInterval(sliderInterval);
-            sliderInterval = setInterval(showNextReview, 3500);
+            ensureReviewSliderInterval();
         }
 
         function collectPublishedReviews(querySnapshot) {
