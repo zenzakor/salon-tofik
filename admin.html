@@ -225,6 +225,90 @@
         .featured-checkbox { width: 22px; height: 22px; cursor: pointer; accent-color: #000;}
         .sale-badge { background: #ff4d4d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-right: 5px;}
         .old-price { text-decoration: line-through; color: #999; font-size: 13px; margin-left: 5px;}
+        .home-builder-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+        .home-builder-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .home-builder-actions a.btn-action { text-decoration: none; min-height: 44px; box-sizing: border-box; align-items: center; }
+        .home-builder-layout { display: grid; grid-template-columns: minmax(300px, 390px) minmax(360px, 1fr); gap: 18px; align-items: start; }
+        .home-builder-panel { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .home-builder-panel h2, .home-builder-panel h3 { margin-top: 0; color: #111; }
+        .home-add-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 16px; }
+        .home-add-row select, .home-add-row button { min-height: 44px; }
+        .home-section-list { display: grid; gap: 10px; }
+        .home-section-card { border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa; padding: 12px; cursor: grab; transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
+        .home-section-card:hover, .home-section-card.active { border-color: #111; box-shadow: 0 10px 24px rgba(17,24,39,0.1); }
+        .home-section-card.dragging { opacity: 0.55; transform: scale(0.99); }
+        .home-section-card.hidden-section { opacity: 0.62; }
+        .home-card-head { display: flex; align-items: flex-start; gap: 10px; justify-content: space-between; }
+        .home-card-title { display: grid; gap: 3px; min-width: 0; }
+        .home-card-title strong { color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .home-card-title small { color: #666; font-weight: bold; }
+        .home-card-handle { color: #64748b; font-size: 22px; line-height: 1; }
+        .home-card-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .home-card-actions .btn-action { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 7px 9px; }
+        .home-editor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .home-editor-grid .full { grid-column: 1 / -1; }
+        .home-editor-field { display: grid; gap: 6px; font-weight: bold; color: #444; font-size: 13px; }
+        .home-editor-field input, .home-editor-field textarea, .home-editor-field select { width: 100%; margin: 0; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .home-editor-field textarea { min-height: 104px; resize: vertical; line-height: 1.6; }
+        .home-editor-field input[type="color"] { height: 42px; padding: 4px; cursor: pointer; }
+        .home-style-toggle { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8fafc; font-weight: bold; color: #111; }
+        .home-style-toggle input { width: 20px; height: 20px; min-width: 20px; margin: 0; accent-color: #111; }
+        .home-style-toggle small { display: block; margin-top: 3px; color: #64748b; font-weight: normal; line-height: 1.4; }
+        .home-color-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .home-color-controls.disabled { opacity: 0.45; pointer-events: none; }
+        .home-color-swatches { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 2px; }
+        .home-color-swatch { width: 30px; height: 30px; border: 2px solid #fff; border-radius: 999px; box-shadow: 0 0 0 1px #cbd5e1; cursor: pointer; padding: 0; }
+        .home-color-swatch:hover, .home-color-swatch:focus { box-shadow: 0 0 0 2px #111; outline: none; }
+        .home-product-picker { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; background: #f8fafc; display: none; gap: 10px; }
+        .home-product-picker.open { display: grid; }
+        .home-product-picker-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .home-product-picker-head strong { color: #111; }
+        .home-product-search { width: 100%; margin: 0; padding: 11px 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 15px; background: #fff; }
+        .home-product-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; max-height: 240px; overflow-y: auto; padding: 2px; }
+        .home-product-choice { display: grid; grid-template-columns: auto 46px 1fr; gap: 10px; align-items: center; padding: 8px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; font-weight: bold; cursor: pointer; }
+        .home-product-choice input { width: 18px; height: 18px; min-width: 18px; margin: 0; accent-color: #111; }
+        .home-product-choice img { width: 46px; height: 46px; object-fit: contain; border-radius: 7px; background: #fff; border: 1px solid #e5e7eb; }
+        .home-product-choice span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .home-product-choice small { color: #64748b; font-weight: normal; }
+        .home-editor-empty { color: #777; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 18px; text-align: center; }
+        .home-preview-frame { background: #f2f4f7; border: 1px solid #d9dee7; border-radius: 8px; padding: 16px; overflow: hidden; }
+        .home-preview-canvas { background: #f5f5f5; border-radius: 8px; max-width: 430px; min-height: 520px; margin: 0 auto; padding: 12px; box-shadow: 0 16px 40px rgba(15,23,42,0.14); transform-origin: top center; }
+        .home-preview-section { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 18px; margin-bottom: 12px; text-align: center; overflow: hidden; }
+        .home-preview-section.hero, .home-preview-section.banner { background: #111; color: #fff; padding: 26px 16px; }
+        .home-preview-section.hidden-preview { opacity: 0.35; filter: grayscale(1); }
+        .home-preview-section h3 { margin: 0 0 8px; font-size: 18px; color: inherit; }
+        .home-preview-section p { margin: 0 auto 12px; color: inherit; line-height: 1.55; font-size: 13px; max-width: 340px; }
+        .home-preview-image { width: 100%; max-height: 140px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; }
+        .home-preview-button { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; padding: 0 14px; border-radius: 999px; background: #111; color: #fff; font-weight: bold; font-size: 12px; }
+        .home-preview-section.hero .home-preview-button, .home-preview-section.banner .home-preview-button { background: #fff; color: #111; }
+        .home-preview-products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+        .home-preview-product { height: 58px; border-radius: 8px; background: #f1f5f9; border: 1px solid #e2e8f0; }
+        .home-preview-services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+        .home-preview-service { min-height: 38px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 5px; }
+        body.dark-mode .home-builder-panel, body.dark-mode .home-preview-canvas, body.dark-mode .home-section-card { background: #202020; color: #f3f3f3; border-color: #333; }
+        body.dark-mode .home-builder-panel h2, body.dark-mode .home-builder-panel h3, body.dark-mode .home-card-title strong, body.dark-mode .home-editor-field { color: #f3f3f3; }
+        body.dark-mode .home-card-title small, body.dark-mode .home-card-handle { color: #cfcfcf; }
+        body.dark-mode .home-style-toggle { background: #181818; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .home-style-toggle small { color: #cfcfcf; }
+        body.dark-mode .home-product-picker { background: #181818; border-color: #333; }
+        body.dark-mode .home-product-picker-head strong { color: #f3f3f3; }
+        body.dark-mode .home-product-search { background: #202020; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .home-product-choice { background: #202020; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .home-product-choice small { color: #cfcfcf; }
+        body.dark-mode .home-editor-empty, body.dark-mode .home-preview-frame { background: #181818; border-color: #333; color: #d1d5db; }
+        body.dark-mode .home-preview-section { background: #222; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .home-preview-product, body.dark-mode .home-preview-service { background: #181818; border-color: #333; }
+        @media (max-width: 1120px) {
+            .home-builder-layout { grid-template-columns: 1fr; }
+            .home-preview-canvas { max-width: 100%; }
+        }
+        @media (max-width: 720px) {
+            .home-builder-toolbar, .home-builder-actions, .home-card-actions { align-items: stretch; flex-direction: column; }
+            .home-builder-actions .btn-action, .home-card-actions .btn-action, .home-add-row { width: 100%; }
+            .home-add-row { grid-template-columns: 1fr; }
+            .home-editor-grid { grid-template-columns: 1fr; }
+            .home-color-controls { grid-template-columns: 1fr; }
+        }
         .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1200; }
         .settings-drawer-overlay.open { display: block; }
         .settings-drawer { position: fixed; top: 0; left: 0; height: 100vh; width: min(360px, 92vw); background: #fff; color: #222; padding: 28px; box-sizing: border-box; box-shadow: 8px 0 30px rgba(0,0,0,0.25); transform: translateX(-105%); transition: transform 0.25s ease; overflow-y: auto; }
@@ -274,6 +358,7 @@
             <a class="nav-link active" onclick="switchTab('appointments')"><span class="material-symbols-outlined">calendar_month</span> <span data-i18n="appointments">المواعيد</span> <span id="pendingBookingsBadge" class="nav-badge" style="display:none;">0</span></a>
             <a class="nav-link" onclick="switchTab('orders')"><span class="material-symbols-outlined">shopping_cart</span> <span data-i18n="orders">الطلبات المشتراة</span></a>
             <a class="nav-link" onclick="switchTab('products')"><span class="material-symbols-outlined">inventory_2</span> <span data-i18n="products">المتجر والمنتجات</span></a>
+            <a class="nav-link" onclick="switchTab('home-builder')"><span class="material-symbols-outlined">dashboard_customize</span> <span data-admin-text="homeBuilderNav">تعديل الصفحة الرئيسية</span></a>
             <a class="nav-link" onclick="switchTab('accounts')"><span class="material-symbols-outlined">group</span> <span data-i18n="accounts">حسابات الزبائن</span></a>
             <a class="nav-link" onclick="switchTab('reviews')"><span class="material-symbols-outlined">star</span> <span data-i18n="reviews">التقييمات</span></a>
             <a class="nav-link" id="adminSettingsBtn"><span class="material-symbols-outlined">settings</span> <span data-i18n="settings">الإعدادات</span></a>
@@ -382,6 +467,132 @@
                 <table id="productsTable"></table>
             </div>
 
+            <div id="home-builder" class="admin-section">
+                <div class="home-builder-toolbar">
+                    <h1 data-admin-text="homeBuilderTitle">تعديل الصفحة الرئيسية</h1>
+                    <div class="home-builder-actions">
+                        <a id="previewHomePageBtn" class="btn-action btn-sale" href="index.html?homePreview=1#home" target="_blank" rel="noopener">
+                            <span class="material-symbols-outlined">visibility</span>
+                            <span data-admin-text="homePreviewButton">Preview</span>
+                        </a>
+                        <button id="saveHomePageBtn" class="btn-action btn-update" type="button">
+                            <span class="material-symbols-outlined">save</span>
+                            <span data-admin-text="homeSaveButton">Save Changes</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="home-builder-layout">
+                    <div class="home-builder-panel">
+                        <h2 data-admin-text="homeSectionsTitle">الأقسام</h2>
+                        <div class="home-add-row">
+                            <select id="homeNewSectionType" aria-label="Section type">
+                                <option value="text" data-admin-text="homeTypeText">Text Box</option>
+                                <option value="image" data-admin-text="homeTypeImage">Image Box</option>
+                                <option value="products" data-admin-text="homeTypeProducts">Product Section</option>
+                                <option value="offer" data-admin-text="homeTypeOffer">Offer Section</option>
+                                <option value="service" data-admin-text="homeTypeService">Service Section</option>
+                                <option value="banner" data-admin-text="homeTypeBanner">Banner / Hero Section</option>
+                            </select>
+                            <button id="addHomeSectionBtn" class="btn-add" type="button" data-admin-text="homeAddSection">إضافة</button>
+                        </div>
+                        <div id="homeSectionList" class="home-section-list"></div>
+                    </div>
+
+                    <div class="home-builder-panel">
+                        <h2 data-admin-text="homeEditTitle">Edit Section</h2>
+                        <div id="homeEditorEmpty" class="home-editor-empty" data-admin-text="homeEditorEmpty">اختر قسمًا من القائمة لتعديله.</div>
+                        <div id="homeEditorForm" class="home-editor-grid" style="display:none;">
+                            <label class="home-editor-field">
+                                <span data-admin-text="homeFieldType">Type</span>
+                                <select id="homeSectionType">
+                                    <option value="hero" data-admin-text="homeTypeHero">Hero</option>
+                                    <option value="banner" data-admin-text="homeTypeBanner">Banner / Hero Section</option>
+                                    <option value="text" data-admin-text="homeTypeText">Text Box</option>
+                                    <option value="image" data-admin-text="homeTypeImage">Image Box</option>
+                                    <option value="products" data-admin-text="homeTypeProducts">Product Section</option>
+                                    <option value="offer" data-admin-text="homeTypeOffer">Offer Section</option>
+                                    <option value="service" data-admin-text="homeTypeService">Service Section</option>
+                                    <option value="reviews" data-admin-text="homeTypeReviews">Reviews Section</option>
+                                </select>
+                            </label>
+                            <label class="home-editor-field">
+                                <span data-admin-text="homeFieldVisible">Visible</span>
+                                <select id="homeSectionVisible">
+                                    <option value="true" data-admin-text="homeVisible">Show</option>
+                                    <option value="false" data-admin-text="homeHidden">Hide</option>
+                                </select>
+                            </label>
+                            <label class="home-editor-field full">
+                                <span data-admin-text="homeFieldTitle">Title</span>
+                                <input id="homeSectionTitle" type="text">
+                            </label>
+                            <label class="home-editor-field full">
+                                <span data-admin-text="homeFieldDescription">Description</span>
+                                <textarea id="homeSectionDescription"></textarea>
+                            </label>
+                            <label class="home-editor-field">
+                                <span data-admin-text="homeFieldButtonText">Button text</span>
+                                <input id="homeSectionButtonText" type="text">
+                            </label>
+                            <label class="home-editor-field">
+                                <span data-admin-text="homeFieldButtonLink">Button link</span>
+                                <input id="homeSectionButtonLink" type="text" dir="ltr">
+                            </label>
+                            <label class="home-editor-field full">
+                                <span data-admin-text="homeFieldImage">Image URL</span>
+                                <input id="homeSectionImageUrl" type="url" dir="ltr">
+                            </label>
+                            <div id="homeProductPicker" class="home-product-picker full">
+                                <div class="home-product-picker-head">
+                                    <strong data-admin-text="homeChooseProducts">Choose products for this section</strong>
+                                    <small id="homeSelectedProductsCount">0</small>
+                                </div>
+                                <input id="homeProductSearch" class="home-product-search" type="search" placeholder="Search products by name" data-admin-placeholder="homeProductSearchPlaceholder">
+                                <div id="homeProductList" class="home-product-list"></div>
+                                <small data-admin-text="homeProductFallback">If nothing is selected, this section will use the featured products.</small>
+                            </div>
+                            <label class="home-style-toggle full">
+                                <input id="homeKeepOriginalStyle" type="checkbox" checked>
+                                <span>
+                                    <span data-admin-text="homeKeepOriginal">Keep like original</span>
+                                    <small data-admin-text="homeKeepOriginalHelp">Uses the original site colors and follows dark/light mode.</small>
+                                </span>
+                            </label>
+                            <div id="homeCustomColorControls" class="home-color-controls full">
+                                <label class="home-editor-field">
+                                    <span data-admin-text="homeFieldBg">Background</span>
+                                    <input id="homeSectionBgColor" type="color">
+                                    <div class="home-color-swatches" aria-label="Background presets">
+                                        <button class="home-color-swatch" type="button" data-home-color-target="background" data-home-color-value="#ffffff" style="background:#ffffff;"></button>
+                                        <button class="home-color-swatch" type="button" data-home-color-target="background" data-home-color-value="#111111" style="background:#111111;"></button>
+                                        <button class="home-color-swatch" type="button" data-home-color-target="background" data-home-color-value="#f8fafc" style="background:#f8fafc;"></button>
+                                        <button class="home-color-swatch" type="button" data-home-color-target="background" data-home-color-value="#fff7ed" style="background:#fff7ed;"></button>
+                                    </div>
+                                </label>
+                                <label class="home-editor-field">
+                                    <span data-admin-text="homeFieldTextColor">Text color</span>
+                                    <input id="homeSectionTextColor" type="color">
+                                    <div class="home-color-swatches" aria-label="Text presets">
+                                        <button class="home-color-swatch" type="button" data-home-color-target="text" data-home-color-value="#222222" style="background:#222222;"></button>
+                                        <button class="home-color-swatch" type="button" data-home-color-target="text" data-home-color-value="#ffffff" style="background:#ffffff;"></button>
+                                        <button class="home-color-swatch" type="button" data-home-color-target="text" data-home-color-value="#b45309" style="background:#b45309;"></button>
+                                        <button class="home-color-swatch" type="button" data-home-color-target="text" data-home-color-value="#0f766e" style="background:#0f766e;"></button>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="home-builder-panel" style="grid-column: 1 / -1;">
+                        <h2 data-admin-text="homeLivePreviewTitle">معاينة الصفحة</h2>
+                        <div class="home-preview-frame">
+                            <div id="homePreviewCanvas" class="home-preview-canvas"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="accounts" class="admin-section">
                 <h1 data-i18n="accountsTitle">👥 حسابات الزبائن المسجلين</h1>
                 <div class="add-box admin-create-user-panel">
@@ -481,7 +692,7 @@
 
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, setDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, addDoc, setDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword, deleteUser as deleteAuthUser, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const THE_ADMIN_EMAIL = "admin@tofik.com"; 
@@ -495,6 +706,11 @@
         let selectedAppointmentDate = "";
         let selectedPenaltyUserId = "";
         let adminRealtimeUnsubscribes = [];
+        let homeBuilderSections = [];
+        let homeBuilderProducts = [];
+        let selectedHomeSectionId = "";
+        let draggedHomeSectionId = "";
+        let homeBuilderLoaded = false;
 
         const adminText = {
             ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
@@ -691,6 +907,148 @@
             reviewPending: "Awaiting approval",
             reviewPublished: "Published",
             reviewHidden: "Unpublished"
+        });
+
+        Object.assign(adminDynamicText.ar, {
+            homeBuilderNav: "تعديل الصفحة الرئيسية",
+            homeBuilderTitle: "تعديل الصفحة الرئيسية",
+            homePreviewButton: "Preview",
+            homeSaveButton: "Save Changes",
+            homeSectionsTitle: "الأقسام",
+            homeAddSection: "إضافة",
+            homeEditTitle: "Edit Section",
+            homeEditorEmpty: "اختر قسمًا من القائمة لتعديله.",
+            homeLivePreviewTitle: "معاينة الصفحة",
+            homeTypeHero: "Hero",
+            homeTypeBanner: "Banner / Hero Section",
+            homeTypeText: "Text Box",
+            homeTypeImage: "Image Box",
+            homeTypeProducts: "Product Section",
+            homeTypeOffer: "Offer Section",
+            homeTypeService: "Service Section",
+            homeTypeReviews: "Reviews Section",
+            homeFieldType: "Type",
+            homeFieldVisible: "Visible",
+            homeFieldTitle: "Title",
+            homeFieldDescription: "Description",
+            homeFieldButtonText: "Button text",
+            homeFieldButtonLink: "Button link",
+            homeFieldImage: "Image URL",
+            homeFieldBg: "Background",
+            homeFieldTextColor: "Text color",
+            homeKeepOriginal: "Keep like original",
+            homeKeepOriginalHelp: "Uses the original site colors and follows dark/light mode.",
+            homeChooseProducts: "Choose products for this section",
+            homeProductSearchPlaceholder: "Search products by name",
+            homeProductFallback: "If nothing is selected, this section will use the featured products.",
+            homeNoProducts: "No products in the shop yet.",
+            homeSelectedProducts: "selected products",
+            homeVisible: "Show",
+            homeHidden: "Hide",
+            homeEdit: "Edit",
+            homeHide: "Hide",
+            homeShow: "Show",
+            homeDuplicate: "Duplicate",
+            homeMoveUp: "Move Up",
+            homeMoveDown: "Move Down",
+            homeSavedAlert: "تم حفظ تغييرات الصفحة الرئيسية بنجاح.",
+            homeSaveError: "تعذر حفظ التغييرات. حاول مرة أخرى.",
+            homeDeleteConfirm: "حذف هذا القسم من الصفحة الرئيسية؟",
+            homeResetConfirm: "إعادة تحميل آخر نسخة محفوظة؟ سيتم فقدان التعديلات غير المحفوظة."
+        });
+        Object.assign(adminDynamicText.he, {
+            homeBuilderNav: "עריכת דף הבית",
+            homeBuilderTitle: "עריכת דף הבית",
+            homePreviewButton: "Preview",
+            homeSaveButton: "Save Changes",
+            homeSectionsTitle: "מקטעים",
+            homeAddSection: "הוספה",
+            homeEditTitle: "Edit Section",
+            homeEditorEmpty: "בחרי מקטע לעריכה.",
+            homeLivePreviewTitle: "תצוגה מקדימה",
+            homeTypeHero: "Hero",
+            homeTypeBanner: "Banner / Hero Section",
+            homeTypeText: "Text Box",
+            homeTypeImage: "Image Box",
+            homeTypeProducts: "Product Section",
+            homeTypeOffer: "Offer Section",
+            homeTypeService: "Service Section",
+            homeTypeReviews: "Reviews Section",
+            homeFieldType: "Type",
+            homeFieldVisible: "Visible",
+            homeFieldTitle: "Title",
+            homeFieldDescription: "Description",
+            homeFieldButtonText: "Button text",
+            homeFieldButtonLink: "Button link",
+            homeFieldImage: "Image URL",
+            homeFieldBg: "Background",
+            homeFieldTextColor: "Text color",
+            homeKeepOriginal: "Keep like original",
+            homeKeepOriginalHelp: "Uses the original site colors and follows dark/light mode.",
+            homeChooseProducts: "Choose products for this section",
+            homeProductSearchPlaceholder: "Search products by name",
+            homeProductFallback: "If nothing is selected, this section will use the featured products.",
+            homeNoProducts: "No products in the shop yet.",
+            homeSelectedProducts: "selected products",
+            homeVisible: "Show",
+            homeHidden: "Hide",
+            homeEdit: "Edit",
+            homeHide: "Hide",
+            homeShow: "Show",
+            homeDuplicate: "Duplicate",
+            homeMoveUp: "Move Up",
+            homeMoveDown: "Move Down",
+            homeSavedAlert: "דף הבית נשמר בהצלחה.",
+            homeSaveError: "לא ניתן היה לשמור את השינויים.",
+            homeDeleteConfirm: "למחוק את המקטע מדף הבית?",
+            homeResetConfirm: "לטעון מחדש את הגרסה השמורה? שינויים שלא נשמרו יאבדו."
+        });
+        Object.assign(adminDynamicText.en, {
+            homeBuilderNav: "Home Page Editor",
+            homeBuilderTitle: "Home Page Editor",
+            homePreviewButton: "Preview",
+            homeSaveButton: "Save Changes",
+            homeSectionsTitle: "Sections",
+            homeAddSection: "Add",
+            homeEditTitle: "Edit Section",
+            homeEditorEmpty: "Choose a section from the list to edit it.",
+            homeLivePreviewTitle: "Live Preview",
+            homeTypeHero: "Hero",
+            homeTypeBanner: "Banner / Hero Section",
+            homeTypeText: "Text Box",
+            homeTypeImage: "Image Box",
+            homeTypeProducts: "Product Section",
+            homeTypeOffer: "Offer Section",
+            homeTypeService: "Service Section",
+            homeTypeReviews: "Reviews Section",
+            homeFieldType: "Type",
+            homeFieldVisible: "Visible",
+            homeFieldTitle: "Title",
+            homeFieldDescription: "Description",
+            homeFieldButtonText: "Button text",
+            homeFieldButtonLink: "Button link",
+            homeFieldImage: "Image URL",
+            homeFieldBg: "Background",
+            homeFieldTextColor: "Text color",
+            homeKeepOriginal: "Keep like original",
+            homeKeepOriginalHelp: "Uses the original site colors and follows dark/light mode.",
+            homeChooseProducts: "Choose products for this section",
+            homeProductSearchPlaceholder: "Search products by name",
+            homeProductFallback: "If nothing is selected, this section will use the featured products.",
+            homeNoProducts: "No products in the shop yet.",
+            homeSelectedProducts: "selected products",
+            homeVisible: "Show",
+            homeHidden: "Hide",
+            homeEdit: "Edit",
+            homeHide: "Hide",
+            homeShow: "Show",
+            homeDuplicate: "Duplicate",
+            homeMoveUp: "Move Up",
+            homeMoveDown: "Move Down",
+            homeSavedAlert: "Home page changes were saved successfully.",
+            homeSaveError: "Could not save the changes. Please try again.",
+            homeDeleteConfirm: "Delete this section from the home page?",
+            homeResetConfirm: "Reload the last saved version? Unsaved edits will be lost."
         });
 
         Object.assign(adminDynamicText.ar, {
@@ -1058,6 +1416,7 @@
                 element.placeholder = adminT(key, element.placeholder);
             });
             populateAdminTimeSelects();
+            if (homeBuilderLoaded) renderHomeBuilder();
         }
 
         function moveMonthChooserToCalendar() {
@@ -1159,11 +1518,573 @@
 
         function loadAllData() {
             ensureAdminNavBadges();
-            loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews();
+            loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews(); loadHomePageBuilder();
             startAdminRealtimeListeners();
             populateAdminTimeSelects();
             document.getElementById("adminBookingDate").value = getTodayValue();
         }
+
+        const HOME_PAGE_DOC = ["SiteContent", "homePage"];
+        const HOME_PAGE_PREVIEW_KEY = "salonHomePagePreviewDraft";
+
+        function createHomeSectionId() {
+            if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+            return `home-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        }
+
+        function getDefaultHomeBuilderSections() {
+            return [
+                {
+                    id: "hero",
+                    systemKey: "hero",
+                    type: "hero",
+                    title: "صالون توفيق للأناقة والجمال",
+                    description: "وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.",
+                    buttonText: "احجزي موعدك الآن 📅",
+                    buttonLink: "book.html",
+                    backgroundColor: "#111111",
+                    textColor: "#ffffff",
+                    useOriginalStyle: true,
+                    visible: true
+                },
+                {
+                    id: "products",
+                    systemKey: "products",
+                    type: "products",
+                    title: "🛍️ تشكيلة من منتجاتنا",
+                    description: "اكتشفي أفضل منتجات العناية المتوفرة لدينا.",
+                    buttonText: "عرض كل المنتجات وشراؤها 🛒",
+                    buttonLink: "shop.html",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true,
+                    visible: true
+                },
+                {
+                    id: "about",
+                    systemKey: "about",
+                    type: "text",
+                    title: "✨ عن صالون توفيق",
+                    description: "تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا المكون من أمهر الخبراء والمصففين يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true,
+                    visible: true
+                },
+                {
+                    id: "reviews",
+                    systemKey: "reviews",
+                    type: "reviews",
+                    title: "⭐ ماذا يقول زبائننا عنّا",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true,
+                    visible: true
+                }
+            ];
+        }
+
+        function getHomeTemplate(type) {
+            const templates = {
+                text: {
+                    type: "text",
+                    title: "عنوان جديد",
+                    description: "اكتب وصف القسم هنا.",
+                    buttonText: "",
+                    buttonLink: "",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true
+                },
+                image: {
+                    type: "image",
+                    title: "Image Box",
+                    description: "أضف صورة ونصًا قصيرًا لهذا القسم.",
+                    imageUrl: "",
+                    buttonText: "",
+                    buttonLink: "",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true
+                },
+                products: {
+                    type: "products",
+                    title: "🛍️ منتجات مختارة",
+                    description: "يعرض هذا القسم المنتجات المميزة التي تختارها من إدارة المنتجات.",
+                    buttonText: "عرض المتجر",
+                    buttonLink: "shop.html",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true
+                },
+                offer: {
+                    type: "offer",
+                    title: "عرض خاص",
+                    description: "اكتب تفاصيل العرض ومدة توفره هنا.",
+                    buttonText: "احجزي العرض",
+                    buttonLink: "book.html",
+                    backgroundColor: "#fff7ed",
+                    textColor: "#222222",
+                    useOriginalStyle: true
+                },
+                service: {
+                    type: "service",
+                    title: "خدماتنا",
+                    description: "قص وتصفيف، صبغات، عناية بالشعر",
+                    buttonText: "احجزي موعد",
+                    buttonLink: "book.html",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true
+                },
+                banner: {
+                    type: "banner",
+                    title: "Banner / Hero Section",
+                    description: "قسم بارز للرسائل المهمة أو الحملات.",
+                    buttonText: "المزيد",
+                    buttonLink: "book.html",
+                    backgroundColor: "#111111",
+                    textColor: "#ffffff",
+                    useOriginalStyle: true
+                },
+                hero: {
+                    type: "hero",
+                    title: "Hero Section",
+                    description: "اكتب نصًا جذابًا يظهر في أول الصفحة.",
+                    buttonText: "احجزي الآن",
+                    buttonLink: "book.html",
+                    backgroundColor: "#111111",
+                    textColor: "#ffffff",
+                    useOriginalStyle: true
+                },
+                reviews: {
+                    type: "reviews",
+                    title: "⭐ تقييمات الزبائن",
+                    description: "",
+                    backgroundColor: "#ffffff",
+                    textColor: "#222222",
+                    useOriginalStyle: true
+                }
+            };
+            return { ...(templates[type] || templates.text) };
+        }
+
+        function normalizeHomeBuilderSections(sections) {
+            const defaults = getDefaultHomeBuilderSections();
+            const incoming = Array.isArray(sections) ? sections : [];
+            const normalized = incoming.map((section, index) => {
+                const fallback = defaults.find((item) => item.id === section?.id || item.systemKey === section?.systemKey) || getHomeTemplate(section?.type || "text");
+                return {
+                    ...fallback,
+                    ...section,
+                    id: section?.id || fallback.id || createHomeSectionId(),
+                    type: section?.type || fallback.type || "text",
+                    title: section?.title ?? fallback.title ?? "",
+                    description: section?.description ?? fallback.description ?? "",
+                    buttonText: section?.buttonText ?? fallback.buttonText ?? "",
+                    buttonLink: section?.buttonLink ?? fallback.buttonLink ?? "",
+                    imageUrl: section?.imageUrl ?? fallback.imageUrl ?? "",
+                    productIds: Array.isArray(section?.productIds) ? section.productIds.map(String) : [],
+                    backgroundColor: section?.backgroundColor || fallback.backgroundColor || "#ffffff",
+                    textColor: section?.textColor || fallback.textColor || "#222222",
+                    useOriginalStyle: section?.useOriginalStyle !== false,
+                    visible: section?.visible !== false,
+                    sortOrder: index
+                };
+            });
+
+            defaults.forEach((fallback) => {
+                if (!normalized.some((section) => section.id === fallback.id || section.systemKey === fallback.systemKey)) {
+                    normalized.push({ ...fallback, sortOrder: normalized.length });
+                }
+            });
+
+            return normalized;
+        }
+
+        function getHomeSectionTypeLabel(type) {
+            const labels = {
+                hero: adminT("homeTypeHero", "Hero"),
+                banner: adminT("homeTypeBanner", "Banner / Hero Section"),
+                text: adminT("homeTypeText", "Text Box"),
+                image: adminT("homeTypeImage", "Image Box"),
+                products: adminT("homeTypeProducts", "Product Section"),
+                offer: adminT("homeTypeOffer", "Offer Section"),
+                service: adminT("homeTypeService", "Service Section"),
+                reviews: adminT("homeTypeReviews", "Reviews Section")
+            };
+            return labels[type] || type;
+        }
+
+        function getSelectedHomeSection() {
+            return homeBuilderSections.find((section) => section.id === selectedHomeSectionId) || null;
+        }
+
+        async function loadHomePageBuilder(force = false) {
+            if (homeBuilderLoaded && !force) return;
+            try {
+                const snap = await getDoc(doc(db, HOME_PAGE_DOC[0], HOME_PAGE_DOC[1]));
+                const sections = snap.exists() ? snap.data().sections : null;
+                homeBuilderSections = normalizeHomeBuilderSections(sections);
+            } catch (error) {
+                console.warn("Home page builder could not load:", error);
+                homeBuilderSections = normalizeHomeBuilderSections();
+            }
+            homeBuilderLoaded = true;
+            if (!selectedHomeSectionId || !getSelectedHomeSection()) selectedHomeSectionId = homeBuilderSections[0]?.id || "";
+            renderHomeBuilder();
+        }
+
+        function moveHomeSection(fromIndex, toIndex) {
+            if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex || toIndex >= homeBuilderSections.length) return;
+            const [section] = homeBuilderSections.splice(fromIndex, 1);
+            homeBuilderSections.splice(toIndex, 0, section);
+            renderHomeBuilder();
+        }
+
+        function renderHomeSectionList() {
+            const list = document.getElementById("homeSectionList");
+            if (!list) return;
+            list.innerHTML = "";
+
+            homeBuilderSections.forEach((section, index) => {
+                const card = document.createElement("div");
+                card.className = `home-section-card ${section.id === selectedHomeSectionId ? "active" : ""} ${section.visible === false ? "hidden-section" : ""}`;
+                card.draggable = true;
+                card.dataset.sectionId = section.id;
+                card.innerHTML = `
+                    <div class="home-card-head">
+                        <span class="material-symbols-outlined home-card-handle">drag_indicator</span>
+                        <div class="home-card-title">
+                            <strong>${safeText(section.title || getHomeSectionTypeLabel(section.type))}</strong>
+                            <small>${safeText(getHomeSectionTypeLabel(section.type))}${section.visible === false ? ` · ${adminT("homeHidden", "Hide")}` : ""}</small>
+                        </div>
+                    </div>
+                    <div class="home-card-actions"></div>
+                `;
+
+                card.addEventListener("click", (event) => {
+                    if (event.target.closest("button")) return;
+                    selectedHomeSectionId = section.id;
+                    renderHomeBuilder();
+                });
+                card.addEventListener("dragstart", () => {
+                    draggedHomeSectionId = section.id;
+                    card.classList.add("dragging");
+                });
+                card.addEventListener("dragend", () => {
+                    draggedHomeSectionId = "";
+                    card.classList.remove("dragging");
+                });
+                card.addEventListener("dragover", (event) => event.preventDefault());
+                card.addEventListener("drop", (event) => {
+                    event.preventDefault();
+                    const fromIndex = homeBuilderSections.findIndex((item) => item.id === draggedHomeSectionId);
+                    moveHomeSection(fromIndex, index);
+                });
+
+                const actions = card.querySelector(".home-card-actions");
+                const actionButtons = [
+                    { key: "homeEdit", icon: "edit", className: "btn-update", handler: () => { selectedHomeSectionId = section.id; renderHomeBuilder(); } },
+                    { key: section.visible === false ? "homeShow" : "homeHide", icon: section.visible === false ? "visibility" : "visibility_off", className: "btn-sale", handler: () => { section.visible = section.visible === false; renderHomeBuilder(); } },
+                    { key: "homeDuplicate", icon: "content_copy", className: "btn-update", handler: () => duplicateHomeSection(section.id) },
+                    { key: "homeMoveUp", icon: "arrow_upward", className: "btn-restore", handler: () => moveHomeSection(index, index - 1), disabled: index === 0 },
+                    { key: "homeMoveDown", icon: "arrow_downward", className: "btn-restore", handler: () => moveHomeSection(index, index + 1), disabled: index === homeBuilderSections.length - 1 },
+                    { key: "delete", icon: "delete", className: "btn-delete", handler: () => deleteHomeSection(section.id) }
+                ];
+
+                actionButtons.forEach((action) => {
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.className = `btn-action ${action.className}`;
+                    button.disabled = !!action.disabled;
+                    button.innerHTML = `<span class="material-symbols-outlined">${action.icon}</span><span>${adminT(action.key, action.key)}</span>`;
+                    button.addEventListener("click", action.handler);
+                    actions.appendChild(button);
+                });
+
+                list.appendChild(card);
+            });
+        }
+
+        function renderHomeEditor() {
+            const section = getSelectedHomeSection();
+            const form = document.getElementById("homeEditorForm");
+            const empty = document.getElementById("homeEditorEmpty");
+            if (!form || !empty) return;
+            form.style.display = section ? "grid" : "none";
+            empty.style.display = section ? "none" : "block";
+            if (!section) return;
+
+            document.getElementById("homeSectionType").value = section.type || "text";
+            document.getElementById("homeSectionType").disabled = !!section.systemKey;
+            document.getElementById("homeSectionVisible").value = section.visible === false ? "false" : "true";
+            document.getElementById("homeSectionTitle").value = section.title || "";
+            document.getElementById("homeSectionDescription").value = section.description || "";
+            document.getElementById("homeSectionButtonText").value = section.buttonText || "";
+            document.getElementById("homeSectionButtonLink").value = section.buttonLink || "";
+            document.getElementById("homeSectionImageUrl").value = section.imageUrl || "";
+            document.getElementById("homeKeepOriginalStyle").checked = section.useOriginalStyle !== false;
+            document.getElementById("homeSectionBgColor").value = section.backgroundColor || "#ffffff";
+            document.getElementById("homeSectionTextColor").value = section.textColor || "#222222";
+            updateHomeColorControlState();
+            renderHomeProductPicker(section);
+        }
+
+        function renderHomeProductPicker(section) {
+            const picker = document.getElementById("homeProductPicker");
+            const list = document.getElementById("homeProductList");
+            const count = document.getElementById("homeSelectedProductsCount");
+            const search = document.getElementById("homeProductSearch");
+            if (!picker || !list || !count) return;
+            const isProductSection = section?.type === "products";
+            picker.classList.toggle("open", isProductSection);
+            if (!isProductSection) return;
+
+            const selectedIds = new Set((section.productIds || []).map(String));
+            count.textContent = `${selectedIds.size} ${adminT("homeSelectedProducts", "selected products")}`;
+            const searchTerm = String(search?.value || "").trim().toLowerCase();
+            const visibleProducts = searchTerm
+                ? homeBuilderProducts.filter((product) => String(product.name || "").toLowerCase().includes(searchTerm))
+                : homeBuilderProducts;
+
+            if (!visibleProducts.length) {
+                list.innerHTML = `<div class="home-editor-empty">${adminT("homeNoProducts", "No products in the shop yet.")}</div>`;
+                return;
+            }
+
+            list.innerHTML = "";
+            visibleProducts.forEach((product) => {
+                const label = document.createElement("label");
+                label.className = "home-product-choice";
+                const imgUrl = product.imageUrl || "https://via.placeholder.com/80?text=No+Image";
+                label.innerHTML = `
+                    <input type="checkbox" value="${safeText(product.id)}" ${selectedIds.has(String(product.id)) ? "checked" : ""}>
+                    <img src="${safeText(imgUrl)}" alt="">
+                    <span>${safeText(product.name || adminT("productHeader", "Product"))}<br><small>${safeText(product.price ?? "")} ₪</small></span>
+                `;
+                label.querySelector("input").addEventListener("change", syncHomeProductSelection);
+                list.appendChild(label);
+            });
+        }
+
+        function syncHomeProductSelection() {
+            const section = getSelectedHomeSection();
+            if (!section) return;
+            section.productIds = Array.from(document.querySelectorAll("#homeProductList input:checked")).map((input) => input.value);
+            renderHomeProductPicker(section);
+            renderHomePreview();
+        }
+
+        function updateHomeColorControlState() {
+            const keepOriginal = document.getElementById("homeKeepOriginalStyle")?.checked !== false;
+            const colorControls = document.getElementById("homeCustomColorControls");
+            colorControls?.classList.toggle("disabled", keepOriginal);
+            ["homeSectionBgColor", "homeSectionTextColor"].forEach((id) => {
+                const input = document.getElementById(id);
+                if (input) input.disabled = keepOriginal;
+            });
+        }
+
+        function syncSelectedHomeSectionFromForm() {
+            const section = getSelectedHomeSection();
+            if (!section) return;
+            if (!section.systemKey) section.type = document.getElementById("homeSectionType").value;
+            section.visible = document.getElementById("homeSectionVisible").value !== "false";
+            section.title = document.getElementById("homeSectionTitle").value;
+            section.description = document.getElementById("homeSectionDescription").value;
+            section.buttonText = document.getElementById("homeSectionButtonText").value;
+            section.buttonLink = document.getElementById("homeSectionButtonLink").value;
+            section.imageUrl = document.getElementById("homeSectionImageUrl").value;
+            if (section.type !== "products") section.productIds = [];
+            section.useOriginalStyle = document.getElementById("homeKeepOriginalStyle").checked;
+            section.backgroundColor = document.getElementById("homeSectionBgColor").value || "#ffffff";
+            section.textColor = document.getElementById("homeSectionTextColor").value || "#222222";
+            updateHomeColorControlState();
+            renderHomeSectionList();
+            renderHomeProductPicker(section);
+            renderHomePreview();
+        }
+
+        function renderHomePreview() {
+            const canvas = document.getElementById("homePreviewCanvas");
+            if (!canvas) return;
+            canvas.innerHTML = "";
+
+            homeBuilderSections.forEach((section) => {
+                const preview = document.createElement("div");
+                preview.className = `home-preview-section ${section.type || "text"} ${section.visible === false ? "hidden-preview" : ""}`;
+                if (section.useOriginalStyle === false) {
+                    preview.style.background = section.backgroundColor || "";
+                    preview.style.color = section.textColor || "";
+                }
+
+                if (section.imageUrl) {
+                    preview.innerHTML += `<img class="home-preview-image" src="${safeText(section.imageUrl)}" alt="">`;
+                }
+
+                preview.innerHTML += `<h3>${safeText(section.title || getHomeSectionTypeLabel(section.type))}</h3>`;
+                if (section.description) preview.innerHTML += `<p>${safeText(section.description)}</p>`;
+
+                if (section.type === "products") {
+                    const selectedProducts = homeBuilderProducts.filter((product) => (section.productIds || []).includes(String(product.id))).slice(0, 3);
+                    const placeholders = selectedProducts.length ? selectedProducts.map((product) => {
+                        const img = product.imageUrl ? `<img src="${safeText(product.imageUrl)}" alt="" style="width:100%;height:36px;object-fit:contain;">` : "";
+                        return `<span class="home-preview-product">${img}</span>`;
+                    }).join("") : `<span class="home-preview-product"></span><span class="home-preview-product"></span><span class="home-preview-product"></span>`;
+                    preview.innerHTML += `<div class="home-preview-products">${placeholders}</div>`;
+                }
+
+                if (section.type === "service") {
+                    const services = String(section.description || "قص وتصفيف، صبغات، عناية بالشعر").split(/[،,]/).map((item) => item.trim()).filter(Boolean).slice(0, 3);
+                    preview.innerHTML += `<div class="home-preview-services">${services.map((item) => `<span class="home-preview-service">${safeText(item)}</span>`).join("")}</div>`;
+                }
+
+                if (section.buttonText) {
+                    preview.innerHTML += `<span class="home-preview-button">${safeText(section.buttonText)}</span>`;
+                }
+
+                canvas.appendChild(preview);
+            });
+        }
+
+        function renderHomeBuilder() {
+            renderHomeSectionList();
+            renderHomeEditor();
+            renderHomePreview();
+        }
+
+        function addHomeSection() {
+            const type = document.getElementById("homeNewSectionType").value;
+            const section = {
+                id: createHomeSectionId(),
+                visible: true,
+                ...getHomeTemplate(type)
+            };
+            homeBuilderSections.push(section);
+            selectedHomeSectionId = section.id;
+            renderHomeBuilder();
+        }
+
+        function duplicateHomeSection(sectionId) {
+            const index = homeBuilderSections.findIndex((section) => section.id === sectionId);
+            if (index < 0) return;
+            const source = homeBuilderSections[index];
+            const duplicate = {
+                ...source,
+                id: createHomeSectionId(),
+                systemKey: "",
+                title: `${source.title || getHomeSectionTypeLabel(source.type)} Copy`,
+                visible: true
+            };
+            homeBuilderSections.splice(index + 1, 0, duplicate);
+            selectedHomeSectionId = duplicate.id;
+            renderHomeBuilder();
+        }
+
+        function deleteHomeSection(sectionId) {
+            const section = homeBuilderSections.find((item) => item.id === sectionId);
+            if (!section) return;
+            if (!confirm(adminT("homeDeleteConfirm", "Delete this section from the home page?"))) return;
+            if (section.systemKey) {
+                section.visible = false;
+            } else {
+                homeBuilderSections = homeBuilderSections.filter((item) => item.id !== sectionId);
+            }
+            selectedHomeSectionId = homeBuilderSections.find((item) => item.id !== sectionId)?.id || homeBuilderSections[0]?.id || "";
+            renderHomeBuilder();
+        }
+
+        function getCleanHomeBuilderSections() {
+            syncSelectedHomeSectionFromForm();
+            return homeBuilderSections.map((section, index) => ({
+                id: section.id,
+                systemKey: section.systemKey || "",
+                type: section.type || "text",
+                title: section.title || "",
+                description: section.description || "",
+                buttonText: section.buttonText || "",
+                buttonLink: section.buttonLink || "",
+                imageUrl: section.imageUrl || "",
+                productIds: Array.isArray(section.productIds) ? section.productIds.map(String) : [],
+                useOriginalStyle: section.useOriginalStyle !== false,
+                backgroundColor: section.useOriginalStyle === false ? (section.backgroundColor || "#ffffff") : "",
+                textColor: section.useOriginalStyle === false ? (section.textColor || "#222222") : "",
+                visible: section.visible !== false,
+                sortOrder: index
+            }));
+        }
+
+        async function saveHomePageBuilder() {
+            const button = document.getElementById("saveHomePageBtn");
+            const sections = getCleanHomeBuilderSections();
+            button.disabled = true;
+            try {
+                await setDoc(doc(db, HOME_PAGE_DOC[0], HOME_PAGE_DOC[1]), {
+                    sections,
+                    updatedAt: new Date().toISOString(),
+                    updatedAtMs: Date.now(),
+                    updatedBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+                });
+                homeBuilderSections = normalizeHomeBuilderSections(sections);
+                renderHomeBuilder();
+                alert(adminT("homeSavedAlert", "Home page changes were saved successfully."));
+            } catch (error) {
+                console.error(error);
+                alert(adminT("homeSaveError", "Could not save the changes. Please try again."));
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        function getHomePreviewUrl() {
+            const previewUrl = new URL("index.html", window.location.href);
+            previewUrl.search = "";
+            previewUrl.hash = "";
+            previewUrl.searchParams.set("homePreview", "1");
+            previewUrl.searchParams.set("previewTs", String(Date.now()));
+            previewUrl.hash = "home";
+            return previewUrl.href;
+        }
+
+        function previewHomePageBuilder(event) {
+            const sections = getCleanHomeBuilderSections();
+            const previewUrl = getHomePreviewUrl();
+            localStorage.setItem(HOME_PAGE_PREVIEW_KEY, JSON.stringify({ sections, createdAt: Date.now() }));
+            renderHomePreview();
+
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const openedWindow = window.open(previewUrl, "_blank", "noopener");
+            if (!openedWindow) window.location.href = previewUrl;
+        }
+
+        document.getElementById("addHomeSectionBtn")?.addEventListener("click", addHomeSection);
+        document.getElementById("saveHomePageBtn")?.addEventListener("click", saveHomePageBuilder);
+        const previewHomePageBtn = document.getElementById("previewHomePageBtn");
+        if (previewHomePageBtn) {
+            previewHomePageBtn.href = getHomePreviewUrl();
+            previewHomePageBtn.addEventListener("click", previewHomePageBuilder, true);
+        }
+        ["homeSectionType", "homeSectionVisible", "homeSectionTitle", "homeSectionDescription", "homeSectionButtonText", "homeSectionButtonLink", "homeSectionImageUrl", "homeKeepOriginalStyle", "homeSectionBgColor", "homeSectionTextColor"].forEach((id) => {
+            document.getElementById(id)?.addEventListener("input", syncSelectedHomeSectionFromForm);
+            document.getElementById(id)?.addEventListener("change", syncSelectedHomeSectionFromForm);
+        });
+        document.querySelectorAll("[data-home-color-value]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const targetInput = button.dataset.homeColorTarget === "text" ? document.getElementById("homeSectionTextColor") : document.getElementById("homeSectionBgColor");
+                const keepOriginal = document.getElementById("homeKeepOriginalStyle");
+                if (keepOriginal) keepOriginal.checked = false;
+                if (targetInput) targetInput.value = button.dataset.homeColorValue;
+                syncSelectedHomeSectionFromForm();
+            });
+        });
+        document.getElementById("homeProductSearch")?.addEventListener("input", () => {
+            renderHomeProductPicker(getSelectedHomeSection());
+        });
 
         // ================= 1. المواعيد =================
         function getAppointmentStatusClass(status) {
@@ -1740,10 +2661,12 @@
             const table = document.getElementById("productsTable");
             table.innerHTML = renderAdminHeaders(["featuredHeader", "imageHeader", "productHeader", "priceHeader", "quantityHeader", "visibilityHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Products"));
+            homeBuilderProducts = [];
             
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
                 const isVisible = data.isVisible !== false;
+                homeBuilderProducts.push({ id, ...data });
                 
                 // مربع اختيار العرض في الرئيسية
                 const isChecked = data.isFeatured && isVisible ? "checked" : "";
@@ -1787,6 +2710,7 @@
                 
                 actionsCell.appendChild(saleBtn); actionsCell.appendChild(stockBtn); actionsCell.appendChild(visibilityBtn); actionsCell.appendChild(deleteBtn);
             });
+            if (homeBuilderLoaded) renderHomeBuilder();
         }
 
         document.getElementById("addProductBtn").addEventListener("click", async () => {

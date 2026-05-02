@@ -24,6 +24,7 @@
         body.dark-mode .review-form-card .star { color: #666; }
         body.dark-mode .review-form-card .star.selected, body.dark-mode .review-form-card .star:hover, body.dark-mode .review-form-card .star:hover ~ .star { color: #FFD700; }
         .container { padding: 20px; max-width: 1000px; margin: auto; }
+        .home-page-stack { display: flex; flex-direction: column; }
         .section-box { background-color: white; padding: 40px; margin-bottom: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eaeaea; }
         
         header { background-color: #000000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;}
@@ -50,6 +51,11 @@
         .hero-section p { font-size: 1.2em; color: #ccc; max-width: 700px; margin: 0 auto 30px; line-height: 1.6;}
         .btn-large { background-color: white; color: black; font-size: 20px; padding: 15px 40px; border-radius: 30px; text-decoration: none; display: inline-block; font-weight: bold; transition: 0.3s;}
         .btn-large:hover { background-color: #ddd; transform: scale(1.05);}
+        .home-custom-image { width: min(100%, 620px); max-height: 320px; object-fit: cover; border-radius: 10px; margin: 0 auto 24px; display: block; box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+        .home-section-actions { margin-top: 22px; text-align: center; }
+        .home-service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 22px; }
+        .home-service-chip { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; background: #fafafa; font-weight: bold; }
+        body.dark-mode .home-service-chip { background: #181818; border-color: #333; }
 
         input, select, textarea { padding: 12px; margin: 8px 0; width: 100%; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; background-color: #fafafa; box-sizing: border-box;}
         input:focus, textarea:focus { outline: none; border-color: #000; }
@@ -268,35 +274,36 @@
     </div>
 
     <div class="container" id="home">
-        <div class="hero-section">
-            <h1 data-i18n="heroTitle">صالون توفيق للأناقة والجمال</h1>
-            <p data-i18n="heroCopy">وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.</p>
-            <a href="book.html" class="btn-large" data-i18n="bookNow">احجزي موعدك الآن 📅</a>
+        <div id="homePageSections" class="home-page-stack">
+        <div class="hero-section" data-home-section-id="hero">
+            <h1 class="home-editable-text" data-i18n="heroTitle">صالون توفيق للأناقة والجمال</h1>
+            <p class="home-editable-text" data-i18n="heroCopy">وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.</p>
+            <a href="book.html" class="btn-large" data-home-section-button data-i18n="bookNow">احجزي موعدك الآن 📅</a>
         </div>
 
-        <div id="myAppointmentsSection" class="section-box" style="display: none;">
+        <div id="myAppointmentsSection" class="section-box" data-home-system-section="appointments" style="display: none;">
             <h2 data-i18n="myAppointments">📅 مواعيدي القادمة</h2>
             <div id="myAppointmentsList">جاري التحميل...</div>
         </div>
 
-        <div id="shopPreview" class="section-box">
-            <h2 style="text-align: center;" data-i18n="featuredProducts">🛍️ تشكيلة من منتجاتنا</h2>
-            <p style="text-align: center;" data-i18n="featuredProductsCopy">اكتشفي أفضل منتجات العناية المتوفرة لدينا.</p>
-            <div id="productsContainer" class="products-grid">جاري تحميل المنتجات...</div>
+        <div id="shopPreview" class="section-box" data-home-section-id="products">
+            <h2 class="home-editable-text" style="text-align: center;" data-i18n="featuredProducts">🛍️ تشكيلة من منتجاتنا</h2>
+            <p class="home-editable-text" style="text-align: center;" data-i18n="featuredProductsCopy">اكتشفي أفضل منتجات العناية المتوفرة لدينا.</p>
+            <div id="productsContainer" class="products-grid" data-products-container>جاري تحميل المنتجات...</div>
             <div style="text-align: center; margin-top: 30px;">
-                <button onclick="window.location.href='shop.html'" class="btn" style="padding: 12px 30px;" data-i18n="viewProducts">عرض كل المنتجات وشراؤها 🛒</button>
+                <button onclick="window.location.href='shop.html'" class="btn" style="padding: 12px 30px;" data-home-section-button data-i18n="viewProducts">عرض كل المنتجات وشراؤها 🛒</button>
             </div>
         </div>
 
-        <div id="about" class="section-box">
-            <h2 style="text-align: center;" data-i18n="aboutTitle">✨ عن صالون توفيق</h2>
-            <p class="about-text" data-i18n="aboutCopy">
+        <div id="about" class="section-box" data-home-section-id="about">
+            <h2 class="home-editable-text" style="text-align: center;" data-i18n="aboutTitle">✨ عن صالون توفيق</h2>
+            <p class="about-text home-editable-text" data-i18n="aboutCopy">
                 تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا المكون من أمهر الخبراء والمصففين يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.
             </p>
         </div>
 
-        <div id="reviews" class="section-box">
-            <h2 style="text-align: center;" data-i18n="reviewsTitle">⭐ ماذا يقول زبائننا عنّا</h2>
+        <div id="reviews" class="section-box" data-home-section-id="reviews">
+            <h2 class="home-editable-text" style="text-align: center;" data-i18n="reviewsTitle">⭐ ماذا يقول زبائننا عنّا</h2>
             
             <div class="review-slider-container" id="reviewsSliderContainer">
                 <div style="color: #888;">جاري تحميل التقييمات...</div>
@@ -320,6 +327,7 @@
                 <br>
                 <button id="addReviewBtn" class="btn" style="width: 50%;">نشر التقييم</button>
             </div>
+        </div>
         </div>
     </div>
 
@@ -458,6 +466,272 @@
             return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
         }
 
+        const HOME_PAGE_CONTENT_DOC = ["SiteContent", "homePage"];
+        const HOME_PAGE_PREVIEW_KEY = "salonHomePagePreviewDraft";
+        let activeHomePageSections = [];
+        let homePageLayoutReady = false;
+        let homePageRealtimeStarted = false;
+
+        const defaultHomeSections = [
+            {
+                id: "hero",
+                systemKey: "hero",
+                type: "hero",
+                title: "صالون توفيق للأناقة والجمال",
+                description: "وجهتكِ الأولى للعناية الفائقة والجمال الساحر. نقدم لكِ أحدث صيحات الموضة في تصفيف الشعر، الصبغات، العناية بالبشرة، والمزيد بأيدي خبراء محترفين. دعينا نبرز جمالكِ الحقيقي.",
+                buttonText: "احجزي موعدك الآن 📅",
+                buttonLink: "book.html",
+                useOriginalStyle: true,
+                visible: true
+            },
+            {
+                id: "products",
+                systemKey: "products",
+                type: "products",
+                title: "🛍️ تشكيلة من منتجاتنا",
+                description: "اكتشفي أفضل منتجات العناية المتوفرة لدينا.",
+                buttonText: "عرض كل المنتجات وشراؤها 🛒",
+                buttonLink: "shop.html",
+                useOriginalStyle: true,
+                visible: true
+            },
+            {
+                id: "about",
+                systemKey: "about",
+                type: "text",
+                title: "✨ عن صالون توفيق",
+                description: "تأسس صالون توفيق ليكون الملاذ الأول لكل من تبحث عن الجمال والفخامة. نحن نؤمن بأن جمالك يستحق العناية بأفضل المنتجات وأحدث التقنيات العالمية. فريقنا المكون من أمهر الخبراء والمصففين يكرس جهوده لتحويل رؤيتك لجمالك إلى واقع ملموس، في بيئة مريحة وراقية تلبي كافة تطلعاتك.",
+                useOriginalStyle: true,
+                visible: true
+            },
+            {
+                id: "reviews",
+                systemKey: "reviews",
+                type: "reviews",
+                title: "⭐ ماذا يقول زبائننا عنّا",
+                useOriginalStyle: true,
+                visible: true
+            }
+        ];
+
+        function cloneHomeSections(sections = defaultHomeSections) {
+            return sections.map((section) => ({ ...section }));
+        }
+
+        function normalizeHomeSections(sections) {
+            const baseSections = cloneHomeSections();
+            const incoming = Array.isArray(sections) ? sections : [];
+            const normalized = incoming.map((section, index) => {
+                const fallback = baseSections.find((item) => item.id === section?.id || item.systemKey === section?.systemKey) || {};
+                return {
+                    ...fallback,
+                    ...section,
+                    id: section?.id || fallback.id || `home-section-${index}`,
+                    type: section?.type || fallback.type || "text",
+                    productIds: Array.isArray(section?.productIds) ? section.productIds.map(String) : [],
+                    useOriginalStyle: section?.useOriginalStyle !== false,
+                    visible: section?.visible !== false
+                };
+            });
+
+            baseSections.forEach((fallback) => {
+                if (!normalized.some((section) => section.id === fallback.id || section.systemKey === fallback.systemKey)) {
+                    normalized.push({ ...fallback });
+                }
+            });
+
+            return normalized;
+        }
+
+        function setElementText(element, value) {
+            if (!element || value === undefined || value === null) return;
+            element.textContent = value;
+        }
+
+        function applyHomeSectionStyle(element, section) {
+            if (!element) return;
+            const useOriginalStyle = section.useOriginalStyle !== false;
+            element.style.background = useOriginalStyle ? "" : (section.backgroundColor || "");
+            element.style.color = useOriginalStyle ? "" : (section.textColor || "");
+            element.querySelectorAll(".home-editable-text").forEach((node) => {
+                node.style.color = useOriginalStyle ? "" : (section.textColor || "");
+            });
+        }
+
+        function updateHomeLink(element, text, href) {
+            if (!element) return;
+            element.textContent = text || "";
+            element.href = href || "#";
+            element.style.display = text || href ? "inline-block" : "none";
+            if (element.tagName === "BUTTON") {
+                element.onclick = () => {
+                    if (href) window.location.href = href;
+                };
+            }
+        }
+
+        function updateSystemHomeSection(section, index) {
+            const element = document.querySelector(`[data-home-section-id="${section.systemKey || section.id}"]`);
+            if (!element) return;
+            element.hidden = section.visible === false;
+            element.style.order = String(index * 10);
+            applyHomeSectionStyle(element, section);
+
+            if (section.systemKey === "hero") {
+                setElementText(element.querySelector("h1"), section.title);
+                setElementText(element.querySelector("p"), section.description);
+                updateHomeLink(element.querySelector("[data-home-section-button]"), section.buttonText, section.buttonLink);
+            }
+
+            if (section.systemKey === "products") {
+                setElementText(element.querySelector("h2"), section.title);
+                setElementText(element.querySelector("p"), section.description);
+                updateHomeLink(element.querySelector("[data-home-section-button]"), section.buttonText, section.buttonLink);
+                const container = element.querySelector("[data-products-container]");
+                if (container) container.dataset.productsSectionId = section.id;
+            }
+
+            if (section.systemKey === "about") {
+                setElementText(element.querySelector("h2"), section.title);
+                setElementText(element.querySelector(".about-text"), section.description);
+            }
+
+            if (section.systemKey === "reviews") {
+                setElementText(element.querySelector("h2"), section.title);
+            }
+        }
+
+        function createCustomHomeSection(section, index) {
+            const type = section.type || "text";
+            const wrapper = document.createElement("div");
+            wrapper.className = type === "hero" || type === "banner" ? "hero-section builder-custom-section" : "section-box builder-custom-section";
+            wrapper.dataset.builderSectionId = section.id;
+            wrapper.style.order = String(index * 10);
+            applyHomeSectionStyle(wrapper, section);
+
+            if (section.imageUrl) {
+                const image = document.createElement("img");
+                image.className = "home-custom-image";
+                image.src = section.imageUrl;
+                image.alt = section.title || "Home section image";
+                wrapper.appendChild(image);
+            }
+
+            const title = document.createElement(type === "hero" || type === "banner" ? "h1" : "h2");
+            title.className = "home-editable-text";
+            title.style.textAlign = "center";
+            title.textContent = section.title || "";
+            wrapper.appendChild(title);
+
+            if (section.description) {
+                const description = document.createElement("p");
+                description.className = "about-text home-editable-text";
+                description.textContent = section.description;
+                wrapper.appendChild(description);
+            }
+
+            if (type === "service") {
+                const grid = document.createElement("div");
+                grid.className = "home-service-grid";
+                const services = String(section.description || "").split(/[،,]/).map((item) => item.trim()).filter(Boolean).slice(0, 6);
+                (services.length ? services : ["قص وتصفيف", "صبغات", "عناية بالشعر"]).forEach((item) => {
+                    const chip = document.createElement("div");
+                    chip.className = "home-service-chip";
+                    chip.textContent = item;
+                    grid.appendChild(chip);
+                });
+                wrapper.appendChild(grid);
+            }
+
+            if (type === "products") {
+                const container = document.createElement("div");
+                container.className = "products-grid";
+                container.dataset.productsContainer = "";
+                container.dataset.productsSectionId = section.id;
+                container.textContent = "جاري تحميل المنتجات...";
+                wrapper.appendChild(container);
+            }
+
+            if (section.buttonText || section.buttonLink) {
+                const actions = document.createElement("div");
+                actions.className = "home-section-actions";
+                const link = document.createElement("a");
+                link.className = type === "hero" || type === "banner" ? "btn-large" : "btn";
+                link.textContent = section.buttonText || "المزيد";
+                link.href = section.buttonLink || "#";
+                actions.appendChild(link);
+                wrapper.appendChild(actions);
+            }
+
+            return wrapper;
+        }
+
+        function renderHomePageSections(sections) {
+            const root = document.getElementById("homePageSections");
+            if (!root) return;
+            root.querySelectorAll(".builder-custom-section").forEach((section) => section.remove());
+            const normalized = normalizeHomeSections(sections);
+            activeHomePageSections = normalized;
+            homePageLayoutReady = true;
+
+            let heroOrder = 0;
+            normalized.forEach((section, index) => {
+                if (section.systemKey === "hero") heroOrder = index * 10;
+                if (section.systemKey) {
+                    updateSystemHomeSection(section, index);
+                    return;
+                }
+                if (section.visible === false) return;
+                root.appendChild(createCustomHomeSection(section, index));
+            });
+
+            const appointments = document.getElementById("myAppointmentsSection");
+            if (appointments) appointments.style.order = String(heroOrder + 1);
+        }
+
+        function getHomePagePreviewSections() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("homePreview") !== "1") return null;
+            try {
+                const preview = JSON.parse(localStorage.getItem(HOME_PAGE_PREVIEW_KEY) || "null");
+                return Array.isArray(preview?.sections) ? preview.sections : null;
+            } catch (error) {
+                console.warn("Home page preview could not be read:", error);
+                return null;
+            }
+        }
+
+        async function loadHomePageLayout() {
+            const previewSections = getHomePagePreviewSections();
+            if (previewSections) {
+                renderHomePageSections(previewSections);
+                return;
+            }
+
+            try {
+                const pageRef = doc(db, HOME_PAGE_CONTENT_DOC[0], HOME_PAGE_CONTENT_DOC[1]);
+                const pageSnap = await getDoc(pageRef);
+                const sections = pageSnap.exists() ? pageSnap.data().sections : null;
+                if (Array.isArray(sections) && sections.length) renderHomePageSections(sections);
+            } catch (error) {
+                console.warn("Home page layout was not loaded:", error);
+            }
+            startHomePageLayoutRealtime();
+        }
+
+        function startHomePageLayoutRealtime() {
+            if (homePageRealtimeStarted || getHomePagePreviewSections()) return;
+            homePageRealtimeStarted = true;
+            onSnapshot(doc(db, HOME_PAGE_CONTENT_DOC[0], HOME_PAGE_CONTENT_DOC[1]), (snapshot) => {
+                const sections = snapshot.exists() ? snapshot.data().sections : null;
+                if (!Array.isArray(sections) || !sections.length) return;
+                renderHomePageSections(sections);
+                loadShopPreview();
+            }, (error) => {
+                console.warn("Home page realtime layout failed:", error);
+            });
+        }
+
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -482,6 +756,7 @@
                 else if (uiText[lang] && uiText[lang][key]) element.placeholder = uiText[lang][key];
             });
             if (!loggedInUserData) document.getElementById("profileName").innerText = lang === "ar" ? "حسابي" : uiText[lang].account;
+            if (homePageLayoutReady) renderHomePageSections(activeHomePageSections);
         }
 
         applySettings();
@@ -995,42 +1270,60 @@
         }
 
         async function loadShopPreview() {
-            const container = document.getElementById("productsContainer");
+            const containers = Array.from(document.querySelectorAll("[data-products-container]"));
+            if (!containers.length) return;
             const querySnapshot = await getDocs(collection(db, "Products"));
-            container.innerHTML = ""; 
+            containers.forEach((container) => {
+                container.innerHTML = "";
+            });
             const lang = localStorage.getItem("salonLang") || "ar";
             const text = uiText[lang] || uiText.ar;
-            
-            let hasFeatured = false;
+            const featuredProducts = [];
+            const allProducts = [];
             
             querySnapshot.forEach((documentSnap) => {
-                const data = documentSnap.data();
+                const data = { id: documentSnap.id, ...documentSnap.data() };
+                if (data.isVisible !== false && Number(data.stock || 0) > 0) allProducts.push(data);
                 
                 // === التعديل هنا: جلب المنتجات المميزة (Featured) فقط ===
                 if (data.isFeatured && data.isVisible !== false && Number(data.stock || 0) > 0) {
-                    hasFeatured = true;
+                    featuredProducts.push(data);
+                }
+            });
+            
+            containers.forEach((container) => {
+                const section = activeHomePageSections.find((item) => item.id === container.dataset.productsSectionId);
+                const selectedIds = Array.isArray(section?.productIds) ? section.productIds.map(String) : [];
+                const productsToShow = selectedIds.length
+                    ? selectedIds.map((id) => allProducts.find((product) => String(product.id) === id)).filter(Boolean)
+                    : featuredProducts;
+
+                if (!productsToShow.length) {
+                    container.innerHTML = `<p style='color:#888;'>${text.noFeaturedProducts}</p>`;
+                    return;
+                }
+
+                productsToShow.forEach((data) => {
                     const imgUrl = data.imageUrl ? data.imageUrl : 'https://via.placeholder.com/250x150?text=No+Image';
                     const safeName = data.name ? data.name.replace(/'/g, "\\'").replace(/"/g, '&quot;') : '';
                     const desc = data.description || '';
                     const safeDesc = desc.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n').replace(/\r/g, '');
-                    
-                    // ترتيب السعر (مع أو بدون خصم)
                     let priceHtml = `<p class="price">${data.price} ₪</p>`;
                     if (data.originalPrice) {
                         priceHtml = `<p class="price"><span class="sale-badge">${text.saleBadge}</span> ${data.price} ₪ <span class="old-price">${data.originalPrice} ₪</span></p>`;
                     }
 
-                    const card = document.createElement("div"); card.className = "product-card";
+                    const card = document.createElement("div");
+                    card.className = "product-card";
                     card.innerHTML = `<div class="info-btn" onclick="openInfoModal('${safeName}', '${safeDesc}', '${imgUrl}')">i</div><img src="${imgUrl}"><h3>${data.name}</h3>${priceHtml}`;
-                    const shopBtn = document.createElement("button"); shopBtn.className = "btn"; shopBtn.innerText = text.shopPreviewButton;
-                    shopBtn.onclick = () => { window.location.href = "shop.html"; }; 
-                    card.appendChild(shopBtn); container.appendChild(card);
-                }
+                    const shopBtn = document.createElement("button");
+                    shopBtn.className = "btn";
+                    shopBtn.innerText = text.shopPreviewButton;
+                    shopBtn.onclick = () => { window.location.href = "shop.html"; };
+                    card.appendChild(shopBtn);
+                    container.appendChild(card);
+                });
             });
-            
-            if (!hasFeatured) {
-                container.innerHTML = `<p style='color:#888;'>${text.noFeaturedProducts}</p>`;
-            }
         }
 
         let currentRating = 5; 
@@ -1171,7 +1464,10 @@
             } catch (e) { console.error(e); }
         });
 
-        loadShopPreview(); loadReviews();
+        loadHomePageLayout().finally(() => {
+            loadShopPreview();
+            loadReviews();
+        });
     </script>
     <script type="module" src="assets/notifications.js"></script>
 </body>
