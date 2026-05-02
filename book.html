@@ -250,6 +250,30 @@
             return uiText[lang]?.[key] || fallback;
         }
 
+        async function createNotification(payload) {
+            if (!payload?.userId) return;
+            const createdAtMs = Date.now();
+            try {
+                await addDoc(collection(db, "Notifications"), {
+                    userId: String(payload.userId),
+                    targetType: payload.targetType || (payload.userId === "admin" ? "admin" : "user"),
+                    title: payload.title || "",
+                    body: payload.body || "",
+                    type: payload.type || "info",
+                    link: payload.link || "",
+                    sourceCollection: payload.sourceCollection || "",
+                    sourceId: payload.sourceId || "",
+                    actorName: payload.actorName || "",
+                    read: false,
+                    createdAt: new Date(createdAtMs).toISOString(),
+                    createdAtMs,
+                    meta: payload.meta || {}
+                });
+            } catch (error) {
+                console.warn("Notification was not saved:", error);
+            }
+        }
+
         function getPenaltyPoints(profile) {
             return Math.max(0, Number(profile?.penaltyPoints || 0));
         }
@@ -331,7 +355,7 @@
                     return; 
                 }
 
-                await addDoc(collection(db, "Appointments"), {
+                const appointmentRef = await addDoc(collection(db, "Appointments"), {
                     userId: currentUserId,
                     email: loggedInUserData.email || "",
                     customerName: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
@@ -343,11 +367,34 @@
                     status: "قيد الانتظار"
                 });
                 alert("✅ تم تأكيد حجزك بنجاح! سيتم مراجعته من قبل الإدارة.");
+                const customerName = `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim() || "زبون";
+                await createNotification({
+                    userId: "admin",
+                    targetType: "admin",
+                    title: "حجز جديد ينتظر الموافقة",
+                    body: `${customerName} يريد حجز ${service} بتاريخ ${date} الساعة ${finalTime}.`,
+                    type: "booking",
+                    link: "admin.html#appointments",
+                    sourceCollection: "Appointments",
+                    sourceId: appointmentRef.id,
+                    actorName: customerName
+                });
+                await createNotification({
+                    userId: currentUserId,
+                    targetType: "user",
+                    title: "تم إرسال حجزك",
+                    body: `تم إرسال طلب الحجز بتاريخ ${date} الساعة ${finalTime}. سنراجعه قريبًا.`,
+                    type: "booking",
+                    link: "index.html",
+                    sourceCollection: "Appointments",
+                    sourceId: appointmentRef.id
+                });
                 window.location.href = "index.html"; 
             } catch (error) {
                 console.error(error); alert("حدث خطأ أثناء الحجز: " + error.message);
             } finally { document.getElementById("loader").style.display = "none"; document.getElementById("submitBookBtn").disabled = false; }
         });
     </script>
+    <script type="module" src="assets/notifications.js"></script>
 </body>
 </html>

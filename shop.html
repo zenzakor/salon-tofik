@@ -184,11 +184,14 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
+        let currentUserId = null;
 
         const uiText = {
             ar: { home: "الرئيسية", book: "حجز دور", cart: "السلة", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", shopTitle: "🛍️ متجر صالون توفيق", shopSubtitle: "أضيفي المنتجات إلى سلتك وأكملي عملية الشراء بسهولة.", loadingProducts: "جاري تحميل المنتجات... ⏳", emptyShop: "المتجر فارغ حالياً.", noSaleProducts: "لا توجد منتجات متاحة للبيع حالياً.", available: "المتوفر", unavailable: "غير متوفر حالياً", addToCart: "أضف إلى السلة 🛒", added: "✔ تمت الإضافة", outOfStock: "غير متوفر", noInfo: "لا توجد تفاصيل إضافية لهذا المنتج حالياً." },
@@ -227,10 +230,82 @@
         applySettings();
 
         let cart = JSON.parse(localStorage.getItem('salonCart')) || [];
+        function cartStorageKey() { return currentUserId ? `salonCart_${currentUserId}` : "salonCart"; }
+        function normalizeCartItems(items) {
+            const merged = new Map();
+            (Array.isArray(items) ? items : []).forEach((item) => {
+                if (!item?.id) return;
+                const existing = merged.get(item.id) || {};
+                const quantity = Math.max(1, Number(existing.quantity || 0) + Number(item.quantity || 1));
+                merged.set(item.id, { ...existing, ...item, quantity });
+            });
+            return Array.from(merged.values());
+        }
+        function saveCartToLocal() {
+            localStorage.setItem(cartStorageKey(), JSON.stringify(cart));
+            if (currentUserId) localStorage.removeItem("salonCart");
+        }
+        async function saveCart() {
+            cart = normalizeCartItems(cart);
+            saveCartToLocal();
+            updateCartBadge();
+            if (!currentUserId) return;
+            await setDoc(doc(db, "Carts", currentUserId), {
+                userId: currentUserId,
+                items: cart,
+                updatedAt: new Date().toISOString()
+            }, { merge: true });
+        }
+        async function loadSavedCart() {
+            const localGuestCart = JSON.parse(localStorage.getItem("salonCart") || "[]");
+            const localUserCart = JSON.parse(localStorage.getItem(cartStorageKey()) || "[]");
+            let savedCart = localUserCart;
+            if (currentUserId) {
+                const cartSnap = await getDoc(doc(db, "Carts", currentUserId));
+                savedCart = cartSnap.exists() ? (cartSnap.data().items || []) : localUserCart;
+            }
+            cart = normalizeCartItems([...(savedCart || []), ...(currentUserId ? localGuestCart : [])]);
+            await saveCart();
+        }
+        async function syncCartWithProducts(productMap) {
+            let changed = false;
+            cart = cart.filter((item) => {
+                const product = productMap.get(item.id);
+                if (!product || product.isVisible === false || Number(product.stock || 0) <= 0) {
+                    changed = true;
+                    return false;
+                }
+                const stock = Number(product.stock || 0);
+                const nextQuantity = Math.min(Number(item.quantity || 1), stock);
+                if (nextQuantity !== Number(item.quantity || 1) || item.stock !== stock || item.price !== product.price || item.name !== product.name) changed = true;
+                item.quantity = Math.max(1, nextQuantity);
+                item.stock = stock;
+                item.name = product.name;
+                item.price = product.price;
+                item.image = product.imageUrl || item.image;
+                return true;
+            });
+            if (changed) await saveCart();
+            else updateCartBadge();
+        }
         function updateCartBadge() { let totalItems = 0; cart.forEach(item => totalItems += (item.quantity || 1)); document.getElementById('cartCount').innerText = totalItems; }
         updateCartBadge(); 
 
         window.goToCart = function() { window.location.href = "cart.html"; };
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUserId = user?.uid || null;
+            cart = normalizeCartItems([
+                ...JSON.parse(localStorage.getItem(cartStorageKey()) || "[]"),
+                ...(currentUserId ? JSON.parse(localStorage.getItem("salonCart") || "[]") : [])
+            ]);
+            updateCartBadge();
+            loadSavedCart().then(() => {
+                updateCartBadge();
+                loadShopProducts();
+            }).catch((error) => console.error("Could not load saved cart:", error));
+            loadShopProducts();
+        });
 
         const productSearchInput = document.getElementById("productSearchInput");
         const clearProductSearch = document.getElementById("clearProductSearch");
@@ -283,6 +358,11 @@
             const lang = localStorage.getItem("salonLang") || "ar";
             if (querySnapshot.empty) { container.innerHTML = `<p>${uiText[lang].emptyShop}</p>`; return; }
             let visibleProductsCount = 0;
+            const productMap = new Map();
+            querySnapshot.forEach((documentSnap) => {
+                productMap.set(documentSnap.id, { id: documentSnap.id, ...documentSnap.data() });
+            });
+            syncCartWithProducts(productMap).catch((error) => console.error("Could not sync cart stock:", error));
 
             querySnapshot.forEach((documentSnap) => {
                 const data = documentSnap.data();
@@ -318,14 +398,14 @@
                     addBtn.innerText = uiText[lang].outOfStock;
                     addBtn.style.backgroundColor = "#999";
                 }
-                addBtn.onclick = () => {
+                addBtn.onclick = async () => {
                     const existingProductIndex = cart.findIndex(item => item.id === productId);
                     const currentQty = existingProductIndex !== -1 ? (cart[existingProductIndex].quantity || 1) : 0;
                     if (currentQty + 1 > stock) return alert(`${uiText[lang].available}: ${stock}`);
                     if (existingProductIndex !== -1) { cart[existingProductIndex].quantity = currentQty + 1; cart[existingProductIndex].stock = stock; } 
                     else { cart.push({ id: productId, name: data.name, price: data.price, image: imgUrl, quantity: 1, stock: stock }); }
-                    localStorage.setItem('salonCart', JSON.stringify(cart)); updateCartBadge();
                     addBtn.innerText = uiText[lang].added; addBtn.style.backgroundColor = "#4CAF50";
+                    saveCart().catch((error) => console.error("Could not save cart:", error));
                     setTimeout(() => { addBtn.innerText = uiText[lang].addToCart; addBtn.style.backgroundColor = "#000000"; }, 1500);
                 };
                 card.appendChild(addBtn); container.appendChild(card);
@@ -335,5 +415,6 @@
         }
         loadShopProducts();
     </script>
+    <script type="module" src="assets/notifications.js"></script>
 </body>
 </html>

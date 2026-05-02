@@ -377,7 +377,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, deleteDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, deleteUser as deleteAuthUser, RecaptchaVerifier, PhoneAuthProvider, linkWithCredential, updatePhoneNumber, GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const THE_ADMIN_EMAIL = "admin@tofik.com";
@@ -396,6 +396,7 @@
         let phoneVerificationId = null;
         let recaptchaVerifier = null;
         let appointmentsRefreshTimer = null;
+        let appointmentsRealtimeUnsubscribe = null;
         const SIGNUP_VERIFICATION_MINUTES = 10;
 
         const uiText = {
@@ -417,6 +418,30 @@
         function uiT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
             return uiText[lang]?.[key] || fallback;
+        }
+
+        async function createNotification(payload) {
+            if (!payload?.userId) return;
+            const createdAtMs = Date.now();
+            try {
+                await addDoc(collection(db, "Notifications"), {
+                    userId: String(payload.userId),
+                    targetType: payload.targetType || (payload.userId === "admin" ? "admin" : "user"),
+                    title: payload.title || "",
+                    body: payload.body || "",
+                    type: payload.type || "info",
+                    link: payload.link || "",
+                    sourceCollection: payload.sourceCollection || "",
+                    sourceId: payload.sourceId || "",
+                    actorName: payload.actorName || "",
+                    read: false,
+                    createdAt: new Date(createdAtMs).toISOString(),
+                    createdAtMs,
+                    meta: payload.meta || {}
+                });
+            } catch (error) {
+                console.warn("Notification was not saved:", error);
+            }
         }
 
         function displayAppointmentStatus(status) {
@@ -909,15 +934,21 @@
 
         function startAppointmentsRefresh() {
             stopAppointmentsRefresh();
-            appointmentsRefreshTimer = setInterval(() => {
+            appointmentsRealtimeUnsubscribe = onSnapshot(collection(db, "Appointments"), () => {
                 if (loggedInUserData) loadMyAppointments();
-            }, 60000);
+            }, (error) => {
+                console.error("Appointments realtime listener failed:", error);
+            });
         }
 
         function stopAppointmentsRefresh() {
             if (appointmentsRefreshTimer) {
                 clearInterval(appointmentsRefreshTimer);
                 appointmentsRefreshTimer = null;
+            }
+            if (appointmentsRealtimeUnsubscribe) {
+                appointmentsRealtimeUnsubscribe();
+                appointmentsRealtimeUnsubscribe = null;
             }
         }
 
@@ -1017,9 +1048,13 @@
             { title: "منتجات ممتازة", text: "اشتريت مجموعة العناية بالشعر والنتيجة كانت مذهلة من أول استخدام.", name: "رنين", rating: 5 },
             { title: "تجربة لا تُنسى", text: "فريق العمل لطيف جداً والمكان يبعث على الراحة النفسية. شكراً لكم.", name: "لارا", rating: 4 }
         ];
+        const fallbackReviews = allReviews.slice();
         
         let reviewIndex = 0;
         let sliderInterval;
+        let reviewsUnsubscribe = null;
+        let reviewsRefreshTimer = null;
+        let lastReviewsSignature = "";
 
         function showNextReview() {
             const container = document.getElementById("reviewsSliderContainer");
@@ -1034,17 +1069,52 @@
             return review && review.status !== "pending" && review.status !== "hidden" && review.isPublished !== false;
         }
 
-        async function loadReviews() {
-            const querySnapshot = await getDocs(collection(db, "Reviews"));
+        function renderRealtimeReviews(publishedReviews) {
+            const nextSignature = publishedReviews.map((review) => `${review.userId || ""}:${review.createdAt || ""}:${review.status || ""}:${review.isPublished}`).join("|");
+            allReviews = publishedReviews.length ? publishedReviews : fallbackReviews;
+            if (nextSignature !== lastReviewsSignature || reviewIndex >= allReviews.length) {
+                reviewIndex = 0;
+                lastReviewsSignature = nextSignature;
+            }
+            showNextReview();
+            if(sliderInterval) clearInterval(sliderInterval);
+            sliderInterval = setInterval(showNextReview, 3500);
+        }
+
+        function collectPublishedReviews(querySnapshot) {
             const publishedReviews = [];
             querySnapshot.forEach((docSnap) => {
                 const review = docSnap.data();
                 if (isPublicReview(review)) publishedReviews.push(review);
             });
-            if (publishedReviews.length) allReviews = publishedReviews;
-            showNextReview();
-            if(sliderInterval) clearInterval(sliderInterval);
-            sliderInterval = setInterval(showNextReview, 3500); 
+            publishedReviews.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+            return publishedReviews;
+        }
+
+        async function refreshReviewsOnce() {
+            const querySnapshot = await getDocs(collection(db, "Reviews"));
+            renderRealtimeReviews(collectPublishedReviews(querySnapshot));
+        }
+
+        function startReviewsPollingFallback() {
+            if (reviewsRefreshTimer) return;
+            reviewsRefreshTimer = setInterval(() => {
+                refreshReviewsOnce().catch((error) => console.error("Reviews refresh failed:", error));
+            }, 4000);
+        }
+
+        function loadReviews() {
+            if (reviewsUnsubscribe) {
+                startReviewsPollingFallback();
+                return;
+            }
+            reviewsUnsubscribe = onSnapshot(collection(db, "Reviews"), (querySnapshot) => {
+                renderRealtimeReviews(collectPublishedReviews(querySnapshot));
+            }, (error) => {
+                console.error("Reviews realtime listener failed:", error);
+                refreshReviewsOnce().catch(() => renderRealtimeReviews(fallbackReviews));
+            });
+            startReviewsPollingFallback();
         }
 
         document.getElementById("addReviewBtn").addEventListener("click", async () => {
@@ -1053,7 +1123,7 @@
             const textVal = document.getElementById("reviewText").value;
             if (!titleVal || !textVal) return alert("الرجاء كتابة العنوان والتفاصيل!");
             try { 
-                await addDoc(collection(db, "Reviews"), {
+                const reviewRef = await addDoc(collection(db, "Reviews"), {
                     name: loggedInUserData.firstName,
                     title: titleVal,
                     text: textVal,
@@ -1066,11 +1136,34 @@
                     phone: loggedInUserData.phone || ""
                 }); 
                 document.getElementById("reviewTitle").value = ""; document.getElementById("reviewText").value = ""; 
+                const reviewerName = `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim() || loggedInUserData.firstName || "زبون";
+                await createNotification({
+                    userId: "admin",
+                    targetType: "admin",
+                    title: "تعليق جديد ينتظر الموافقة",
+                    body: `${reviewerName} يريد نشر تعليق بعنوان: ${titleVal}.`,
+                    type: "review",
+                    link: "admin.html#reviews",
+                    sourceCollection: "Reviews",
+                    sourceId: reviewRef.id,
+                    actorName: reviewerName
+                });
+                await createNotification({
+                    userId: currentUserId,
+                    targetType: "user",
+                    title: "تم إرسال تعليقك",
+                    body: "وصل تعليقك للإدارة وسيظهر في الموقع بعد الموافقة عليه.",
+                    type: "review",
+                    link: "index.html#reviews",
+                    sourceCollection: "Reviews",
+                    sourceId: reviewRef.id
+                });
                 alert(uiT("reviewPendingAlert", "تم إرسال تقييمك للإدارة. سيظهر للزبائن بعد الموافقة عليه.")); loadReviews(); 
             } catch (e) { console.error(e); }
         });
 
         loadShopPreview(); loadReviews();
     </script>
+    <script type="module" src="assets/notifications.js"></script>
 </body>
 </html>

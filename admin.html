@@ -71,15 +71,20 @@
         .btn-absent { background: linear-gradient(135deg, #334155, #0f172a); border-radius: 999px; box-shadow: 0 8px 18px rgba(15,23,42,0.18); }
         .btn-absent:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,0.24); }
         .booking-card.no-show, .calendar-booking.no-show { position: relative; overflow: hidden; opacity: 0.88; filter: grayscale(0.28); border-right-color: #64748b; background: linear-gradient(135deg, #f8fafc, #f1f5f9); transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease, background 0.35s ease; }
-        .booking-card.no-show::after, .calendar-booking.no-show::after { content: "×"; position: absolute; inset: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(100,116,139,0.18); border-radius: 18px; background: rgba(255,255,255,0.18); color: rgba(51,65,85,0.38); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.32); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); font-size: clamp(82px, 18vw, 150px); font-weight: 200; line-height: 1; pointer-events: none; z-index: 2; }
-        .calendar-booking.no-show::after { inset-block-start: 5px; inset-inline-end: 5px; width: 22px; height: 22px; font-size: 18px; }
+        .booking-card.no-show::after { content: "×"; position: absolute; inset: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(100,116,139,0.18); border-radius: 18px; background: rgba(255,255,255,0.18); color: rgba(51,65,85,0.38); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.32); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); font-size: clamp(82px, 18vw, 150px); font-weight: 200; line-height: 1; pointer-events: none; z-index: 2; }
+        .calendar-booking.no-show::after { content: none; }
         .booking-card.no-show > * { position: relative; z-index: 1; }
         .appointment-no-show-row td { background: linear-gradient(135deg, #f8fafc, #f1f5f9); color: #64748b; transition: background 0.35s ease, color 0.35s ease; }
         .appointment-no-show-row { position: relative; }
-        .appointment-no-show-row::after { content: "×"; position: absolute; inset: 12px 28px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(100,116,139,0.16); border-radius: 18px; background: rgba(255,255,255,0.16); color: rgba(51,65,85,0.36); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); font-size: clamp(92px, 14vw, 170px); font-weight: 200; line-height: 1; pointer-events: none; z-index: 2; }
+        .appointment-no-show-row::after { content: "×"; position: absolute; inset: 12px 28px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 18px; background: transparent; color: rgba(51,65,85,0.36); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; font-size: clamp(92px, 14vw, 170px); font-weight: 200; line-height: 1; pointer-events: none; z-index: 3; }
         .appointment-no-show-row td { position: relative; z-index: 1; }
+        .appointment-no-show-row .appointment-glass-cell { position: relative; overflow: hidden; }
+        .appointment-no-show-row .appointment-glass-cell::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; border: 1px solid rgba(100,116,139,0.16); border-radius: 18px; background: rgba(255,255,255,0.16); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); }
+        .appointment-no-show-row .appointment-no-glass-cell { position: relative; z-index: 4; }
         body.dark-mode .booking-card.no-show, body.dark-mode .calendar-booking.no-show { background: linear-gradient(135deg, #111827, #1f2937); border-color: #334155; color: #cbd5e1; }
-        body.dark-mode .booking-card.no-show::after, body.dark-mode .calendar-booking.no-show::after, body.dark-mode .appointment-no-show-row::after { background: rgba(15,23,42,0.2); border-color: rgba(148,163,184,0.2); color: rgba(226,232,240,0.34); }
+        body.dark-mode .booking-card.no-show::after, body.dark-mode .appointment-no-show-row::after { background: rgba(15,23,42,0.2); border-color: rgba(148,163,184,0.2); color: rgba(226,232,240,0.34); }
+        body.dark-mode .appointment-no-show-row::after { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+        body.dark-mode .appointment-no-show-row .appointment-glass-cell::after { background: rgba(15,23,42,0.2); border-color: rgba(148,163,184,0.2); box-shadow: inset 0 0 0 1px rgba(148,163,184,0.15); }
         .user-name-cell { display: flex; flex-direction: column; align-items: stretch; gap: 6px; min-width: 170px; }
         .penalty-badge, .deposit-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; min-height: 24px; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 800; white-space: nowrap; }
         .penalty-badge { background: #111827; color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); }
@@ -476,7 +481,7 @@
 
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, setDoc, query, where } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, setDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword, deleteUser as deleteAuthUser, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const THE_ADMIN_EMAIL = "admin@tofik.com"; 
@@ -489,6 +494,7 @@
         let allAppointments = [];
         let selectedAppointmentDate = "";
         let selectedPenaltyUserId = "";
+        let adminRealtimeUnsubscribes = [];
 
         const adminText = {
             ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
@@ -834,6 +840,95 @@
             }, 4600);
         }
 
+        async function createNotification(payload) {
+            if (!payload?.userId) return;
+            const createdAtMs = Date.now();
+            try {
+                await addDoc(collection(db, "Notifications"), {
+                    userId: String(payload.userId),
+                    targetType: payload.targetType || (payload.userId === "admin" ? "admin" : "user"),
+                    title: payload.title || "",
+                    body: payload.body || "",
+                    type: payload.type || "info",
+                    link: payload.link || "",
+                    sourceCollection: payload.sourceCollection || "",
+                    sourceId: payload.sourceId || "",
+                    actorName: payload.actorName || "",
+                    read: false,
+                    createdAt: new Date(createdAtMs).toISOString(),
+                    createdAtMs,
+                    meta: payload.meta || {}
+                });
+            } catch (error) {
+                console.warn("Notification was not saved:", error);
+            }
+        }
+
+        function notifyUser(userId, payload) {
+            if (!userId) return Promise.resolve();
+            return createNotification({ ...payload, userId, targetType: "user" });
+        }
+
+        function ensureAdminNavBadges() {
+            [
+                { tab: "orders", id: "newOrdersBadge" },
+                { tab: "reviews", id: "pendingReviewsBadge" }
+            ].forEach(({ tab, id }) => {
+                if (document.getElementById(id)) return;
+                const link = Array.from(document.querySelectorAll(".sidebar .nav-link")).find((item) => {
+                    const handler = item.getAttribute("onclick") || "";
+                    return handler.includes(`'${tab}'`) || handler.includes(`"${tab}"`);
+                });
+                if (!link) return;
+                const badge = document.createElement("span");
+                badge.id = id;
+                badge.className = "nav-badge";
+                badge.style.display = "none";
+                badge.textContent = "0";
+                link.appendChild(badge);
+            });
+        }
+
+        function setNavBadge(id, count) {
+            const badge = document.getElementById(id);
+            if (!badge) return;
+            const safeCount = Math.max(0, Number(count || 0));
+            badge.textContent = safeCount > 99 ? "99+" : String(safeCount);
+            badge.style.display = safeCount ? "inline-flex" : "none";
+        }
+
+        function isNewOrder(order) {
+            const value = String(order?.status || "").toLowerCase();
+            return !value ||
+                value.includes("new") ||
+                value.includes("pending") ||
+                value.includes("جديد") ||
+                value.includes("Ø¬Ø¯ÙŠØ¯") ||
+                value.includes("חדש");
+        }
+
+        function stopAdminRealtimeListeners() {
+            adminRealtimeUnsubscribes.forEach((unsubscribe) => unsubscribe());
+            adminRealtimeUnsubscribes = [];
+        }
+
+        function startAdminRealtimeListeners() {
+            if (adminRealtimeUnsubscribes.length) return;
+            const realtimeTargets = [
+                { name: "Appointments", refresh: loadAppointments },
+                { name: "Orders", refresh: loadOrders },
+                { name: "Reviews", refresh: loadAdminReviews }
+            ];
+            realtimeTargets.forEach(({ name, refresh }) => {
+                const unsubscribe = onSnapshot(collection(db, name), () => {
+                    refresh();
+                }, (error) => {
+                    console.error(`${name} realtime listener failed:`, error);
+                });
+                adminRealtimeUnsubscribes.push(unsubscribe);
+            });
+        }
+
         async function setCustomerPenalty(userId, nextPoints, options = {}) {
             const user = allUsers.find((item) => item.id === userId);
             if (!user) return;
@@ -849,6 +944,16 @@
             user.partialPrepaymentRequired = partialPrepaymentRequired;
             if (safePoints >= 3 && previousPoints < 3 && options.toast !== false) {
                 showAdminToast(adminT("penaltyToastTitle", "Deposit required"), adminT("penaltyToastBody", "This customer reached 3 penalty points. Future bookings require a partial deposit."));
+            }
+            if (safePoints !== previousPoints && options.notify !== false) {
+                await notifyUser(userId, {
+                    title: "تم تحديث حالة حسابك",
+                    body: `تم تحديث نقاط الحضور في حسابك إلى ${safePoints}.`,
+                    type: "account",
+                    link: "account.html",
+                    sourceCollection: "Users",
+                    sourceId: userId
+                });
             }
             renderUsersTable();
             renderCustomerPenaltyModal();
@@ -867,6 +972,14 @@
             await updateDoc(doc(db, "Users", userId), {
                 manualPrepaymentRequired: checked,
                 partialPrepaymentRequired
+            });
+            await notifyUser(userId, {
+                title: "تحديث مهم في حسابك",
+                body: checked ? "أصبحت الدفعة المسبقة مطلوبة للحجوزات القادمة." : "تم إلغاء طلب الدفعة المسبقة عن حسابك.",
+                type: "account",
+                link: "account.html",
+                sourceCollection: "Users",
+                sourceId: userId
             });
             user.manualPrepaymentRequired = checked;
             user.partialPrepaymentRequired = partialPrepaymentRequired;
@@ -1004,9 +1117,20 @@
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            if (trigger) trigger.classList.add('active');
+            if (trigger?.classList) trigger.classList.add('active');
             closeAdminSidebar();
         }
+
+        function openAdminHashTab() {
+            const tabId = window.location.hash.replace("#", "");
+            if (!tabId || !document.getElementById(tabId)?.classList.contains("admin-section")) return;
+            window.switchTab(tabId);
+            document.querySelectorAll(".nav-link").forEach((link) => {
+                const handler = link.getAttribute("onclick") || "";
+                if (handler.includes(`'${tabId}'`) || handler.includes(`"${tabId}"`)) link.classList.add("active");
+            });
+        }
+        window.addEventListener("hashchange", openAdminHashTab);
 
         // تسجيل الدخول والخروج
         onAuthStateChanged(auth, (user) => {
@@ -1014,7 +1138,9 @@
                 document.getElementById("adminLoginSection").style.display = "none"; 
                 document.getElementById("adminContent").style.display = "flex";
                 loadAllData();
+                openAdminHashTab();
             } else {
+                stopAdminRealtimeListeners();
                 closeAdminSidebar();
                 document.getElementById("adminLoginSection").style.display = "flex"; 
                 document.getElementById("adminContent").style.display = "none";
@@ -1032,7 +1158,9 @@
         });
 
         function loadAllData() {
+            ensureAdminNavBadges();
             loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews();
+            startAdminRealtimeListeners();
             populateAdminTimeSelects();
             document.getElementById("adminBookingDate").value = getTodayValue();
         }
@@ -1120,7 +1248,7 @@
             if (!customer) return alert(adminT("selectCustomerAlert", "اختر زبوناً مسجلاً أولاً."));
             if (!service || !date || !time) return alert(adminT("fillBookingAlert", "اختر الخدمة والتاريخ والوقت قبل إضافة الحجز."));
 
-            await addDoc(collection(db, "Appointments"), {
+            const appointmentRef = await addDoc(collection(db, "Appointments"), {
                 userId: customer.id,
                 customerName: getUserFullName(customer),
                 phone: customer.phone || "",
@@ -1132,6 +1260,14 @@
                 status: "تم التأكيد",
                 createdBy: "admin",
                 createdAt: new Date().toISOString()
+            });
+            await notifyUser(customer.id, {
+                title: "تم إنشاء حجز جديد لك",
+                body: `تمت إضافة حجز ${service} بتاريخ ${date} الساعة ${time}.`,
+                type: "booking",
+                link: "index.html",
+                sourceCollection: "Appointments",
+                sourceId: appointmentRef.id
             });
 
             selectedAppointmentDate = date;
@@ -1169,6 +1305,14 @@
                 noShow: true,
                 markedAbsentAt,
                 penaltyApplied: true
+            });
+            await notifyUser(appointment.userId, {
+                title: "تحديث على حجزك",
+                body: `تم تسجيل عدم حضور للحجز بتاريخ ${appointment.date || "-"} الساعة ${appointment.time || "-"}.`,
+                type: "booking",
+                link: "old-bookings.html",
+                sourceCollection: "Appointments",
+                sourceId: appointment.id
             });
 
             if (!allUsers.length) await loadUsers();
@@ -1222,6 +1366,14 @@
                 penaltyApplied: false,
                 markedAbsentAt: null,
                 absenceCanceledAt: new Date().toISOString()
+            });
+            await notifyUser(appointment.userId, {
+                title: "تم تحديث حجزك",
+                body: `تم إلغاء علامة عدم الحضور للحجز بتاريخ ${appointment.date || "-"} الساعة ${appointment.time || "-"}.`,
+                type: "booking",
+                link: "old-bookings.html",
+                sourceCollection: "Appointments",
+                sourceId: appointment.id
             });
             await loadAppointments();
             await loadUsers();
@@ -1410,7 +1562,16 @@
         }
 
         window.acceptAppointment = async function(appointmentId) {
+            const appointment = allAppointments.find((item) => item.id === appointmentId);
             await updateDoc(doc(db, "Appointments", appointmentId), { status: "تم التأكيد" });
+            await notifyUser(appointment?.userId, {
+                title: "تم تأكيد حجزك",
+                body: `تم تأكيد حجزك بتاريخ ${appointment?.date || "-"} الساعة ${appointment?.time || "-"}.`,
+                type: "booking",
+                link: "index.html",
+                sourceCollection: "Appointments",
+                sourceId: appointmentId
+            });
             loadAppointments();
         }
 
@@ -1433,6 +1594,14 @@
                 status: newStatus.trim(),
                 notes: newNotes.trim()
             });
+            await notifyUser(appointment.userId, {
+                title: "تم تعديل حجزك",
+                body: `تحديث الحجز: ${newService.trim() || "-"} بتاريخ ${newDate.trim() || "-"} الساعة ${newTime.trim() || "-"}.`,
+                type: "booking",
+                link: "index.html",
+                sourceCollection: "Appointments",
+                sourceId: appointment.id
+            });
             loadAppointments();
         }
 
@@ -1441,6 +1610,14 @@
             const appointment = allAppointments.find((item) => item.id === appointmentId);
             const reversedPenalty = await reverseAppointmentPenalty(appointment);
             await deleteDoc(doc(db, "Appointments", appointmentId));
+            await notifyUser(appointment?.userId, {
+                title: "تم إلغاء حجزك",
+                body: `تم إلغاء الحجز بتاريخ ${appointment?.date || "-"} الساعة ${appointment?.time || "-"}.`,
+                type: "booking",
+                link: "old-bookings.html",
+                sourceCollection: "Appointments",
+                sourceId: appointmentId
+            });
             await loadAppointments();
             if (reversedPenalty) await loadUsers();
         }
@@ -1461,8 +1638,10 @@
             const table = document.getElementById("ordersTable"); 
             table.innerHTML = renderAdminHeaders(["orderHeader", "amountHeader", "customerHeader", "statusHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Orders"));
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data(); const id = docSnap.id; const row = table.insertRow();
+            const orders = querySnapshot.docs.map((docSnap) => ({ id: docSnap.id, data: docSnap.data() }));
+            setNavBadge("newOrdersBadge", orders.filter(({ data }) => isNewOrder(data)).length);
+            orders.forEach(({ id, data }) => {
+                const row = table.insertRow();
                 row.insertCell(0).innerHTML = data.productName; 
                 row.insertCell(1).innerHTML = `<strong>${data.price} ₪</strong>`; 
                 row.insertCell(2).innerHTML = `<strong>${data.customerName}</strong><br><small dir="ltr">${data.phone}</small>`; 
@@ -1472,6 +1651,33 @@
                 updateBtn.onclick = async () => { const newStatus = prompt(adminT("updateStatusPrompt", "تحديث الحالة:"), data.status); if (newStatus) { await updateDoc(doc(db, "Orders", id), { status: newStatus }); loadOrders(); } };
                 const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("delete", "حذف"); deleteBtn.className = "btn-action btn-delete";
                 deleteBtn.onclick = async () => { if (confirm(adminT("deleteOrderConfirm", "حذف الطلب؟"))) { await deleteDoc(doc(db, "Orders", id)); loadOrders(); } };
+                updateBtn.onclick = async () => {
+                    const newStatus = prompt(adminT("updateStatusPrompt", "Update status:"), data.status);
+                    if (!newStatus) return;
+                    await updateDoc(doc(db, "Orders", id), { status: newStatus });
+                    await notifyUser(data.userId, {
+                        title: "تم تحديث طلبك",
+                        body: `حالة الطلب الآن: ${newStatus}.`,
+                        type: "order",
+                        link: "account.html",
+                        sourceCollection: "Orders",
+                        sourceId: id
+                    });
+                    loadOrders();
+                };
+                deleteBtn.onclick = async () => {
+                    if (!confirm(adminT("deleteOrderConfirm", "Delete this order?"))) return;
+                    await deleteDoc(doc(db, "Orders", id));
+                    await notifyUser(data.userId, {
+                        title: "تم إلغاء طلبك",
+                        body: `تم إلغاء طلب ${data.productName || "المنتج"}.`,
+                        type: "order",
+                        link: "account.html",
+                        sourceCollection: "Orders",
+                        sourceId: id
+                    });
+                    loadOrders();
+                };
                 actionsCell.appendChild(updateBtn); actionsCell.appendChild(deleteBtn);
             });
         }
@@ -1820,6 +2026,14 @@
             }
 
             await updateDoc(doc(db, "Users", userId), updatedUser);
+            await notifyUser(userId, {
+                title: "تم تحديث بيانات حسابك",
+                body: "قام الأدمن بتحديث بيانات حسابك. يمكنك مراجعتها من صفحة الحساب.",
+                type: "account",
+                link: "account.html",
+                sourceCollection: "Users",
+                sourceId: userId
+            });
             alert(adminT("userUpdatedAlert", "تم تحديث بيانات الزبون بنجاح!"));
             loadUsers();
         }
@@ -1943,13 +2157,23 @@
             if (selectedPenaltyUserId) toggleCustomerPrepayment(selectedPenaltyUserId, event.target.checked);
         });
 
-        async function setReviewPublication(id, status) {
+        async function setReviewPublication(id, status, review = {}) {
             const isPublished = status === "published";
             await updateDoc(doc(db, "Reviews", id), {
                 status,
                 isPublished,
                 moderatedAt: new Date().toISOString()
             });
+            if (review.userId) {
+                await notifyUser(review.userId, {
+                    title: isPublished ? "تم نشر تعليقك" : "تم تحديث تعليقك",
+                    body: isPublished ? "وافق الأدمن على تعليقك وتم نشره في الموقع." : "تمت مراجعة تعليقك ولم يتم نشره حاليًا.",
+                    type: "review",
+                    link: "index.html#reviews",
+                    sourceCollection: "Reviews",
+                    sourceId: id
+                });
+            }
             loadAdminReviews();
         }
 
@@ -1958,6 +2182,7 @@
             table.innerHTML = renderAdminHeaders(["customerHeader", "ratingHeader", "commentHeader", "actionsHeader"]);
             const querySnapshot = await getDocs(collection(db, "Reviews"));
             const reviews = querySnapshot.docs.map((reviewDoc) => ({ id: reviewDoc.id, data: reviewDoc.data() }));
+            setNavBadge("pendingReviewsBadge", reviews.filter(({ data }) => getReviewStatus(data) === "pending").length);
             const statusOrder = { pending: 0, hidden: 1, published: 2 };
             reviews.sort((a, b) => {
                 const statusDiff = statusOrder[getReviewStatus(a.data)] - statusOrder[getReviewStatus(b.data)];
@@ -2006,7 +2231,7 @@
                     const publishBtn = document.createElement("button");
                     publishBtn.innerText = adminT("publishReview", "نشر");
                     publishBtn.className = "btn-action btn-update";
-                    publishBtn.onclick = () => setReviewPublication(id, "published");
+                    publishBtn.onclick = () => setReviewPublication(id, "published", data);
                     actionsCell.appendChild(publishBtn);
                 }
 
@@ -2014,7 +2239,7 @@
                     const keepBtn = document.createElement("button");
                     keepBtn.innerText = adminT("keepUnpublishedReview", "إبقاء بدون نشر");
                     keepBtn.className = "btn-action btn-sale";
-                    keepBtn.onclick = () => setReviewPublication(id, "hidden");
+                    keepBtn.onclick = () => setReviewPublication(id, "hidden", data);
                     actionsCell.appendChild(keepBtn);
                 }
 
@@ -2022,16 +2247,30 @@
                     const hideBtn = document.createElement("button");
                     hideBtn.innerText = adminT("hideReview", "إخفاء");
                     hideBtn.className = "btn-action btn-sale";
-                    hideBtn.onclick = () => setReviewPublication(id, "hidden");
+                    hideBtn.onclick = () => setReviewPublication(id, "hidden", data);
                     actionsCell.appendChild(hideBtn);
                 }
 
                 const deleteBtn = document.createElement("button"); deleteBtn.innerText = adminT("deleteReview", "حذف التقييم"); deleteBtn.className = "btn-action btn-delete";
                 deleteBtn.onclick = async () => { if (confirm(adminT("deleteReviewConfirm", "هل أنت متأكد من حذف هذا التقييم؟"))) { await deleteDoc(doc(db, "Reviews", id)); loadAdminReviews(); } };
+                deleteBtn.onclick = async () => {
+                    if (!confirm(adminT("deleteReviewConfirm", "Delete this review?"))) return;
+                    await deleteDoc(doc(db, "Reviews", id));
+                    await notifyUser(data.userId, {
+                        title: "تم حذف تعليقك",
+                        body: "قام الأدمن بحذف التعليق من الموقع.",
+                        type: "review",
+                        link: "index.html#reviews",
+                        sourceCollection: "Reviews",
+                        sourceId: id
+                    });
+                    loadAdminReviews();
+                };
                 actionsCell.appendChild(deleteBtn);
             });
         }
 
     </script>
+    <script type="module" src="assets/notifications.js"></script>
 </body>
 </html>

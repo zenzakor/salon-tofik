@@ -166,7 +166,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, doc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, getDoc, setDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
@@ -200,6 +200,115 @@
             document.querySelectorAll("[data-i18n]").forEach((element) => { const key = element.dataset.i18n; if (uiText[lang]?.[key]) element.textContent = uiText[lang][key]; });
             renderCart();
         }
+
+        async function createNotification(payload) {
+            if (!payload?.userId) return;
+            const createdAtMs = Date.now();
+            try {
+                await addDoc(collection(db, "Notifications"), {
+                    userId: String(payload.userId),
+                    targetType: payload.targetType || (payload.userId === "admin" ? "admin" : "user"),
+                    title: payload.title || "",
+                    body: payload.body || "",
+                    type: payload.type || "info",
+                    link: payload.link || "",
+                    sourceCollection: payload.sourceCollection || "",
+                    sourceId: payload.sourceId || "",
+                    actorName: payload.actorName || "",
+                    read: false,
+                    createdAt: new Date(createdAtMs).toISOString(),
+                    createdAtMs,
+                    meta: payload.meta || {}
+                });
+            } catch (error) {
+                console.warn("Notification was not saved:", error);
+            }
+        }
+
+        function cartStorageKey() {
+            return currentUserId ? `salonCart_${currentUserId}` : "salonCart";
+        }
+
+        function normalizeCartItems(items) {
+            const merged = new Map();
+            (Array.isArray(items) ? items : []).forEach((item) => {
+                if (!item?.id) return;
+                const existing = merged.get(item.id) || {};
+                const quantity = Math.max(1, Number(existing.quantity || 0) + Number(item.quantity || 1));
+                merged.set(item.id, { ...existing, ...item, quantity });
+            });
+            return Array.from(merged.values());
+        }
+
+        function saveCartToLocal() {
+            localStorage.setItem(cartStorageKey(), JSON.stringify(cart));
+            if (currentUserId) localStorage.removeItem("salonCart");
+        }
+
+        async function saveCart() {
+            cart = normalizeCartItems(cart);
+            saveCartToLocal();
+            if (!currentUserId) return;
+            await setDoc(doc(db, "Carts", currentUserId), {
+                userId: currentUserId,
+                items: cart,
+                updatedAt: new Date().toISOString()
+            }, { merge: true });
+        }
+
+        async function loadSavedCart() {
+            const localGuestCart = JSON.parse(localStorage.getItem("salonCart") || "[]");
+            const localUserCart = JSON.parse(localStorage.getItem(cartStorageKey()) || "[]");
+            let savedCart = localUserCart;
+            if (currentUserId) {
+                const cartSnap = await getDoc(doc(db, "Carts", currentUserId));
+                savedCart = cartSnap.exists() ? (cartSnap.data().items || []) : localUserCart;
+            }
+            cart = normalizeCartItems([...(savedCart || []), ...(currentUserId ? localGuestCart : [])]);
+            await saveCart();
+        }
+
+        async function reconcileCartStock() {
+            let changed = false;
+            const checkedItems = await Promise.all(cart.map(async (item) => {
+                const productSnap = await getDoc(doc(db, "Products", item.id));
+                if (!productSnap.exists()) {
+                    changed = true;
+                    return null;
+                }
+                const product = productSnap.data();
+                const stock = Number(product.stock || 0);
+                if (product.isVisible === false || stock <= 0) {
+                    changed = true;
+                    return null;
+                }
+                const nextQuantity = Math.min(Number(item.quantity || 1), stock);
+                if (nextQuantity !== Number(item.quantity || 1) || item.stock !== stock || item.price !== product.price || item.name !== product.name) changed = true;
+                return {
+                    ...item,
+                    name: product.name,
+                    price: product.price,
+                    image: product.imageUrl || item.image,
+                    stock,
+                    quantity: Math.max(1, nextQuantity)
+                };
+            }));
+            cart = checkedItems.filter(Boolean);
+            if (changed) await saveCart();
+        }
+
+        function updateCheckoutVisibility() {
+            const checkoutBtn = document.getElementById("checkoutBtn");
+            const loginWarning = document.getElementById("loginWarning");
+            if (!checkoutBtn || !loginWarning) return;
+            if (!cart.length) {
+                checkoutBtn.style.display = "none";
+                loginWarning.style.display = "none";
+                return;
+            }
+            checkoutBtn.style.display = loggedInUserData ? "block" : "none";
+            loginWarning.style.display = loggedInUserData ? "none" : "block";
+        }
         window.openSettings = () => { document.getElementById("settingsModal").classList.add("open"); };
         window.closeSettings = () => { document.getElementById("settingsModal").classList.remove("open"); };
         document.getElementById("settingsModal").addEventListener("click", (event) => { if (event.target === document.getElementById("settingsModal")) closeSettings(); });
@@ -216,16 +325,25 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
-                const docSnap = await getDoc(doc(db, "Users", user.uid));
-                if (docSnap.exists()) {
-                    loggedInUserData = { ...docSnap.data(), email: user.email };
-                    document.getElementById("loginWarning").style.display = "none";
-                    if(cart.length > 0) document.getElementById("checkoutBtn").style.display = "block";
-                }
+                cart = normalizeCartItems([
+                    ...JSON.parse(localStorage.getItem(cartStorageKey()) || "[]"),
+                    ...JSON.parse(localStorage.getItem("salonCart") || "[]")
+                ]);
+                renderCart();
+                getDoc(doc(db, "Users", user.uid)).then(async (docSnap) => {
+                    if (docSnap.exists()) loggedInUserData = { ...docSnap.data(), email: user.email };
+                    renderCart();
+                    await loadSavedCart();
+                    renderCart();
+                    await reconcileCartStock();
+                    renderCart();
+                }).catch((error) => console.error("Could not load saved cart:", error));
             } else {
                 currentUserId = null;
                 loggedInUserData = null;
-                if(cart.length > 0) { document.getElementById("loginWarning").style.display = "block"; document.getElementById("checkoutBtn").style.display = "none"; }
+                cart = JSON.parse(localStorage.getItem("salonCart") || "[]");
+                renderCart();
+                reconcileCartStock().then(renderCart).catch((error) => console.error("Could not update cart stock:", error));
             }
         });
 
@@ -244,6 +362,7 @@
             }
 
             emptyMsg.style.display = "none"; summary.style.display = "block";
+            updateCheckoutVisibility();
 
             cart.forEach((product, index) => {
                 const qty = product.quantity || 1; 
@@ -283,10 +402,15 @@
             }
             cart[index].quantity = nextQuantity;
             if (cart[index].quantity < 1) cart[index].quantity = 1;
-            localStorage.setItem('salonCart', JSON.stringify(cart)); renderCart();
+            renderCart();
+            saveCart().catch((error) => console.error("Could not save cart:", error));
         };
 
-        window.removeItem = function(index) { cart.splice(index, 1); localStorage.setItem('salonCart', JSON.stringify(cart)); renderCart(); };
+        window.removeItem = function(index) {
+            cart.splice(index, 1);
+            renderCart();
+            saveCart().catch((error) => console.error("Could not save cart:", error));
+        };
 
         document.getElementById("checkoutBtn").addEventListener("click", async () => {
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -328,8 +452,34 @@
                 });
 
                 await batch.commit();
+                const customerName = `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim() || "زبون";
+                await createNotification({
+                    userId: "admin",
+                    targetType: "admin",
+                    title: "طلب شراء جديد",
+                    body: `${customerName} اشترى: ${productNames}. المبلغ: ${totalPrice} ₪.`,
+                    type: "order",
+                    link: "admin.html#orders",
+                    sourceCollection: "Orders",
+                    sourceId: orderRef.id,
+                    actorName: customerName
+                });
+                await createNotification({
+                    userId: currentUserId,
+                    targetType: "user",
+                    title: "تم إرسال طلب الشراء بنجاح",
+                    body: `وصل طلبك (${productNames}) وسنتواصل معك قريبًا.`,
+                    type: "order",
+                    link: "account.html",
+                    sourceCollection: "Orders",
+                    sourceId: orderRef.id
+                });
                 
-                localStorage.removeItem('salonCart'); cart = []; renderCart();
+                cart = [];
+                localStorage.removeItem('salonCart');
+                if (currentUserId) localStorage.removeItem(cartStorageKey());
+                await saveCart();
+                renderCart();
                 alert(text.orderSuccess);
             } catch (error) { console.error(error); alert(text.orderError + error.message);
             } finally { document.getElementById("loader").style.display = "none"; document.getElementById("checkoutBtn").disabled = false; }
@@ -337,5 +487,6 @@
 
         renderCart();
     </script>
+    <script type="module" src="assets/notifications.js"></script>
 </body>
 </html>

@@ -286,12 +286,6 @@ html.mobile-view .booking-card.no-show::after {
     font-size: 116px;
 }
 
-html.mobile-view .calendar-booking.no-show::after {
-    width: 20px;
-    height: 20px;
-    font-size: 16px;
-}
-
 html.mobile-view .toast-stack {
     top: 12px;
     inset-inline: 12px;
