@@ -43,6 +43,15 @@
         .prepayment-panel p { margin: 0 0 8px; color: #e5e7eb; line-height: 1.6; }
         .prepayment-panel small { color: #cbd5e1; line-height: 1.5; }
         body.dark-mode .prepayment-panel { background: linear-gradient(135deg, #0f172a, #111827); border-color: rgba(212,175,55,0.58); }
+        .booking-availability { display: none; margin-top: 14px; padding: 14px 16px; border: 1px solid #dbe4ee; border-radius: 10px; background: #f8fafc; color: #334155; font-size: 14px; line-height: 1.6; }
+        .booking-availability.active { display: block; }
+        .booking-availability strong { display: block; color: #111827; margin-bottom: 4px; }
+        .booking-availability.warning { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
+        .booking-availability.blocked { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+        body.dark-mode .booking-availability { background: #181818; border-color: #333; color: #d1d5db; }
+        body.dark-mode .booking-availability strong { color: #f8fafc; }
+        body.dark-mode .booking-availability.warning { background: #2b2415; border-color: #7c2d12; color: #fed7aa; }
+        body.dark-mode .booking-availability.blocked { background: #2b181d; border-color: #7f1d1d; color: #fecdd3; }
         
         label { font-weight: bold; display: block; margin-top: 20px; margin-bottom: 8px; color: #222;}
         input, select, textarea { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 16px; box-sizing: border-box; background-color: #fafafa; transition: 0.3s; cursor: pointer;}
@@ -138,6 +147,7 @@
                     <option value="" disabled selected data-i18n="hourPlaceholder">الساعة</option>
                 </select>
             </div>
+            <div id="bookingAvailability" class="booking-availability" aria-live="polite"></div>
 
             <label data-i18n="notesLabel">ملاحظات إضافية أو طلب خاص (اختياري):</label>
             <textarea id="notes" rows="3" placeholder="مثال: أريد صبغة بلون أشقر رمادي..." data-i18n-placeholder="notesPlaceholder"></textarea>
@@ -207,16 +217,19 @@
         import { getFirestore, collection, addDoc, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
-        flatpickr("#bookDate", { locale: "ar", minDate: "today", dateFormat: "Y-m-d", disableMobile: "true" });
+        const bookDatePicker = flatpickr("#bookDate", {
+            locale: "ar",
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            disableMobile: "true",
+            onChange: () => {
+                populateBookingHours();
+                updateBookingAvailabilityMessage();
+            }
+        });
 
         const hourSelect = document.getElementById("bookHour");
-        for (let i = 9; i <= 19; i++) {
-            let option = document.createElement("option");
-            let computerHour = i < 10 ? '0' + i : i; 
-            let displayHour = i > 12 ? i - 12 : (i === 0 ? 12 : i); 
-            let ampm = i < 12 ? 'ص' : 'م';
-            option.value = computerHour; option.text = `${displayHour} ${ampm}`; hourSelect.appendChild(option);
-        }
+        const minuteSelect = document.getElementById("bookMinute");
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
         const app = initializeApp(firebaseConfig);
@@ -229,6 +242,11 @@
             providers: ["stripe", "paypal"],
             status: "prepared"
         };
+        let salonBookingSettings = null;
+        let salonBookingSettingsLoaded = false;
+
+        const SALON_BOOKING_SETTINGS_DOC = ["SiteContent", "salonBookingSettings"];
+        const BOOKING_DAY_KEYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
         const uiText = {
             ar: { home: "الرئيسية", settings: "الإعدادات", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير", bookTitle: "📅 احجزي موعدك", bookSubtitle: "حددي تفاصيل حجزك بدقة لنتمكن من خدمتك بأفضل شكل.", serviceLabel: "نوع الخدمة المطلوبة:", dateLabel: "تاريخ الموعد:", datePlaceholder: "📅 اضغطي لاختيار التاريخ...", timeLabel: "الوقت المفضل (أوقات العمل 9 ص - 7 م):", notesLabel: "ملاحظات إضافية أو طلب خاص (اختياري):", notesPlaceholder: "مثال: أريد صبغة بلون أشقر رمادي...", submitBook: "تأكيد الحجز", bookingLoader: "جاري التحقق من توفر الموعد... ⏳", loginRequiredTitle: "🔒 يرجى تسجيل الدخول أولاً", loginRequiredText: "يجب عليك تسجيل الدخول من الصفحة الرئيسية لتتمكني من حجز موعد.", backHome: "العودة للصفحة الرئيسية" },
@@ -244,6 +262,60 @@
         Object.assign(uiText.ar, { bookingPolicyTitle: "سياسة الإلغاء", bookingPolicyText: "يمكن إلغاء الحجز قبل 24 ساعة بدون رسوم. الإلغاء المتأخر يخضع لمراجعة الصالون.", readTerms: "قراءة الشروط وسياسة الإلغاء" });
         Object.assign(uiText.he, { bookingPolicyTitle: "מדיניות ביטול", bookingPolicyText: "אפשר לבטל עד 24 שעות לפני התור ללא דמי ביטול. ביטול מאוחר ייבדק על ידי הסלון.", readTerms: "קריאת התנאים ומדיניות הביטול" });
         Object.assign(uiText.en, { bookingPolicyTitle: "Cancellation policy", bookingPolicyText: "You can cancel up to 24 hours before the appointment with no fee. Late cancellation is reviewed by the salon.", readTerms: "Read terms and cancellation policy" });
+        Object.assign(uiText.ar, {
+            loadingServices: "جاري تحميل الخدمات...",
+            noServicesAvailable: "لا توجد خدمات متاحة للحجز حالياً.",
+            serviceDurationLabel: "المدة",
+            servicePriceLabel: "السعر",
+            durationMinutesSuffix: "دقيقة",
+            availabilityTitle: "حالة اليوم",
+            workingHoursLabel: "ساعات العمل",
+            capacityLabel: "السعة",
+            regularDayLabel: "يوم عادي",
+            busyDayLabel: "يوم ازدحام",
+            closedDayLabel: "مغلق",
+            selectDateForAvailability: "اختاري التاريخ لعرض ساعات العمل والسعة.",
+            bookingClosedAlert: "هذا اليوم مغلق للحجز.",
+            bookingOutsideHoursAlert: "الوقت خارج ساعات العمل أو مدة الخدمة تتجاوز نهاية الدوام.",
+            bookingCapacityAlert: "عذراً، لا توجد سعة كافية لهذا الوقت حسب مدة الخدمة. الرجاء اختيار وقت آخر.",
+            servicesLoadError: "تعذر تحميل إعدادات الحجز. سيتم استخدام القيم الافتراضية."
+        });
+        Object.assign(uiText.he, {
+            loadingServices: "טוען שירותים...",
+            noServicesAvailable: "אין כרגע שירותים זמינים להזמנה.",
+            serviceDurationLabel: "משך",
+            servicePriceLabel: "מחיר",
+            durationMinutesSuffix: "דקות",
+            availabilityTitle: "מצב היום",
+            workingHoursLabel: "שעות עבודה",
+            capacityLabel: "קיבולת",
+            regularDayLabel: "יום רגיל",
+            busyDayLabel: "יום עמוס",
+            closedDayLabel: "סגור",
+            selectDateForAvailability: "בחרי תאריך להצגת שעות עבודה וקיבולת.",
+            bookingClosedAlert: "היום הזה סגור להזמנות.",
+            bookingOutsideHoursAlert: "השעה מחוץ לשעות העבודה או השירות מסתיים אחרי הסגירה.",
+            bookingCapacityAlert: "אין קיבולת זמינה בשעה הזו לפי משך השירות. בחרי שעה אחרת.",
+            servicesLoadError: "לא ניתן לטעון הגדרות תורים. נעשה שימוש בברירת מחדל."
+        });
+        Object.assign(uiText.en, {
+            loadingServices: "Loading services...",
+            noServicesAvailable: "No services are currently available for booking.",
+            serviceDurationLabel: "Duration",
+            servicePriceLabel: "Price",
+            durationMinutesSuffix: "min",
+            availabilityTitle: "Day status",
+            workingHoursLabel: "Working hours",
+            capacityLabel: "Capacity",
+            regularDayLabel: "Regular day",
+            busyDayLabel: "Busy day",
+            closedDayLabel: "Closed",
+            selectDateForAvailability: "Choose a date to see working hours and capacity.",
+            bookingClosedAlert: "This day is closed for booking.",
+            bookingOutsideHoursAlert: "The time is outside working hours or the service ends after closing.",
+            bookingCapacityAlert: "There is no available capacity at this time for the service duration. Please choose another time.",
+            servicesLoadError: "Could not load booking settings. Defaults will be used."
+        });
 
         function applySettings() {
             const theme = localStorage.getItem("salonTheme") || "light";
@@ -263,6 +335,286 @@
         function uiT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
             return uiText[lang]?.[key] || fallback;
+        }
+
+        function safeText(value) {
+            return String(value || "").replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[char]));
+        }
+
+        function getDefaultSalonServices() {
+            return [
+                { id: "haircut", name: "قص شعر", price: 80, durationMinutes: 45, active: true },
+                { id: "hair-color", name: "صبغة شعر", price: 250, durationMinutes: 90, active: true },
+                { id: "hair-style", name: "تسريحة", price: 150, durationMinutes: 60, active: true },
+                { id: "makeup", name: "مكياج", price: 220, durationMinutes: 75, active: true },
+                { id: "skin-care", name: "عناية بالبشرة", price: 180, durationMinutes: 60, active: true }
+            ];
+        }
+
+        function getDefaultSalonWorkingHours() {
+            const hours = {};
+            BOOKING_DAY_KEYS.forEach((day) => {
+                hours[day] = { open: day !== "saturday", start: "09:00", end: day === "friday" ? "15:00" : "19:00" };
+            });
+            return hours;
+        }
+
+        function getDefaultSalonBookingSettings() {
+            return {
+                capacity: { regular: 2, busy: 4 },
+                workingHours: getDefaultSalonWorkingHours(),
+                specialDays: [],
+                services: getDefaultSalonServices()
+            };
+        }
+
+        function normalizeSalonBookingSettings(data = {}) {
+            const defaults = getDefaultSalonBookingSettings();
+            const workingHours = {};
+            BOOKING_DAY_KEYS.forEach((day) => {
+                workingHours[day] = { ...defaults.workingHours[day], ...(data.workingHours?.[day] || {}) };
+                workingHours[day].open = workingHours[day].open !== false;
+                workingHours[day].start = String(workingHours[day].start || defaults.workingHours[day].start);
+                workingHours[day].end = String(workingHours[day].end || defaults.workingHours[day].end);
+            });
+            const services = Array.isArray(data.services) && data.services.length
+                ? data.services.map((service, index) => ({
+                    id: String(service.id || `service-${index}`),
+                    name: String(service.name || "").trim() || `Service ${index + 1}`,
+                    price: Math.max(0, Number(service.price || 0)),
+                    durationMinutes: Math.max(5, Number(service.durationMinutes || service.duration || 60)),
+                    active: service.active !== false
+                }))
+                : defaults.services;
+            const specialDays = Array.isArray(data.specialDays)
+                ? data.specialDays
+                    .map((day) => ({
+                        id: String(day.id || day.date || ""),
+                        date: String(day.date || ""),
+                        type: day.type === "busy" ? "busy" : "closed",
+                        reason: String(day.reason || "").trim()
+                    }))
+                    .filter((day) => /^\d{4}-\d{2}-\d{2}$/.test(day.date))
+                : [];
+            return {
+                capacity: {
+                    regular: Math.max(1, Number(data.capacity?.regular || defaults.capacity.regular)),
+                    busy: Math.max(1, Number(data.capacity?.busy || defaults.capacity.busy))
+                },
+                workingHours,
+                specialDays,
+                services
+            };
+        }
+
+        function getSalonSettings() {
+            if (!salonBookingSettings) salonBookingSettings = getDefaultSalonBookingSettings();
+            return salonBookingSettings;
+        }
+
+        function timeToMinutes(value) {
+            const [hour, minute] = String(value || "").split(":").map(Number);
+            if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
+            return hour * 60 + minute;
+        }
+
+        function minutesToTime(totalMinutes) {
+            const hour = Math.floor(Math.max(0, Number(totalMinutes || 0)) / 60);
+            const minute = Math.max(0, Number(totalMinutes || 0)) % 60;
+            return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+        }
+
+        function formatHourLabel(hour) {
+            const numericHour = Number(hour);
+            const displayHour = numericHour > 12 ? numericHour - 12 : (numericHour === 0 ? 12 : numericHour);
+            const ampm = numericHour < 12 ? "ص" : "م";
+            return `${displayHour} ${ampm}`;
+        }
+
+        function getDateDayKey(dateValue) {
+            const date = new Date(`${dateValue}T00:00:00`);
+            return BOOKING_DAY_KEYS[date.getDay()] || "sunday";
+        }
+
+        function getSalonSpecialDay(dateValue) {
+            return getSalonSettings().specialDays.find((day) => day.date === dateValue) || null;
+        }
+
+        function getSalonDateInfo(dateValue) {
+            const settings = getSalonSettings();
+            const dayKey = getDateDayKey(dateValue);
+            const working = settings.workingHours[dayKey] || getDefaultSalonWorkingHours()[dayKey];
+            const specialDay = getSalonSpecialDay(dateValue);
+            const closed = specialDay?.type === "closed" || working.open === false;
+            const busy = specialDay?.type === "busy";
+            return {
+                start: working.start || "09:00",
+                end: working.end || "19:00",
+                open: !closed,
+                busy,
+                capacity: busy ? settings.capacity.busy : settings.capacity.regular,
+                reason: specialDay?.type === "closed" ? (specialDay.reason || uiT("bookingClosedAlert", "This day is closed for booking.")) : ""
+            };
+        }
+
+        function findSalonService(value) {
+            const needle = String(value || "").trim();
+            return getSalonSettings().services.find((service) => service.id === needle || service.name === needle) || null;
+        }
+
+        function getSelectedBookingService() {
+            return findSalonService(document.getElementById("serviceType").value);
+        }
+
+        function getAppointmentDurationMinutes(appointment = {}) {
+            const storedDuration = Number(appointment.serviceDurationMinutes || appointment.durationMinutes || 0);
+            if (storedDuration > 0) return storedDuration;
+            return Math.max(5, Number(findSalonService(appointment.serviceId || appointment.service)?.durationMinutes || 60));
+        }
+
+        function shouldCountAppointmentForCapacity(appointment = {}) {
+            const status = String(appointment.status || "").toLowerCase();
+            if (!appointment.date || !appointment.time) return false;
+            return !status.includes("رفض") && !status.includes("reject") && !status.includes("cancel") && !status.includes("إلغاء") && !status.includes("no-show") && !status.includes("absent") && !appointment.noShow;
+        }
+
+        function getAppointmentInterval(appointment = {}) {
+            const start = timeToMinutes(appointment.time);
+            if (start === null) return null;
+            return { start, end: start + getAppointmentDurationMinutes(appointment) };
+        }
+
+        function hasCapacityConflict(appointments, date, start, end, capacity) {
+            const intervals = appointments
+                .filter((appointment) => appointment.date === date && shouldCountAppointmentForCapacity(appointment))
+                .map(getAppointmentInterval)
+                .filter((interval) => interval && interval.start < end && start < interval.end);
+            intervals.push({ start, end });
+
+            const events = [];
+            intervals.forEach((interval) => {
+                events.push({ time: interval.start, delta: 1 });
+                events.push({ time: interval.end, delta: -1 });
+            });
+            events.sort((a, b) => (a.time - b.time) || (a.delta - b.delta));
+
+            let activeCount = 0;
+            return events.some((event) => {
+                activeCount += event.delta;
+                return activeCount > capacity;
+            });
+        }
+
+        function checkSalonBookingAvailability({ date, time, durationMinutes, appointments = [] }) {
+            const info = getSalonDateInfo(date);
+            if (!info.open) return { available: false, reason: info.reason || uiT("bookingClosedAlert", "This day is closed for booking."), info };
+
+            const start = timeToMinutes(time);
+            const duration = Math.max(5, Number(durationMinutes || 60));
+            const end = start === null ? null : start + duration;
+            const workStart = timeToMinutes(info.start);
+            const workEnd = timeToMinutes(info.end);
+            if (start === null || end === null || workStart === null || workEnd === null || start < workStart || end > workEnd) {
+                return { available: false, reason: uiT("bookingOutsideHoursAlert", "The time is outside working hours or the service ends after closing."), info };
+            }
+            if (hasCapacityConflict(appointments, date, start, end, info.capacity)) {
+                return { available: false, reason: uiT("bookingCapacityAlert", "There is no available capacity at this time for the service duration."), info };
+            }
+            return { available: true, info, start, end };
+        }
+
+        function renderBookingServices() {
+            const select = document.getElementById("serviceType");
+            const selectedValue = select.value;
+            const services = getSalonSettings().services.filter((service) => service.active !== false);
+            select.innerHTML = `<option value="" disabled selected>${uiT("servicePlaceholder", "-- اضغطي لاختيار الخدمة --")}</option>`;
+            if (!services.length) {
+                select.innerHTML = `<option value="" disabled selected>${uiT("noServicesAvailable", "No services are currently available for booking.")}</option>`;
+                return;
+            }
+            services.forEach((service) => {
+                const option = document.createElement("option");
+                option.value = service.id;
+                option.textContent = `${service.name} · ${uiT("serviceDurationLabel", "المدة")}: ${service.durationMinutes} ${uiT("durationMinutesSuffix", "دقيقة")} · ₪${Number(service.price || 0)}`;
+                select.appendChild(option);
+            });
+            if (selectedValue && services.some((service) => service.id === selectedValue)) select.value = selectedValue;
+        }
+
+        function populateBookingHours() {
+            const selectedDate = document.getElementById("bookDate").value;
+            const selectedHour = hourSelect.value;
+            const info = selectedDate ? getSalonDateInfo(selectedDate) : { start: "09:00", end: "19:00", open: true };
+            const selectedService = getSelectedBookingService();
+            const workStart = timeToMinutes(info.start) ?? 540;
+            const workEnd = timeToMinutes(info.end) ?? 1140;
+            const latestStart = selectedService ? Math.max(workStart, workEnd - selectedService.durationMinutes) : workEnd;
+            const startHour = Math.floor(workStart / 60);
+            const endHour = info.open ? Math.floor(latestStart / 60) : startHour - 1;
+            hourSelect.innerHTML = `<option value="" disabled selected>${uiT("hourPlaceholder", "الساعة")}</option>`;
+            for (let i = startHour; i <= endHour; i++) {
+                const optionValue = String(i).padStart(2, "0");
+                const option = document.createElement("option");
+                option.value = optionValue;
+                option.textContent = formatHourLabel(i);
+                hourSelect.appendChild(option);
+            }
+            if (selectedHour && Array.from(hourSelect.options).some((option) => option.value === selectedHour)) hourSelect.value = selectedHour;
+        }
+
+        function updateBookingAvailabilityMessage() {
+            const box = document.getElementById("bookingAvailability");
+            const date = document.getElementById("bookDate").value;
+            const service = getSelectedBookingService();
+            if (!box) return;
+            box.className = "booking-availability";
+            if (!date) {
+                box.classList.add("active");
+                box.innerHTML = `<strong>${uiT("availabilityTitle", "حالة اليوم")}</strong>${uiT("selectDateForAvailability", "اختاري التاريخ لعرض ساعات العمل والسعة.")}`;
+                return;
+            }
+            const info = getSalonDateInfo(date);
+            box.classList.add("active");
+            if (!info.open) {
+                box.classList.add("blocked");
+                box.innerHTML = `<strong>${uiT("closedDayLabel", "مغلق")}</strong>${safeText(info.reason || uiT("bookingClosedAlert", "هذا اليوم مغلق للحجز."))}`;
+                return;
+            }
+            const selectedTime = hourSelect.value && minuteSelect.value ? `${hourSelect.value}:${minuteSelect.value}` : "";
+            const duration = service?.durationMinutes || 60;
+            const endLabel = selectedTime ? minutesToTime((timeToMinutes(selectedTime) || 0) + duration) : "";
+            box.classList.toggle("warning", info.busy);
+            box.innerHTML = `
+                <strong>${info.busy ? uiT("busyDayLabel", "يوم ازدحام") : uiT("regularDayLabel", "يوم عادي")}</strong>
+                ${uiT("workingHoursLabel", "ساعات العمل")}: ${safeText(info.start)} - ${safeText(info.end)}<br>
+                ${uiT("capacityLabel", "السعة")}: ${info.capacity}<br>
+                ${service ? `${safeText(service.name)} · ${duration} ${uiT("durationMinutesSuffix", "دقيقة")}${endLabel ? ` · ${selectedTime} - ${endLabel}` : ""}` : ""}
+            `;
+        }
+
+        async function loadSalonBookingSettings(force = false) {
+            if (salonBookingSettingsLoaded && !force) return getSalonSettings();
+            const select = document.getElementById("serviceType");
+            select.innerHTML = `<option value="" disabled selected>${uiT("loadingServices", "Loading services...")}</option>`;
+            try {
+                const snap = await getDoc(doc(db, SALON_BOOKING_SETTINGS_DOC[0], SALON_BOOKING_SETTINGS_DOC[1]));
+                salonBookingSettings = normalizeSalonBookingSettings(snap.exists() ? snap.data() : {});
+            } catch (error) {
+                console.warn("Salon booking settings could not load:", error);
+                salonBookingSettings = getDefaultSalonBookingSettings();
+                alert(uiT("servicesLoadError", "Could not load booking settings. Defaults will be used."));
+            }
+            salonBookingSettingsLoaded = true;
+            renderBookingServices();
+            populateBookingHours();
+            updateBookingAvailabilityMessage();
+            return salonBookingSettings;
         }
 
         async function createNotification(payload) {
@@ -314,8 +666,20 @@
             localStorage.setItem("salonLang", document.getElementById("langSelect").value);
             localStorage.setItem("salonTextSize", document.getElementById("textSizeSelect").value);
             applySettings();
+            if (salonBookingSettingsLoaded) {
+                renderBookingServices();
+                populateBookingHours();
+                updateBookingAvailabilityMessage();
+            }
         }));
         applySettings();
+        document.getElementById("serviceType").addEventListener("change", () => {
+            populateBookingHours();
+            updateBookingAvailabilityMessage();
+        });
+        hourSelect.addEventListener("change", updateBookingAvailabilityMessage);
+        minuteSelect.addEventListener("change", updateBookingAvailabilityMessage);
+        loadSalonBookingSettings();
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -337,7 +701,9 @@
         });
 
         document.getElementById("submitBookBtn").addEventListener("click", async () => {
-            const service = document.getElementById("serviceType").value;
+            await loadSalonBookingSettings();
+            const selectedService = getSelectedBookingService();
+            const service = selectedService?.name || "";
             const date = document.getElementById("bookDate").value;
             const hour = document.getElementById("bookHour").value;
             const minute = document.getElementById("bookMinute").value;
@@ -349,7 +715,6 @@
                 return alert(uiT("prepaymentAlert", "This account requires a partial deposit before a new booking."));
             }
             if (!service || !date || !hour || !minute) return alert("الرجاء تعبئة نوع الخدمة، التاريخ، والساعة والدقيقة!");
-            if (hour === "19" && minute !== "00") return alert("أوقات العمل تنتهي الساعة 7:00 مساءً تماماً. الرجاء اختيار وقت أبكر.");
 
             const finalTime = `${hour}:${minute}`;
 
@@ -358,14 +723,18 @@
 
             try {
                 const querySnapshot = await getDocs(collection(db, "Appointments"));
-                let isTimeTaken = false;
+                const existingAppointments = [];
                 querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.date === date && data.time === finalTime) isTimeTaken = true;
+                    existingAppointments.push({ id: doc.id, ...doc.data() });
                 });
-
-                if (isTimeTaken) {
-                    alert("❌ عذراً، هذا الوقت محجوز مسبقاً من قبل زبون آخر. الرجاء اختيار وقت أو يوم مختلف.");
+                const availability = checkSalonBookingAvailability({
+                    date,
+                    time: finalTime,
+                    durationMinutes: selectedService?.durationMinutes || 60,
+                    appointments: existingAppointments
+                });
+                if (!availability.available) {
+                    alert(availability.reason);
                     document.getElementById("loader").style.display = "none"; document.getElementById("submitBookBtn").disabled = false;
                     return; 
                 }
@@ -376,6 +745,9 @@
                     customerName: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
                     phone: loggedInUserData.phone || "",
                     service: service,
+                    serviceId: selectedService?.id || "",
+                    servicePrice: Number(selectedService?.price || 0),
+                    serviceDurationMinutes: Number(selectedService?.durationMinutes || 60),
                     date: date,
                     time: finalTime,
                     notes: notes,

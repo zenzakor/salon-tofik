@@ -201,6 +201,7 @@ html.mobile-view .appointments-layout {
 html.mobile-view .pending-panel,
 html.mobile-view .calendar-panel,
 html.mobile-view .admin-booking-panel,
+html.mobile-view .salon-settings-panel,
 html.mobile-view .add-box,
 html.mobile-view .user-tools,
 html.mobile-view .product-note {
@@ -209,7 +210,12 @@ html.mobile-view .product-note {
 }
 
 html.mobile-view .admin-booking-grid,
-html.mobile-view .admin-create-user-grid {
+html.mobile-view .admin-create-user-grid,
+html.mobile-view .salon-settings-layout,
+html.mobile-view .salon-capacity-grid,
+html.mobile-view .salon-special-grid,
+html.mobile-view .salon-service-form,
+html.mobile-view .salon-day-row {
     grid-template-columns: 1fr;
 }
 

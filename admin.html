@@ -11,8 +11,8 @@
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; display: flex; min-height: 100vh;}
         body.dark-mode { background-color: #151515; color: #f3f3f3; }
-        body.dark-mode .main-content, body.dark-mode .add-box, body.dark-mode .appointments-topbar, body.dark-mode .pending-panel, body.dark-mode .calendar-panel, body.dark-mode .admin-booking-panel, body.dark-mode .user-tools, body.dark-mode .product-note, body.dark-mode table { background-color: #202020; color: #f3f3f3; border-color: #333; }
-        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode .sub-heading, body.dark-mode .pending-panel h2, body.dark-mode .calendar-panel h2, body.dark-mode .admin-booking-panel h2, body.dark-mode .appointments-topbar label, body.dark-mode .calendar-month-control, body.dark-mode .admin-booking-grid label, body.dark-mode .users-count { color: #f3f3f3; }
+        body.dark-mode .main-content, body.dark-mode .add-box, body.dark-mode .appointments-topbar, body.dark-mode .pending-panel, body.dark-mode .calendar-panel, body.dark-mode .admin-booking-panel, body.dark-mode .salon-settings-panel, body.dark-mode .user-tools, body.dark-mode .product-note, body.dark-mode table { background-color: #202020; color: #f3f3f3; border-color: #333; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode .sub-heading, body.dark-mode .pending-panel h2, body.dark-mode .calendar-panel h2, body.dark-mode .admin-booking-panel h2, body.dark-mode .salon-settings-panel h2, body.dark-mode .salon-settings-panel h3, body.dark-mode .appointments-topbar label, body.dark-mode .calendar-month-control, body.dark-mode .admin-booking-grid label, body.dark-mode .salon-field, body.dark-mode .salon-day-row, body.dark-mode .users-count { color: #f3f3f3; }
         body.dark-mode tr:hover { background-color: #252525; }
         body.dark-mode .calendar-day, body.dark-mode .booking-card, body.dark-mode .calendar-booking { background: #181818; border-color: #333; color: #f3f3f3; }
         body.dark-mode .calendar-day.selected { background: #1d1d2c; border-color: #7c7cff; box-shadow: inset 0 0 0 1px #7c7cff; }
@@ -332,9 +332,47 @@
         body.dark-mode .home-editor-empty, body.dark-mode .home-preview-frame { background: #181818; border-color: #333; color: #d1d5db; }
         body.dark-mode .home-preview-section { background: #222; border-color: #333; color: #f3f3f3; }
         body.dark-mode .home-preview-product, body.dark-mode .home-preview-service { background: #181818; border-color: #333; }
+        .salon-settings-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+        .salon-settings-layout { display: grid; grid-template-columns: minmax(320px, 1.25fr) minmax(300px, 0.75fr); gap: 18px; align-items: start; }
+        .salon-settings-panel { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .salon-settings-panel.full { grid-column: 1 / -1; }
+        .salon-settings-panel h2, .salon-settings-panel h3 { margin-top: 0; color: #111; }
+        .salon-settings-panel p { color: #64748b; line-height: 1.7; margin-top: -6px; }
+        .salon-capacity-grid, .salon-special-grid, .salon-service-form { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 12px; align-items: end; }
+        .salon-service-form { grid-template-columns: 1.3fr 0.7fr 0.7fr auto; margin-bottom: 14px; }
+        .salon-field { display: grid; gap: 6px; font-weight: bold; color: #444; font-size: 13px; }
+        .salon-field input, .salon-field select, .salon-field textarea { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .salon-field textarea { resize: vertical; min-height: 72px; }
+        .salon-day-list { display: grid; gap: 10px; }
+        .salon-day-row { display: grid; grid-template-columns: minmax(92px, 0.8fr) 0.65fr minmax(110px, 1fr) minmax(110px, 1fr); gap: 10px; align-items: center; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa; color: #111; }
+        .salon-day-row strong { min-width: 0; }
+        .salon-day-row label { display: inline-flex; align-items: center; gap: 7px; font-weight: bold; margin: 0; color: inherit; }
+        .salon-day-row input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin: 0; accent-color: #111; }
+        .salon-day-row input[type="time"] { width: 100%; min-width: 0; padding: 9px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .salon-pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .salon-pill { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f8fafc; padding: 7px 10px; font-size: 13px; font-weight: bold; color: #111827; }
+        .salon-pill.closed { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+        .salon-pill.busy { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+        .salon-pill button { border: 0; background: transparent; color: inherit; cursor: pointer; font-weight: bold; font-size: 16px; line-height: 1; }
+        .salon-empty { padding: 14px; border: 1px dashed #cbd5e1; border-radius: 8px; background: #f8fafc; color: #64748b; text-align: center; font-weight: bold; }
+        .salon-status { display: grid; gap: 6px; margin-top: 12px; padding: 13px; border-radius: 8px; background: #f8fafc; border: 1px solid #e5e7eb; color: #334155; font-size: 13px; line-height: 1.55; }
+        .salon-status strong { color: #111; }
+        .salon-service-table input { width: 100%; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; }
+        .salon-service-table input[type="checkbox"] { width: 18px; min-width: 18px; height: 18px; accent-color: #111; }
+        .calendar-day.salon-closed-day { background: #fff1f2; border-color: #fecdd3; }
+        .calendar-day.salon-busy-day { background: #fff7ed; border-color: #fed7aa; }
+        .calendar-day .salon-day-badge { display: inline-flex; align-items: center; margin-bottom: 6px; padding: 3px 7px; border-radius: 999px; background: #111827; color: #fff; font-size: 11px; font-weight: bold; }
+        .booking-meta { color: #64748b; }
+        body.dark-mode .salon-settings-panel p, body.dark-mode .salon-status, body.dark-mode .booking-meta { color: #cfcfcf; }
+        body.dark-mode .salon-day-row, body.dark-mode .salon-empty, body.dark-mode .salon-status, body.dark-mode .salon-pill { background: #181818; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .calendar-day.salon-closed-day { background: #2b181d; border-color: #7f1d1d; }
+        body.dark-mode .calendar-day.salon-busy-day { background: #2b2415; border-color: #7c2d12; }
         @media (max-width: 1120px) {
             .home-builder-layout { grid-template-columns: 1fr; }
             .home-preview-canvas { max-width: 100%; }
+            .salon-settings-layout { grid-template-columns: 1fr; }
+            .salon-capacity-grid, .salon-special-grid, .salon-service-form { grid-template-columns: 1fr; }
+            .salon-day-row { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 720px) {
             .home-builder-toolbar, .home-builder-actions, .home-card-actions { align-items: stretch; flex-direction: column; }
@@ -342,6 +380,8 @@
             .home-add-row { grid-template-columns: 1fr; }
             .home-editor-grid { grid-template-columns: 1fr; }
             .home-color-controls { grid-template-columns: 1fr; }
+            .salon-settings-toolbar { align-items: stretch; flex-direction: column; }
+            .salon-day-row { grid-template-columns: 1fr; }
         }
         .settings-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1200; }
         .settings-drawer-overlay.open { display: block; }
@@ -498,7 +538,17 @@
             </div>
             <a class="nav-link" onclick="switchTab('orders')"><span class="material-symbols-outlined">shopping_cart</span> <span data-i18n="orders">الطلبات المشتراة</span></a>
             <a class="nav-link" onclick="switchTab('products')"><span class="material-symbols-outlined">inventory_2</span> <span data-i18n="products">المتجر والمنتجات</span></a>
-            <a class="nav-link" onclick="switchTab('home-builder')"><span class="material-symbols-outlined">dashboard_customize</span> <span data-admin-text="homeBuilderNav">تعديل الصفحة الرئيسية</span></a>
+            <div class="nav-group" id="salonSettingsNavGroup">
+                <button class="nav-link nav-toggle" type="button" onclick="toggleSalonSettingsMenu()">
+                    <span class="material-symbols-outlined">tune</span>
+                    <span data-admin-text="salonSettingsNav">إعدادات الصالون</span>
+                    <span class="material-symbols-outlined nav-caret">expand_more</span>
+                </button>
+                <div class="nav-submenu">
+                    <a class="nav-sub-link" onclick="switchTab('home-builder')"><span class="material-symbols-outlined">dashboard_customize</span> <span data-admin-text="homeBuilderNav">تعديل الصفحة الرئيسية</span></a>
+                    <a class="nav-sub-link" onclick="switchTab('booking-services')"><span class="material-symbols-outlined">event_available</span> <span data-admin-text="bookingServicesNav">الحجز والخدمات</span></a>
+                </div>
+            </div>
             <a class="nav-link" onclick="switchTab('accounts')"><span class="material-symbols-outlined">group</span> <span data-i18n="accounts">حسابات الزبائن</span></a>
             <a class="nav-link" onclick="switchTab('reviews')"><span class="material-symbols-outlined">star</span> <span data-i18n="reviews">التقييمات</span></a>
             <a class="nav-link" id="adminSettingsBtn"><span class="material-symbols-outlined">settings</span> <span data-i18n="settings">الإعدادات</span></a>
@@ -531,7 +581,7 @@
                         </div>
                         <div>
                             <label for="adminBookingService" data-i18n="adminBookService">الخدمة</label>
-                            <input type="text" id="adminBookingService" placeholder="قص شعر / صبغة / مكياج" data-i18n-placeholder="adminBookServicePlaceholder">
+                            <select id="adminBookingService"></select>
                         </div>
                         <div>
                             <label for="adminBookingDate" data-i18n="adminBookDate">تاريخ الحجز</label>
@@ -990,6 +1040,85 @@
                 </div>
             </div>
 
+            <div id="booking-services" class="admin-section">
+                <div class="salon-settings-toolbar">
+                    <h1 data-admin-text="bookingServicesTitle">إدارة أوقات الحجز والخدمات</h1>
+                    <button id="saveSalonSettingsBtn" class="notification-btn" type="button">
+                        <span class="material-symbols-outlined">save</span>
+                        <span data-admin-text="saveSalonSettingsButton">حفظ الإعدادات</span>
+                    </button>
+                </div>
+
+                <div class="salon-settings-layout">
+                    <div class="salon-settings-panel">
+                        <h2 data-admin-text="workingHoursTitle">أوقات العمل الأسبوعية</h2>
+                        <p data-admin-text="workingHoursHelp">حددي بداية ونهاية العمل لكل يوم. الأيام المغلقة لا تظهر كخيارات حجز للزبائن.</p>
+                        <div id="salonWorkingHoursList" class="salon-day-list"></div>
+                    </div>
+
+                    <div class="salon-settings-panel">
+                        <h2 data-admin-text="capacityTitle">القدرة الاستيعابية</h2>
+                        <p data-admin-text="capacityHelp">هذه القيم تحدد عدد الزبائن الذين يمكن خدمتهم في نفس الوقت.</p>
+                        <div class="salon-capacity-grid">
+                            <label class="salon-field">
+                                <span data-admin-text="regularCapacityLabel">الأيام العادية</span>
+                                <input id="regularCapacityInput" type="number" min="1" step="1" value="2">
+                            </label>
+                            <label class="salon-field">
+                                <span data-admin-text="busyCapacityLabel">أيام الازدحام</span>
+                                <input id="busyCapacityInput" type="number" min="1" step="1" value="4">
+                            </label>
+                        </div>
+                        <div id="salonSettingsStatus" class="salon-status" aria-live="polite"></div>
+                    </div>
+
+                    <div class="salon-settings-panel full">
+                        <h2 data-admin-text="specialDaysTitle">العطل وأيام الازدحام</h2>
+                        <p data-admin-text="specialDaysHelp">عند اختيار يوم عطلة يجب كتابة سبب الإغلاق ليظهر للزبائن عند محاولة الحجز.</p>
+                        <div class="salon-special-grid">
+                            <label class="salon-field">
+                                <span data-admin-text="specialDateLabel">التاريخ</span>
+                                <input id="specialDayDateInput" type="date">
+                            </label>
+                            <label class="salon-field">
+                                <span data-admin-text="specialTypeLabel">نوع اليوم</span>
+                                <select id="specialDayTypeInput">
+                                    <option value="closed" data-admin-text="closedDayOption">عطلة / إغلاق</option>
+                                    <option value="busy" data-admin-text="busyDayOption">يوم ازدحام</option>
+                                </select>
+                            </label>
+                            <label class="salon-field">
+                                <span data-admin-text="specialReasonLabel">سبب الإغلاق / ملاحظة</span>
+                                <input id="specialDayReasonInput" type="text" placeholder="عيد، إجازة، مناسبة..." data-admin-placeholder="specialReasonPlaceholder">
+                            </label>
+                            <button id="addSpecialDayBtn" class="btn-action btn-payment" type="button" data-admin-text="addSpecialDayButton">إضافة اليوم</button>
+                        </div>
+                        <div id="specialDaysList" class="salon-pill-list"></div>
+                    </div>
+
+                    <div class="salon-settings-panel full">
+                        <h2 data-admin-text="servicesManagementTitle">إدارة الخدمات</h2>
+                        <p data-admin-text="servicesManagementHelp">كل خدمة لها سعر ومدة. مدة الخدمة تدخل مباشرة في فحص تداخل الحجوزات والقدرة الاستيعابية.</p>
+                        <div class="salon-service-form">
+                            <label class="salon-field">
+                                <span data-admin-text="serviceNameLabel">اسم الخدمة</span>
+                                <input id="newServiceNameInput" type="text" placeholder="قص شعر، صبغة..." data-admin-placeholder="newServiceNamePlaceholder">
+                            </label>
+                            <label class="salon-field">
+                                <span data-admin-text="servicePriceLabel">السعر</span>
+                                <input id="newServicePriceInput" type="number" min="0" step="0.01" placeholder="120">
+                            </label>
+                            <label class="salon-field">
+                                <span data-admin-text="serviceDurationLabel">المدة بالدقائق</span>
+                                <input id="newServiceDurationInput" type="number" min="5" step="5" placeholder="60">
+                            </label>
+                            <button id="addSalonServiceBtn" class="btn-action btn-update" type="button" data-admin-text="addSalonServiceButton">إضافة خدمة</button>
+                        </div>
+                        <table id="salonServicesTable" class="salon-service-table"></table>
+                    </div>
+                </div>
+            </div>
+
             <div id="accounts" class="admin-section">
                 <h1 data-i18n="accountsTitle">👥 حسابات الزبائن المسجلين</h1>
                 <div class="add-box admin-create-user-panel">
@@ -1166,6 +1295,20 @@
         let allWorkerShifts = [];
         let currentMonthlyReport = { rows: [], summary: {}, month: "" };
         let savedMonthlyReports = [];
+        let salonBookingSettings = null;
+        let salonBookingSettingsLoaded = false;
+
+        const SALON_BOOKING_SETTINGS_DOC = ["SiteContent", "salonBookingSettings"];
+        const BOOKING_DAY_KEYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+        const BOOKING_DAY_LABELS = {
+            sunday: "الأحد",
+            monday: "الإثنين",
+            tuesday: "الثلاثاء",
+            wednesday: "الأربعاء",
+            thursday: "الخميس",
+            friday: "الجمعة",
+            saturday: "السبت"
+        };
 
         const adminText = {
             ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
@@ -1939,9 +2082,171 @@
         Object.assign(adminText.ar, { adminBookDate: "تاريخ الحجز" });
         Object.assign(adminText.he, { adminBookDate: "תאריך התור" });
         Object.assign(adminText.en, { adminBookDate: "Booking date" });
-        Object.assign(adminDynamicText.ar, { adminHourPlaceholder: "ساعة", adminMinutePlaceholder: "دقيقة" });
-        Object.assign(adminDynamicText.he, { adminHourPlaceholder: "שעה", adminMinutePlaceholder: "דקה" });
-        Object.assign(adminDynamicText.en, { adminHourPlaceholder: "Hour", adminMinutePlaceholder: "Minute" });
+        Object.assign(adminDynamicText.ar, { adminHourPlaceholder: "ساعة", adminMinutePlaceholder: "دقيقة", adminBookServicePlaceholder: "اختر خدمة" });
+        Object.assign(adminDynamicText.he, { adminHourPlaceholder: "שעה", adminMinutePlaceholder: "דקה", adminBookServicePlaceholder: "בחרי שירות" });
+        Object.assign(adminDynamicText.en, { adminHourPlaceholder: "Hour", adminMinutePlaceholder: "Minute", adminBookServicePlaceholder: "Choose a service" });
+        Object.assign(adminDynamicText.ar, {
+            salonSettingsNav: "إعدادات الصالون",
+            bookingServicesNav: "الحجز والخدمات",
+            bookingServicesTitle: "إدارة أوقات الحجز والخدمات",
+            saveSalonSettingsButton: "حفظ الإعدادات",
+            workingHoursTitle: "أوقات العمل الأسبوعية",
+            workingHoursHelp: "حددي بداية ونهاية العمل لكل يوم. الأيام المغلقة لا تظهر كخيارات حجز للزبائن.",
+            openDayLabel: "مفتوح",
+            capacityTitle: "القدرة الاستيعابية",
+            capacityHelp: "هذه القيم تحدد عدد الزبائن الذين يمكن خدمتهم في نفس الوقت.",
+            regularCapacityLabel: "الأيام العادية",
+            busyCapacityLabel: "أيام الازدحام",
+            specialDaysTitle: "العطل وأيام الازدحام",
+            specialDaysHelp: "عند اختيار يوم عطلة يجب كتابة سبب الإغلاق ليظهر للزبائن عند محاولة الحجز.",
+            specialDateLabel: "التاريخ",
+            specialTypeLabel: "نوع اليوم",
+            specialReasonLabel: "سبب الإغلاق / ملاحظة",
+            specialReasonPlaceholder: "عيد، إجازة، مناسبة...",
+            closedDayOption: "عطلة / إغلاق",
+            busyDayOption: "يوم ازدحام",
+            addSpecialDayButton: "إضافة اليوم",
+            noSpecialDays: "لا توجد أيام خاصة بعد.",
+            closedBadge: "مغلق",
+            busyBadge: "ازدحام",
+            servicesManagementTitle: "إدارة الخدمات",
+            servicesManagementHelp: "كل خدمة لها سعر ومدة. مدة الخدمة تدخل مباشرة في فحص تداخل الحجوزات والقدرة الاستيعابية.",
+            serviceNameLabel: "اسم الخدمة",
+            servicePriceLabel: "السعر",
+            serviceDurationLabel: "المدة بالدقائق",
+            newServiceNamePlaceholder: "قص شعر، صبغة...",
+            addSalonServiceButton: "إضافة خدمة",
+            activeServiceHeader: "متاحة",
+            durationHeader: "المدة",
+            settingsSavedAlert: "تم حفظ إعدادات الصالون.",
+            settingsLoadError: "تعذر تحميل إعدادات الصالون، تم استخدام القيم الافتراضية.",
+            serviceRequiredAlert: "أدخل اسم الخدمة ومدة صحيحة.",
+            invalidWorkingHoursAlert: "تأكد أن بداية العمل قبل نهاية العمل في كل يوم مفتوح.",
+            closedReasonRequiredAlert: "اكتب سبب الإغلاق ليظهر للزبائن.",
+            specialDateRequiredAlert: "اختر تاريخ اليوم الخاص.",
+            bookingClosedAlert: "هذا اليوم مغلق للحجز.",
+            bookingOutsideHoursAlert: "الوقت خارج ساعات العمل أو مدة الخدمة تتجاوز نهاية الدوام.",
+            bookingCapacityAlert: "لا توجد سعة كافية لهذا الوقت حسب مدة الخدمة.",
+            durationMinutesSuffix: "دقيقة",
+            capacitySummaryLabel: "السعة الحالية",
+            workingHoursSummaryLabel: "الدوام",
+            closedTodaySummary: "مغلق",
+            daySunday: "الأحد",
+            dayMonday: "الإثنين",
+            dayTuesday: "الثلاثاء",
+            dayWednesday: "الأربعاء",
+            dayThursday: "الخميس",
+            dayFriday: "الجمعة",
+            daySaturday: "السبت"
+        });
+        Object.assign(adminDynamicText.he, {
+            salonSettingsNav: "הגדרות סלון",
+            bookingServicesNav: "תורים ושירותים",
+            bookingServicesTitle: "ניהול זמני תורים ושירותים",
+            saveSalonSettingsButton: "שמירת הגדרות",
+            workingHoursTitle: "שעות עבודה שבועיות",
+            workingHoursHelp: "קבעי התחלה וסיום לכל יום. ימים סגורים לא יוצגו ללקוחות להזמנה.",
+            openDayLabel: "פתוח",
+            capacityTitle: "קיבולת",
+            capacityHelp: "הערכים קובעים כמה לקוחות ניתן לקבל באותו זמן.",
+            regularCapacityLabel: "ימים רגילים",
+            busyCapacityLabel: "ימים עמוסים",
+            specialDaysTitle: "חופשות וימים עמוסים",
+            specialDaysHelp: "ביום סגור חובה להוסיף סיבה שתוצג ללקוחות.",
+            specialDateLabel: "תאריך",
+            specialTypeLabel: "סוג יום",
+            specialReasonLabel: "סיבת סגירה / הערה",
+            specialReasonPlaceholder: "חג, חופשה, אירוע...",
+            closedDayOption: "חופשה / סגור",
+            busyDayOption: "יום עמוס",
+            addSpecialDayButton: "הוספת יום",
+            noSpecialDays: "עדיין אין ימים מיוחדים.",
+            closedBadge: "סגור",
+            busyBadge: "עמוס",
+            servicesManagementTitle: "ניהול שירותים",
+            servicesManagementHelp: "לכל שירות יש מחיר ומשך. משך השירות משפיע על בדיקת חפיפת התורים.",
+            serviceNameLabel: "שם שירות",
+            servicePriceLabel: "מחיר",
+            serviceDurationLabel: "משך בדקות",
+            newServiceNamePlaceholder: "תספורת, צבע...",
+            addSalonServiceButton: "הוספת שירות",
+            activeServiceHeader: "זמין",
+            durationHeader: "משך",
+            settingsSavedAlert: "הגדרות הסלון נשמרו.",
+            settingsLoadError: "לא ניתן לטעון הגדרות סלון, נעשה שימוש בברירת מחדל.",
+            serviceRequiredAlert: "יש להזין שם שירות ומשך תקין.",
+            invalidWorkingHoursAlert: "יש לוודא ששעת הפתיחה לפני שעת הסגירה בכל יום פתוח.",
+            closedReasonRequiredAlert: "יש לכתוב סיבת סגירה שתוצג ללקוחות.",
+            specialDateRequiredAlert: "יש לבחור תאריך.",
+            bookingClosedAlert: "היום הזה סגור להזמנות.",
+            bookingOutsideHoursAlert: "השעה מחוץ לשעות העבודה או השירות מסתיים אחרי הסגירה.",
+            bookingCapacityAlert: "אין קיבולת פנויה בשעה הזו לפי משך השירות.",
+            durationMinutesSuffix: "דקות",
+            capacitySummaryLabel: "קיבולת נוכחית",
+            workingHoursSummaryLabel: "שעות עבודה",
+            closedTodaySummary: "סגור",
+            daySunday: "ראשון",
+            dayMonday: "שני",
+            dayTuesday: "שלישי",
+            dayWednesday: "רביעי",
+            dayThursday: "חמישי",
+            dayFriday: "שישי",
+            daySaturday: "שבת"
+        });
+        Object.assign(adminDynamicText.en, {
+            salonSettingsNav: "Salon Settings",
+            bookingServicesNav: "Booking & Services",
+            bookingServicesTitle: "Manage Booking Times and Services",
+            saveSalonSettingsButton: "Save settings",
+            workingHoursTitle: "Weekly working hours",
+            workingHoursHelp: "Set the opening and closing time for each day. Closed days are unavailable to customers.",
+            openDayLabel: "Open",
+            capacityTitle: "Capacity",
+            capacityHelp: "These values control how many customers can be served at the same time.",
+            regularCapacityLabel: "Regular days",
+            busyCapacityLabel: "Busy days",
+            specialDaysTitle: "Closures and Busy Days",
+            specialDaysHelp: "Closed days require a reason so customers can see why booking is blocked.",
+            specialDateLabel: "Date",
+            specialTypeLabel: "Day type",
+            specialReasonLabel: "Closure reason / note",
+            specialReasonPlaceholder: "Holiday, vacation, event...",
+            closedDayOption: "Closed / holiday",
+            busyDayOption: "Busy day",
+            addSpecialDayButton: "Add day",
+            noSpecialDays: "No special days yet.",
+            closedBadge: "Closed",
+            busyBadge: "Busy",
+            servicesManagementTitle: "Services Management",
+            servicesManagementHelp: "Each service has a price and duration. Duration is used when checking booking overlap and capacity.",
+            serviceNameLabel: "Service name",
+            servicePriceLabel: "Price",
+            serviceDurationLabel: "Duration in minutes",
+            newServiceNamePlaceholder: "Haircut, color...",
+            addSalonServiceButton: "Add service",
+            activeServiceHeader: "Available",
+            durationHeader: "Duration",
+            settingsSavedAlert: "Salon settings were saved.",
+            settingsLoadError: "Could not load salon settings, defaults were used.",
+            serviceRequiredAlert: "Enter a service name and a valid duration.",
+            invalidWorkingHoursAlert: "Make sure each open day starts before it ends.",
+            closedReasonRequiredAlert: "Write the closure reason shown to customers.",
+            specialDateRequiredAlert: "Choose a special day date.",
+            bookingClosedAlert: "This day is closed for booking.",
+            bookingOutsideHoursAlert: "The time is outside working hours or the service ends after closing.",
+            bookingCapacityAlert: "There is no available capacity at this time for the service duration.",
+            durationMinutesSuffix: "min",
+            capacitySummaryLabel: "Current capacity",
+            workingHoursSummaryLabel: "Working hours",
+            closedTodaySummary: "Closed",
+            daySunday: "Sunday",
+            dayMonday: "Monday",
+            dayTuesday: "Tuesday",
+            dayWednesday: "Wednesday",
+            dayThursday: "Thursday",
+            dayFriday: "Friday",
+            daySaturday: "Saturday"
+        });
 
         function adminT(key, fallback) {
             const lang = localStorage.getItem("salonLang") || "ar";
@@ -1951,6 +2256,475 @@
         function renderAdminHeaders(keys) {
             return `<tr>${keys.map((key) => `<th>${adminT(key, key)}</th>`).join("")}</tr>`;
         }
+
+        function createSalonRecordId(prefix = "item") {
+            if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+            return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        }
+
+        function getDefaultSalonServices() {
+            return [
+                { id: "haircut", name: "قص شعر", price: 80, durationMinutes: 45, active: true },
+                { id: "hair-color", name: "صبغة شعر", price: 250, durationMinutes: 90, active: true },
+                { id: "hair-style", name: "تسريحة", price: 150, durationMinutes: 60, active: true },
+                { id: "makeup", name: "مكياج", price: 220, durationMinutes: 75, active: true },
+                { id: "skin-care", name: "عناية بالبشرة", price: 180, durationMinutes: 60, active: true }
+            ];
+        }
+
+        function getDefaultSalonWorkingHours() {
+            const hours = {};
+            BOOKING_DAY_KEYS.forEach((day) => {
+                hours[day] = {
+                    open: day !== "saturday",
+                    start: "09:00",
+                    end: day === "friday" ? "15:00" : "19:00"
+                };
+            });
+            return hours;
+        }
+
+        function getDefaultSalonBookingSettings() {
+            return {
+                capacity: { regular: 2, busy: 4 },
+                workingHours: getDefaultSalonWorkingHours(),
+                specialDays: [],
+                services: getDefaultSalonServices()
+            };
+        }
+
+        function normalizeSalonService(service = {}, index = 0) {
+            const name = String(service.name || "").trim();
+            const durationMinutes = Math.max(5, Number(service.durationMinutes || service.duration || 60));
+            return {
+                id: String(service.id || createSalonRecordId(`service-${index}`)),
+                name: name || `${adminT("serviceHeader", "Service")} ${index + 1}`,
+                price: Math.max(0, Number(service.price || 0)),
+                durationMinutes,
+                active: service.active !== false
+            };
+        }
+
+        function normalizeSalonBookingSettings(data = {}) {
+            const defaults = getDefaultSalonBookingSettings();
+            const workingHours = {};
+            BOOKING_DAY_KEYS.forEach((day) => {
+                workingHours[day] = {
+                    ...defaults.workingHours[day],
+                    ...(data.workingHours?.[day] || {})
+                };
+                workingHours[day].open = workingHours[day].open !== false;
+                workingHours[day].start = String(workingHours[day].start || defaults.workingHours[day].start);
+                workingHours[day].end = String(workingHours[day].end || defaults.workingHours[day].end);
+            });
+            const services = Array.isArray(data.services) && data.services.length
+                ? data.services.map(normalizeSalonService)
+                : defaults.services;
+            const specialDays = Array.isArray(data.specialDays)
+                ? data.specialDays
+                    .map((day) => ({
+                        id: String(day.id || day.date || createSalonRecordId("special-day")),
+                        date: String(day.date || ""),
+                        type: day.type === "busy" ? "busy" : "closed",
+                        reason: String(day.reason || "").trim()
+                    }))
+                    .filter((day) => /^\d{4}-\d{2}-\d{2}$/.test(day.date))
+                : [];
+            return {
+                capacity: {
+                    regular: Math.max(1, Number(data.capacity?.regular || defaults.capacity.regular)),
+                    busy: Math.max(1, Number(data.capacity?.busy || defaults.capacity.busy))
+                },
+                workingHours,
+                specialDays,
+                services
+            };
+        }
+
+        function getSalonSettings() {
+            if (!salonBookingSettings) salonBookingSettings = getDefaultSalonBookingSettings();
+            return salonBookingSettings;
+        }
+
+        function getBookingDayLabel(dayKey) {
+            const key = `day${dayKey.charAt(0).toUpperCase()}${dayKey.slice(1)}`;
+            return adminT(key, BOOKING_DAY_LABELS[dayKey] || dayKey);
+        }
+
+        function timeToMinutes(value) {
+            const [hour, minute] = String(value || "").split(":").map(Number);
+            if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
+            return hour * 60 + minute;
+        }
+
+        function minutesToTime(totalMinutes) {
+            const safeMinutes = Math.max(0, Number(totalMinutes || 0));
+            const hour = Math.floor(safeMinutes / 60);
+            const minute = safeMinutes % 60;
+            return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+        }
+
+        function getDateDayKey(dateValue) {
+            const date = new Date(`${dateValue}T00:00:00`);
+            return BOOKING_DAY_KEYS[date.getDay()] || "sunday";
+        }
+
+        function getSalonSpecialDay(dateValue) {
+            return getSalonSettings().specialDays.find((day) => day.date === dateValue) || null;
+        }
+
+        function getSalonDateInfo(dateValue) {
+            const settings = getSalonSettings();
+            const dayKey = getDateDayKey(dateValue);
+            const working = settings.workingHours[dayKey] || getDefaultSalonWorkingHours()[dayKey];
+            const specialDay = getSalonSpecialDay(dateValue);
+            const closed = specialDay?.type === "closed" || working.open === false;
+            const busy = specialDay?.type === "busy";
+            const capacity = busy ? settings.capacity.busy : settings.capacity.regular;
+            return {
+                dayKey,
+                label: getBookingDayLabel(dayKey),
+                start: working.start || "09:00",
+                end: working.end || "19:00",
+                open: !closed,
+                busy,
+                capacity,
+                specialDay,
+                reason: specialDay?.type === "closed" ? (specialDay.reason || adminT("bookingClosedAlert", "This day is closed for booking.")) : ""
+            };
+        }
+
+        function findSalonService(value) {
+            const needle = String(value || "").trim();
+            if (!needle) return null;
+            return getSalonSettings().services.find((service) => service.id === needle || sameCleanText(service.name, needle)) || null;
+        }
+
+        function getAppointmentDurationMinutes(appointment = {}) {
+            const storedDuration = Number(appointment.serviceDurationMinutes || appointment.durationMinutes || 0);
+            if (storedDuration > 0) return storedDuration;
+            const service = findSalonService(appointment.serviceId || appointment.service);
+            return Math.max(5, Number(service?.durationMinutes || 60));
+        }
+
+        function shouldCountAppointmentForCapacity(appointment = {}) {
+            if (!appointment?.date || !appointment?.time) return false;
+            return !isRejectedAppointment(appointment.status) && !isCancelledAppointment(appointment) && !isNoShowAppointment(appointment);
+        }
+
+        function getAppointmentInterval(appointment = {}) {
+            const start = timeToMinutes(appointment.time);
+            if (start === null) return null;
+            const duration = getAppointmentDurationMinutes(appointment);
+            return { start, end: start + duration };
+        }
+
+        function hasCapacityConflict(date, start, end, capacity, ignoredAppointmentId = "") {
+            const intervals = allAppointments
+                .filter((appointment) => appointment.id !== ignoredAppointmentId && appointment.date === date && shouldCountAppointmentForCapacity(appointment))
+                .map(getAppointmentInterval)
+                .filter((interval) => interval && interval.start < end && start < interval.end);
+            intervals.push({ start, end });
+
+            const events = [];
+            intervals.forEach((interval) => {
+                events.push({ time: interval.start, delta: 1 });
+                events.push({ time: interval.end, delta: -1 });
+            });
+            events.sort((a, b) => (a.time - b.time) || (a.delta - b.delta));
+
+            let activeCount = 0;
+            return events.some((event) => {
+                activeCount += event.delta;
+                return activeCount > capacity;
+            });
+        }
+
+        function checkSalonBookingAvailability({ date, time, durationMinutes, ignoredAppointmentId = "" }) {
+            if (!date || !time) return { available: false, reason: adminT("fillBookingAlert", "Choose service, date, and time before adding the booking.") };
+            const info = getSalonDateInfo(date);
+            if (!info.open) {
+                return { available: false, reason: info.reason || adminT("bookingClosedAlert", "This day is closed for booking."), info };
+            }
+
+            const start = timeToMinutes(time);
+            const duration = Math.max(5, Number(durationMinutes || 60));
+            const end = start === null ? null : start + duration;
+            const workStart = timeToMinutes(info.start);
+            const workEnd = timeToMinutes(info.end);
+            if (start === null || end === null || workStart === null || workEnd === null || start < workStart || end > workEnd) {
+                return { available: false, reason: adminT("bookingOutsideHoursAlert", "The time is outside working hours or the service ends after closing."), info };
+            }
+
+            if (hasCapacityConflict(date, start, end, info.capacity, ignoredAppointmentId)) {
+                return { available: false, reason: adminT("bookingCapacityAlert", "There is no available capacity at this time for the service duration."), info };
+            }
+
+            return { available: true, info, start, end };
+        }
+
+        async function loadSalonBookingSettings(force = false) {
+            if (salonBookingSettingsLoaded && !force) return getSalonSettings();
+            try {
+                const snap = await getDoc(doc(db, SALON_BOOKING_SETTINGS_DOC[0], SALON_BOOKING_SETTINGS_DOC[1]));
+                salonBookingSettings = normalizeSalonBookingSettings(snap.exists() ? snap.data() : {});
+            } catch (error) {
+                console.warn("Salon booking settings could not load:", error);
+                salonBookingSettings = getDefaultSalonBookingSettings();
+                showSalonSettingsStatus(adminT("settingsLoadError", "Could not load salon settings, defaults were used."));
+            }
+            salonBookingSettingsLoaded = true;
+            renderSalonBookingSettings();
+            renderAdminBookingServiceOptions();
+            renderAppointmentsDashboard();
+            return salonBookingSettings;
+        }
+
+        function showSalonSettingsStatus(message = "") {
+            const status = document.getElementById("salonSettingsStatus");
+            if (!status) return;
+            const today = getTodayValue();
+            const info = getSalonDateInfo(today);
+            const hours = info.open ? `${info.start} - ${info.end}` : adminT("closedTodaySummary", "Closed");
+            const servicesCount = getSalonSettings().services.filter((service) => service.active !== false).length;
+            status.innerHTML = `
+                ${message ? `<strong>${safeText(message)}</strong>` : ""}
+                <span>${adminT("workingHoursSummaryLabel", "Working hours")}: ${safeText(info.label)} | ${safeText(hours)}</span>
+                <span>${adminT("capacitySummaryLabel", "Current capacity")}: ${info.capacity} (${info.busy ? adminT("busyBadge", "Busy") : adminT("regularCapacityLabel", "Regular days")})</span>
+                <span>${adminT("servicesManagementTitle", "Services")}: ${servicesCount}</span>
+            `;
+        }
+
+        function renderSalonWorkingHours() {
+            const list = document.getElementById("salonWorkingHoursList");
+            if (!list) return;
+            const settings = getSalonSettings();
+            list.innerHTML = "";
+            BOOKING_DAY_KEYS.forEach((dayKey) => {
+                const day = settings.workingHours[dayKey];
+                const row = document.createElement("div");
+                row.className = "salon-day-row";
+                row.dataset.day = dayKey;
+                row.innerHTML = `
+                    <strong>${getBookingDayLabel(dayKey)}</strong>
+                    <label>
+                        <input class="salon-day-open" type="checkbox" ${day.open !== false ? "checked" : ""}>
+                        <span>${adminT("openDayLabel", "Open")}</span>
+                    </label>
+                    <input class="salon-day-start" type="time" value="${safeText(day.start || "09:00")}">
+                    <input class="salon-day-end" type="time" value="${safeText(day.end || "19:00")}">
+                `;
+                row.querySelectorAll("input").forEach((input) => input.addEventListener("change", syncSalonBookingSettingsFromForm));
+                list.appendChild(row);
+            });
+        }
+
+        function renderSpecialDaysList() {
+            const list = document.getElementById("specialDaysList");
+            if (!list) return;
+            const sortedDays = getSalonSettings().specialDays.slice().sort((a, b) => a.date.localeCompare(b.date));
+            if (!sortedDays.length) {
+                list.innerHTML = `<div class="salon-empty">${adminT("noSpecialDays", "No special days yet.")}</div>`;
+                return;
+            }
+            list.innerHTML = "";
+            sortedDays.forEach((day) => {
+                const item = document.createElement("span");
+                item.className = `salon-pill ${day.type}`;
+                const badge = day.type === "busy" ? adminT("busyBadge", "Busy") : adminT("closedBadge", "Closed");
+                item.innerHTML = `
+                    <span>${safeText(day.date)} · ${safeText(badge)}${day.reason ? ` · ${safeText(day.reason)}` : ""}</span>
+                    <button type="button" aria-label="Remove">×</button>
+                `;
+                item.querySelector("button").addEventListener("click", () => {
+                    salonBookingSettings.specialDays = salonBookingSettings.specialDays.filter((entry) => entry.date !== day.date);
+                    renderSpecialDaysList();
+                    showSalonSettingsStatus();
+                    renderAppointmentsDashboard();
+                });
+                list.appendChild(item);
+            });
+        }
+
+        function renderSalonServicesTable() {
+            const table = document.getElementById("salonServicesTable");
+            if (!table) return;
+            const settings = getSalonSettings();
+            table.innerHTML = renderAdminHeaders(["serviceHeader", "priceHeader", "durationHeader", "activeServiceHeader", "actionsHeader"]);
+            if (!settings.services.length) {
+                const row = table.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 5;
+                cell.className = "empty-row";
+                cell.innerText = adminT("unspecifiedService", "Unspecified service");
+                return;
+            }
+
+            settings.services.forEach((service) => {
+                const row = table.insertRow();
+                row.dataset.serviceId = service.id;
+                row.insertCell(0).innerHTML = `<input class="salon-service-name" type="text" value="${safeText(service.name)}">`;
+                row.insertCell(1).innerHTML = `<input class="salon-service-price" type="number" min="0" step="0.01" value="${Number(service.price || 0)}">`;
+                row.insertCell(2).innerHTML = `<input class="salon-service-duration" type="number" min="5" step="5" value="${Number(service.durationMinutes || 60)}">`;
+                row.insertCell(3).innerHTML = `<input class="salon-service-active" type="checkbox" ${service.active !== false ? "checked" : ""}>`;
+                const actionsCell = row.insertCell(4);
+                const deleteBtn = document.createElement("button");
+                deleteBtn.type = "button";
+                deleteBtn.className = "btn-action btn-delete";
+                deleteBtn.innerText = adminT("delete", "Delete");
+                deleteBtn.addEventListener("click", () => {
+                    salonBookingSettings.services = salonBookingSettings.services.filter((item) => item.id !== service.id);
+                    renderSalonServicesTable();
+                    renderAdminBookingServiceOptions();
+                    showSalonSettingsStatus();
+                });
+                actionsCell.appendChild(deleteBtn);
+                row.querySelectorAll("input").forEach((input) => input.addEventListener("input", syncSalonBookingSettingsFromForm));
+                row.querySelectorAll("input").forEach((input) => input.addEventListener("change", syncSalonBookingSettingsFromForm));
+            });
+        }
+
+        function renderSalonBookingSettings() {
+            if (!document.getElementById("booking-services")) return;
+            const settings = getSalonSettings();
+            const regularCapacity = document.getElementById("regularCapacityInput");
+            const busyCapacity = document.getElementById("busyCapacityInput");
+            if (regularCapacity) regularCapacity.value = settings.capacity.regular;
+            if (busyCapacity) busyCapacity.value = settings.capacity.busy;
+            renderSalonWorkingHours();
+            renderSpecialDaysList();
+            renderSalonServicesTable();
+            showSalonSettingsStatus();
+        }
+
+        function syncSalonBookingSettingsFromForm() {
+            const settings = getSalonSettings();
+            settings.capacity = {
+                regular: Math.max(1, Number(document.getElementById("regularCapacityInput")?.value || settings.capacity.regular || 2)),
+                busy: Math.max(1, Number(document.getElementById("busyCapacityInput")?.value || settings.capacity.busy || 4))
+            };
+
+            document.querySelectorAll("#salonWorkingHoursList .salon-day-row").forEach((row) => {
+                const dayKey = row.dataset.day;
+                if (!dayKey) return;
+                settings.workingHours[dayKey] = {
+                    open: row.querySelector(".salon-day-open")?.checked !== false,
+                    start: row.querySelector(".salon-day-start")?.value || "09:00",
+                    end: row.querySelector(".salon-day-end")?.value || "19:00"
+                };
+            });
+
+            document.querySelectorAll("#salonServicesTable tr[data-service-id]").forEach((row) => {
+                const service = settings.services.find((item) => item.id === row.dataset.serviceId);
+                if (!service) return;
+                service.name = row.querySelector(".salon-service-name")?.value.trim() || service.name;
+                service.price = Math.max(0, Number(row.querySelector(".salon-service-price")?.value || 0));
+                service.durationMinutes = Math.max(5, Number(row.querySelector(".salon-service-duration")?.value || 60));
+                service.active = row.querySelector(".salon-service-active")?.checked !== false;
+            });
+
+            renderAdminBookingServiceOptions();
+            showSalonSettingsStatus();
+            renderAppointmentsDashboard();
+        }
+
+        function addSpecialDay() {
+            const date = document.getElementById("specialDayDateInput")?.value || "";
+            const type = document.getElementById("specialDayTypeInput")?.value === "busy" ? "busy" : "closed";
+            const reason = document.getElementById("specialDayReasonInput")?.value.trim() || "";
+            if (!date) return alert(adminT("specialDateRequiredAlert", "Choose a special day date."));
+            if (type === "closed" && !reason) return alert(adminT("closedReasonRequiredAlert", "Write the closure reason shown to customers."));
+
+            const settings = getSalonSettings();
+            settings.specialDays = settings.specialDays.filter((day) => day.date !== date);
+            settings.specialDays.push({ id: date, date, type, reason });
+            document.getElementById("specialDayDateInput").value = "";
+            document.getElementById("specialDayReasonInput").value = "";
+            renderSpecialDaysList();
+            showSalonSettingsStatus();
+            renderAppointmentsDashboard();
+        }
+
+        function addSalonService() {
+            const nameInput = document.getElementById("newServiceNameInput");
+            const priceInput = document.getElementById("newServicePriceInput");
+            const durationInput = document.getElementById("newServiceDurationInput");
+            const name = nameInput?.value.trim() || "";
+            const durationMinutes = Math.max(0, Number(durationInput?.value || 0));
+            if (!name || durationMinutes < 5) return alert(adminT("serviceRequiredAlert", "Enter a service name and a valid duration."));
+
+            getSalonSettings().services.push({
+                id: createSalonRecordId("service"),
+                name,
+                price: Math.max(0, Number(priceInput?.value || 0)),
+                durationMinutes,
+                active: true
+            });
+            if (nameInput) nameInput.value = "";
+            if (priceInput) priceInput.value = "";
+            if (durationInput) durationInput.value = "";
+            renderSalonServicesTable();
+            renderAdminBookingServiceOptions();
+            showSalonSettingsStatus();
+        }
+
+        function getCleanSalonBookingSettings() {
+            syncSalonBookingSettingsFromForm();
+            const settings = normalizeSalonBookingSettings(getSalonSettings());
+            BOOKING_DAY_KEYS.forEach((dayKey) => {
+                const hours = settings.workingHours[dayKey];
+                if (hours.open !== false && (timeToMinutes(hours.start) ?? 0) >= (timeToMinutes(hours.end) ?? 0)) {
+                    throw new Error(adminT("invalidWorkingHoursAlert", "Make sure each open day starts before it ends."));
+                }
+            });
+            settings.specialDays.forEach((day) => {
+                if (day.type === "closed" && !day.reason) throw new Error(adminT("closedReasonRequiredAlert", "Write the closure reason shown to customers."));
+            });
+            return settings;
+        }
+
+        async function saveSalonBookingSettings() {
+            const button = document.getElementById("saveSalonSettingsBtn");
+            try {
+                const settings = getCleanSalonBookingSettings();
+                if (button) button.disabled = true;
+                await setDoc(doc(db, SALON_BOOKING_SETTINGS_DOC[0], SALON_BOOKING_SETTINGS_DOC[1]), {
+                    ...settings,
+                    updatedAt: new Date().toISOString(),
+                    updatedAtMs: Date.now(),
+                    updatedBy: auth.currentUser?.email || THE_ADMIN_EMAIL
+                });
+                salonBookingSettings = settings;
+                salonBookingSettingsLoaded = true;
+                renderSalonBookingSettings();
+                alert(adminT("settingsSavedAlert", "Salon settings were saved."));
+            } catch (error) {
+                alert(error.message || adminT("homeSaveError", "Could not save the changes. Please try again."));
+            } finally {
+                if (button) button.disabled = false;
+            }
+        }
+
+        function renderAdminBookingServiceOptions() {
+            const select = document.getElementById("adminBookingService");
+            if (!select) return;
+            const selectedValue = select.value;
+            const services = getSalonSettings().services.filter((service) => service.active !== false);
+            select.innerHTML = `<option value="">${adminT("adminBookServicePlaceholder", "Haircut / color / makeup")}</option>`;
+            services.forEach((service) => {
+                const option = document.createElement("option");
+                option.value = service.id;
+                option.textContent = `${service.name} · ${service.durationMinutes} ${adminT("durationMinutesSuffix", "min")} · ₪${Number(service.price || 0)}`;
+                select.appendChild(option);
+            });
+            if (selectedValue && services.some((service) => service.id === selectedValue)) select.value = selectedValue;
+        }
+
+        document.getElementById("regularCapacityInput")?.addEventListener("input", syncSalonBookingSettingsFromForm);
+        document.getElementById("busyCapacityInput")?.addEventListener("input", syncSalonBookingSettingsFromForm);
+        document.getElementById("addSpecialDayBtn")?.addEventListener("click", addSpecialDay);
+        document.getElementById("addSalonServiceBtn")?.addEventListener("click", addSalonService);
+        document.getElementById("saveSalonSettingsBtn")?.addEventListener("click", saveSalonBookingSettings);
 
         const reportDictionaries = {
             ar: {
@@ -2213,7 +2987,8 @@
                 { name: "Reviews", refresh: loadAdminReviews },
                 { name: "Workers", refresh: loadWorkHours },
                 { name: "WorkerShifts", refresh: loadWorkHours },
-                { name: "Invoices", refresh: loadInvoicesReport }
+                { name: "Invoices", refresh: loadInvoicesReport },
+                { name: "SiteContent", refresh: () => { homeBuilderLoaded = false; salonBookingSettingsLoaded = false; loadHomePageBuilder(true); loadSalonBookingSettings(true); } }
             ];
             realtimeTargets.forEach(({ name, refresh }) => {
                 const unsubscribe = onSnapshot(collection(db, name), () => {
@@ -2355,6 +3130,8 @@
             });
             populateAdminTimeSelects();
             if (homeBuilderLoaded) renderHomeBuilder();
+            if (salonBookingSettingsLoaded) renderSalonBookingSettings();
+            renderAdminBookingServiceOptions();
         }
 
         function moveMonthChooserToCalendar() {
@@ -2420,16 +3197,25 @@
                 document.getElementById("reportsNavGroup")?.classList.add("open");
                 if (trigger?.classList?.contains("nav-sub-link")) trigger.classList.add("active");
             }
+            if (["home-builder", "booking-services"].includes(tabId)) {
+                document.getElementById("salonSettingsNavGroup")?.classList.add("open");
+                if (trigger?.classList?.contains("nav-sub-link")) trigger.classList.add("active");
+            }
             closeAdminSidebar();
             if (tabId === "reports-dashboard") loadReportsDashboard();
             if (tabId === "invoices-report") loadInvoicesReport();
             if (tabId === "sales-report") loadSalesReport();
             if (tabId === "work-hours") loadWorkHours();
             if (tabId === "attendance") loadWorkHours();
+            if (tabId === "booking-services") loadSalonBookingSettings(true);
         }
 
         window.toggleReportsMenu = function() {
             document.getElementById("reportsNavGroup")?.classList.toggle("open");
+        }
+
+        window.toggleSalonSettingsMenu = function() {
+            document.getElementById("salonSettingsNavGroup")?.classList.toggle("open");
         }
 
         function openAdminHashTab() {
@@ -2443,7 +3229,12 @@
             document.querySelectorAll(".nav-sub-link").forEach((link) => {
                 const handler = link.getAttribute("onclick") || "";
                 if (handler.includes(`'${tabId}'`) || handler.includes(`"${tabId}"`)) {
-                    document.getElementById("reportsNavGroup")?.classList.add("open");
+                    if (["reports-dashboard", "invoices-report", "work-hours", "sales-report"].includes(tabId)) {
+                        document.getElementById("reportsNavGroup")?.classList.add("open");
+                    }
+                    if (["home-builder", "booking-services"].includes(tabId)) {
+                        document.getElementById("salonSettingsNavGroup")?.classList.add("open");
+                    }
                     link.classList.add("active");
                 }
             });
@@ -2490,9 +3281,10 @@
 
         function loadAllData() {
             ensureAdminNavBadges();
-            loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews(); loadHomePageBuilder(); loadWorkHours(); loadReportsDashboard(); loadInvoicesReport(); loadSalesReport();
+            loadSalonBookingSettings(); loadAppointments(); loadOrders(); loadProducts(); loadUsers(); loadAdminReviews(); loadHomePageBuilder(); loadWorkHours(); loadReportsDashboard(); loadInvoicesReport(); loadSalesReport();
             startAdminRealtimeListeners();
             populateAdminTimeSelects();
+            renderAdminBookingServiceOptions();
             document.getElementById("adminBookingDate").value = getTodayValue();
             document.getElementById("shiftDateInput").value = getTodayValue();
             document.getElementById("workHoursPeriodFilter").value = "today";
@@ -3138,7 +3930,9 @@
 
         async function createAdminBooking() {
             const userId = document.getElementById("adminBookingUser").value;
-            const service = document.getElementById("adminBookingService").value.trim();
+            await loadSalonBookingSettings();
+            const selectedService = findSalonService(document.getElementById("adminBookingService").value);
+            const service = selectedService?.name || "";
             const date = document.getElementById("adminBookingDate").value;
             const time = getAdminBookingTime();
             const notes = document.getElementById("adminBookingNotes").value.trim();
@@ -3146,6 +3940,12 @@
 
             if (!customer) return alert(adminT("selectCustomerAlert", "اختر زبوناً مسجلاً أولاً."));
             if (!service || !date || !time) return alert(adminT("fillBookingAlert", "اختر الخدمة والتاريخ والوقت قبل إضافة الحجز."));
+            const availability = checkSalonBookingAvailability({
+                date,
+                time,
+                durationMinutes: selectedService?.durationMinutes || 60
+            });
+            if (!availability.available) return alert(availability.reason);
 
             const appointmentRef = await addDoc(collection(db, "Appointments"), {
                 userId: customer.id,
@@ -3153,6 +3953,9 @@
                 phone: customer.phone || "",
                 email: customer.email || "",
                 service,
+                serviceId: selectedService?.id || "",
+                servicePrice: Number(selectedService?.price || 0),
+                serviceDurationMinutes: Number(selectedService?.durationMinutes || 60),
                 date,
                 time,
                 notes,
@@ -3527,11 +4330,14 @@
             const card = document.createElement("div");
             card.className = `booking-card ${getAppointmentStatusClass(appointment.status)}`;
             const paymentLabel = getAppointmentPaymentLabel(appointment);
+            const interval = getAppointmentInterval(appointment);
+            const duration = getAppointmentDurationMinutes(appointment);
             card.innerHTML = `
                 <strong>${renderCustomerNameWithPenalty(appointment)}</strong>
                 <small><b>${adminT("phoneHeader", "الهاتف")}:</b> <span dir="ltr">${appointment.phone || "-"}</span></small>
                 <small>${appointment.date || "-"} | ${appointment.time || "-"}</small>
                 <small>${appointment.service || adminT("unspecifiedService", "خدمة غير محددة")}</small>
+                <small class="booking-meta">${duration} ${adminT("durationMinutesSuffix", "دقيقة")}${interval ? ` · ${appointment.time || "-"} - ${minutesToTime(interval.end)}` : ""}</small>
                 <small>${appointment.notes || adminT("noNotes", "لا توجد ملاحظات")}</small>
                 <small><b>${displayAppointmentStatus(appointment.status)}</b></small>
                 <span class="payment-status-pill ${paymentLabel.className}">${paymentLabel.text}</span>
@@ -3572,9 +4378,14 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateKey = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                 const dayAppointments = allAppointments.filter((appointment) => appointment.date === dateKey);
+                const dateInfo = getSalonDateInfo(dateKey);
                 const dayBox = document.createElement("div");
-                dayBox.className = `calendar-day ${dateKey === todayKey ? "today" : ""} ${dateKey === selectedAppointmentDate ? "selected" : ""}`;
+                dayBox.className = `calendar-day ${dateKey === todayKey ? "today" : ""} ${dateKey === selectedAppointmentDate ? "selected" : ""} ${!dateInfo.open ? "salon-closed-day" : (dateInfo.busy ? "salon-busy-day" : "")}`;
                 dayBox.innerHTML = `<div class="calendar-day-number">${day}</div>`;
+                if (!dateInfo.open || dateInfo.busy) {
+                    const label = !dateInfo.open ? adminT("closedBadge", "Closed") : `${adminT("busyBadge", "Busy")} · ${dateInfo.capacity}`;
+                    dayBox.innerHTML += `<span class="salon-day-badge">${safeText(label)}</span>`;
+                }
                 dayBox.onclick = () => selectAppointmentDate(dateKey);
 
                 if (dayAppointments.length === 0) {
@@ -3626,7 +4437,9 @@
                 const serviceCell = row.insertCell(1);
                 serviceCell.className = "appointment-glass-cell";
                 serviceCell.dataset.label = adminT("serviceHeader", "Service");
-                serviceCell.innerHTML = appointment.service || "-";
+                const interval = getAppointmentInterval(appointment);
+                const duration = getAppointmentDurationMinutes(appointment);
+                serviceCell.innerHTML = `${appointment.service || "-"}<br><small class="booking-meta">${duration} ${adminT("durationMinutesSuffix", "دقيقة")}${interval ? ` · ${appointment.time || "-"} - ${minutesToTime(interval.end)}` : ""}</small>`;
 
                 const dateTimeCell = row.insertCell(2);
                 dateTimeCell.className = "appointment-glass-cell";
@@ -3694,11 +4507,24 @@
             if (newStatus === null) return;
             const newNotes = prompt(adminT("editNotesPrompt", "الملاحظات:"), appointment.notes || "");
             if (newNotes === null) return;
+            await loadSalonBookingSettings();
+            const matchedService = findSalonService(newService.trim());
+            const durationMinutes = matchedService?.durationMinutes || getAppointmentDurationMinutes({ ...appointment, service: newService.trim() });
+            const availability = checkSalonBookingAvailability({
+                date: newDate.trim(),
+                time: newTime.trim(),
+                durationMinutes,
+                ignoredAppointmentId: appointment.id
+            });
+            if (!availability.available) return alert(availability.reason);
 
             await updateDoc(doc(db, "Appointments", appointment.id), {
                 date: newDate.trim(),
                 time: newTime.trim(),
                 service: newService.trim(),
+                serviceId: matchedService?.id || appointment.serviceId || "",
+                servicePrice: matchedService ? Number(matchedService.price || 0) : Number(appointment.servicePrice || 0),
+                serviceDurationMinutes: durationMinutes,
                 status: newStatus.trim(),
                 notes: newNotes.trim()
             });
