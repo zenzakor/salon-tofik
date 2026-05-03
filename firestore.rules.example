@@ -99,5 +99,14 @@ service cloud.firestore {
     match /WorkerShifts/{shiftId} {
       allow read, write: if isAdmin();
     }
+
+    match /MonthlyReports/{reportId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /WhatsappInvoiceSends/{sendId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
+    }
   }
 }

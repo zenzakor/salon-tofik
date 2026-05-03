@@ -357,9 +357,51 @@
         .summary-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .summary-card small { display: block; color: #666; font-weight: bold; margin-bottom: 8px; }
         .summary-card strong { color: #111; font-size: 24px; }
+        .report-toolbar, .report-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; margin: 14px 0; }
+        .report-filters label { display: grid; gap: 6px; color: #444; font-weight: bold; min-width: 150px; }
+        .report-filters input, .report-filters select { min-height: 42px; padding: 9px 11px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; background: #fff; }
+        .monthly-report-sheet { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 26px; margin-top: 16px; box-shadow: 0 8px 22px rgba(15,23,42,0.08); }
+        .monthly-report-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; border-bottom: 2px solid #111; padding-bottom: 14px; margin-bottom: 16px; }
+        .report-logo-mark { display: inline-flex; align-items: center; justify-content: center; min-width: 118px; min-height: 54px; padding: 0; color: #111; margin-bottom: 10px; }
+        .report-logo-mark img { max-width: 132px; max-height: 48px; object-fit: contain; display: block; }
+        .report-logo-mark span { font-family: Georgia, serif; font-weight: bold; letter-spacing: 1px; font-size: 17px; }
+        .monthly-report-head h2 { margin: 0; color: #111; word-spacing: 0.12em; letter-spacing: 0; line-height: 1.25; white-space: pre-wrap; }
+        .monthly-report-head small { color: #666; display: block; margin-top: 5px; }
+        .monthly-report-summary { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 10px; margin-top: 18px; }
+        .monthly-report-summary div { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; background: #fafafa; }
+        .monthly-report-summary small { display: block; color: #666; font-weight: bold; margin-bottom: 6px; word-spacing: 0.1em; line-height: 1.35; white-space: pre-wrap; }
+        .monthly-report-summary strong { color: #111; font-size: 18px; }
+        .monthly-report-sheet table { table-layout: fixed; width: 100%; }
+        .monthly-report-sheet th, .monthly-report-sheet td { white-space: normal; overflow-wrap: anywhere; word-break: normal; line-height: 1.45; }
+        .monthly-report-sheet th { word-spacing: 0.1em; }
+        .pdf-export-mode { width: 980px !important; max-width: 980px !important; overflow: hidden !important; padding: 26px !important; border: 0 !important; box-shadow: none !important; border-radius: 0 !important; margin: 0 auto !important; box-sizing: border-box !important; }
+        .pdf-export-mode * { box-sizing: border-box !important; letter-spacing: 0 !important; word-spacing: 0.18em !important; }
+        .pdf-export-mode .monthly-report-head { margin-bottom: 22px; padding-bottom: 18px; }
+        .pdf-export-mode .monthly-report-head h2 { font-size: 24px; }
+        .pdf-export-mode .monthly-report-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+        .pdf-export-mode .monthly-report-summary div { padding: 12px; min-height: 66px; min-width: 0; }
+        .pdf-export-mode .monthly-report-summary small { font-size: 12px; overflow-wrap: normal; }
+        .pdf-export-mode .monthly-report-summary strong { font-size: 18px; }
+        .pdf-export-mode table { font-size: 11px; border-collapse: collapse; table-layout: fixed !important; }
+        .pdf-export-mode th { padding: 9px 4px; white-space: normal; overflow-wrap: normal; }
+        .pdf-export-mode td { padding: 8px 4px; white-space: normal; overflow-wrap: anywhere; }
+        .pdf-export-mode th:first-child, .pdf-export-mode td:first-child { width: 9%; }
+        .pdf-export-mode th:nth-child(2), .pdf-export-mode td:nth-child(2) { width: 13%; }
+        .pdf-export-mode th:nth-child(3), .pdf-export-mode td:nth-child(3) { width: 10%; }
+        .pdf-export-mode th:nth-child(4), .pdf-export-mode td:nth-child(4) { width: 15%; }
+        .pdf-export-mode th:nth-child(5), .pdf-export-mode td:nth-child(5) { width: 10%; }
+        .pdf-export-mode th:nth-child(6), .pdf-export-mode td:nth-child(6) { width: 9%; }
+        .pdf-export-mode th:nth-child(7), .pdf-export-mode td:nth-child(7) { width: 12%; }
+        .pdf-export-mode th:nth-child(8), .pdf-export-mode td:nth-child(8) { width: 10%; }
+        .pdf-export-mode th:nth-child(9), .pdf-export-mode td:nth-child(9) { width: 12%; }
+        .saved-report-row { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         body.dark-mode .summary-card { background: #202020; border-color: #333; }
         body.dark-mode .summary-card small { color: #cfcfcf; }
         body.dark-mode .summary-card strong { color: #fff; }
+        body.dark-mode .monthly-report-sheet, body.dark-mode .report-filters input, body.dark-mode .report-filters select { background: #202020; color: #f3f3f3; border-color: #333; }
+        body.dark-mode .monthly-report-head h2, body.dark-mode .monthly-report-summary strong, body.dark-mode .report-filters label { color: #f3f3f3; }
+        body.dark-mode .monthly-report-head small, body.dark-mode .monthly-report-summary small { color: #cfcfcf; }
+        body.dark-mode .monthly-report-summary div { background: #181818; border-color: #333; }
         .work-hours-grid { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 18px; align-items: start; }
         .work-form { display: grid; gap: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .work-form h2 { margin: 0 0 6px; color: #111; }
@@ -390,13 +432,21 @@
         body.dark-mode .attendance-status { background: #181818; color: #f3f3f3; border-color: #333; }
         body.dark-mode .attendance-status small, body.dark-mode .readonly-note { color: #cfcfcf; }
         @media (max-width: 980px) {
-            .summary-grid, .work-hours-grid, .attendance-layout, .work-filter-grid { grid-template-columns: 1fr; }
+            .summary-grid, .work-hours-grid, .attendance-layout, .work-filter-grid, .monthly-report-summary { grid-template-columns: 1fr; }
             .worker-rate-row { grid-template-columns: 1fr; }
+        }
+        @media print {
+            body * { visibility: hidden !important; }
+            #monthlyReportSheet, #monthlyReportSheet * { visibility: visible !important; }
+            #monthlyReportSheet { position: absolute; inset: 0; width: 100%; box-shadow: none; border: 0; padding: 0; }
+            .no-print { display: none !important; }
         }
     </style>
     <link rel="stylesheet" href="assets/mobile-layout.css">
     <link rel="stylesheet" href="assets/compliance.css">
     <link rel="stylesheet" href="assets/admin-mobile.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
 </head>
 <body class="admin-page">
     <a class="skip-link" href="#adminContent">تخطي إلى لوحة الإدارة</a>
@@ -551,12 +601,144 @@
 
             <div id="reports-dashboard" class="admin-section">
                 <h1 data-admin-text="reportsTitle">تقارير</h1>
-                <div id="reportsSummary" class="summary-grid"></div>
-                <table id="reportsTable"></table>
+                <div class="report-filters no-print">
+                    <label>
+                        <span data-admin-text="periodLabel">الفترة</span>
+                        <select id="monthlyReportDatePreset">
+                            <option value="today" data-admin-text="periodToday">اليوم</option>
+                            <option value="yesterday_today" data-admin-text="periodYesterdayToday">أمس إلى اليوم</option>
+                            <option value="month" data-admin-text="periodMonth">شهر</option>
+                            <option value="custom" data-admin-text="periodCustom">تحديد يدوي</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="reportLanguageLabel">لغة التقرير</span>
+                        <select id="monthlyReportLanguage">
+                            <option value="ar">العربية</option>
+                            <option value="he">עברית</option>
+                            <option value="en">English</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="monthlyReportMonth">الشهر والسنة</span>
+                        <input id="monthlyReportMonth" type="month">
+                    </label>
+                    <label>
+                        <span data-admin-text="fromDateLabel">من تاريخ</span>
+                        <input id="monthlyReportFromDate" type="date">
+                    </label>
+                    <label>
+                        <span data-admin-text="toDateLabel">إلى تاريخ</span>
+                        <input id="monthlyReportToDate" type="date">
+                    </label>
+                    <label>
+                        <span data-admin-text="monthlyReportType">نوع العملية</span>
+                        <select id="monthlyReportType">
+                            <option value="all" data-admin-text="periodAll">كل السجل</option>
+                            <option value="service" data-admin-text="monthlyTypeService">خدمة</option>
+                            <option value="product" data-admin-text="monthlyTypeProduct">منتج</option>
+                            <option value="booking" data-admin-text="monthlyTypeBooking">حجز</option>
+                            <option value="payment" data-admin-text="monthlyTypePayment">دفع مباشر</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="paymentMethodLabel">طريقة الدفع</span>
+                        <select id="monthlyReportPaymentMethod">
+                            <option value="all" data-admin-text="periodAll">كل السجل</option>
+                            <option value="cash" data-admin-text="paymentMethodCash">كاش</option>
+                            <option value="card" data-admin-text="paymentMethodCard">بطاقة / دفع إلكتروني</option>
+                            <option value="bank" data-admin-text="paymentMethodBank">تحويل</option>
+                            <option value="bit">Bit</option>
+                            <option value="paybox">PayBox</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="statusHeader">الحالة</span>
+                        <select id="monthlyReportPaymentStatus">
+                            <option value="all" data-admin-text="periodAll">كل السجل</option>
+                            <option value="paid" data-admin-text="paidStatus">مدفوع</option>
+                            <option value="partial" data-admin-text="partialPaidStatus">مدفوع جزئياً</option>
+                        </select>
+                    </label>
+                    <button id="applyMonthlyReportFiltersBtn" class="notification-btn" type="button" data-admin-text="applyFilterButton">تطبيق الفلتر</button>
+                </div>
+                <div class="report-toolbar no-print">
+                    <button id="exportMonthlyPdfBtn" class="btn-action btn-payment" type="button">Export to PDF</button>
+                    <button id="exportMonthlyExcelBtn" class="btn-action btn-update" type="button">Export to Excel</button>
+                    <button id="printMonthlyReportBtn" class="btn-action btn-update" type="button">Print</button>
+                    <button id="saveMonthlyReportBtn" class="btn-action btn-payment" type="button">Download / Save</button>
+                </div>
+                <div class="saved-report-row no-print">
+                    <select id="savedMonthlyReportsSelect"></select>
+                    <button id="loadSavedMonthlyReportBtn" class="btn-action btn-update" type="button" data-admin-text="loadSavedReportButton">فتح تقرير محفوظ</button>
+                </div>
+                <div id="monthlyReportSheet" class="monthly-report-sheet">
+                    <div class="monthly-report-head">
+                        <div>
+                            <div class="report-logo-mark">
+                                <img src="assets/logo-black.png" alt="SALON TOFIK" onerror="this.remove(); this.parentElement.insertAdjacentHTML('beforeend','<span>SALON TOFIK</span>');">
+                            </div>
+                            <h2 data-admin-text="monthlyReportTitle">تقرير المداخيل الشهري</h2>
+                            <small>SALON TOFIK</small>
+                        </div>
+                        <div>
+                            <strong id="monthlyReportPeriodLabel"></strong>
+                            <small data-admin-text="accountantReadyLabel">جاهز للمحاسب / רואה חשבון</small>
+                        </div>
+                    </div>
+                    <div id="reportsSummary" class="monthly-report-summary"></div>
+                    <table id="reportsTable"></table>
+                    <div id="monthlyReportFooterSummary" class="monthly-report-summary"></div>
+                </div>
             </div>
 
             <div id="invoices-report" class="admin-section">
                 <h1 data-admin-text="invoicesTitle">فواتير</h1>
+                <div class="report-filters no-print">
+                    <label>
+                        <span data-admin-text="invoiceDateBasisLabel">حسب التاريخ</span>
+                        <select id="invoiceReportDateBasis">
+                            <option value="invoice" data-admin-text="invoiceDateBasisInvoice">تاريخ إنشاء الفاتورة</option>
+                            <option value="booking" data-admin-text="invoiceDateBasisBooking">تاريخ الحجز / الخدمة</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="sendLanguageLabel">لغة الإرسال</span>
+                        <select id="invoiceSendLanguage">
+                            <option value="ar">العربية</option>
+                            <option value="he">עברית</option>
+                            <option value="en">English</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="fromDateLabel">من تاريخ</span>
+                        <input id="invoiceReportFromDate" type="date">
+                    </label>
+                    <label>
+                        <span data-admin-text="toDateLabel">إلى تاريخ</span>
+                        <input id="invoiceReportToDate" type="date">
+                    </label>
+                    <label>
+                        <span data-admin-text="monthlyReportType">نوع العملية</span>
+                        <select id="invoiceReportType">
+                            <option value="all" data-admin-text="periodAll">كل السجل</option>
+                            <option value="service" data-admin-text="monthlyTypeService">خدمة</option>
+                            <option value="product" data-admin-text="monthlyTypeProduct">منتج</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-admin-text="paymentMethodLabel">طريقة الدفع</span>
+                        <select id="invoiceReportPaymentMethod">
+                            <option value="all" data-admin-text="periodAll">كل السجل</option>
+                            <option value="cash" data-admin-text="paymentMethodCash">كاش</option>
+                            <option value="card" data-admin-text="paymentMethodCard">بطاقة / دفع إلكتروني</option>
+                            <option value="bank" data-admin-text="paymentMethodBank">تحويل</option>
+                            <option value="bit">Bit</option>
+                            <option value="paybox">PayBox</option>
+                        </select>
+                    </label>
+                    <button id="applyInvoiceReportFiltersBtn" class="notification-btn" type="button" data-admin-text="applyFilterButton">تطبيق الفلتر</button>
+                </div>
                 <div id="invoicesSummary" class="summary-grid"></div>
                 <table id="invoicesTable"></table>
             </div>
@@ -965,6 +1147,7 @@
         const THE_ADMIN_EMAIL = "admin@tofik.com"; 
 
         const firebaseConfig = { apiKey: "AIzaSyACn-sXRnniaNvtV97KWg43O5MrvvB8VD8", authDomain: "salon-tofik.firebaseapp.com", projectId: "salon-tofik", storageBucket: "salon-tofik.firebasestorage.app", messagingSenderId: "479343315632", appId: "1:479343315632:web:ba955286e8c18d60bcc975" };
+        const WHATSAPP_BUSINESS_SEND_ENDPOINT = "https://us-central1-salon-tofik.cloudfunctions.net/sendInvoiceWhatsapp";
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
@@ -981,6 +1164,8 @@
         let homeBuilderLoaded = false;
         let allWorkers = [];
         let allWorkerShifts = [];
+        let currentMonthlyReport = { rows: [], summary: {}, month: "" };
+        let savedMonthlyReports = [];
 
         const adminText = {
             ar: { appointments: "المواعيد", orders: "الطلبات المشتراة", products: "المتجر والمنتجات", accounts: "حسابات الزبائن", reviews: "التقييمات", settings: "الإعدادات", logout: "تسجيل الخروج", appointmentsTitle: "📅 إدارة المواعيد", ordersTitle: "📦 إدارة طلبات الشراء", productsTitle: "🛍️ إدارة المتجر والمنتجات", accountsTitle: "👥 حسابات الزبائن المسجلين", reviewsTitle: "⭐ إدارة التقييمات", newBookings: "حجوزات جديدة", monthView: "عرض شهر:", pendingTitle: "الحجوزات التي تحتاج موافقة", calendarTitle: "تقويم الحجوزات", addProductTitle: "إضافة منتج جديد:", adminBookTitle: "حجز موعد لزبون مسجل", adminBookCustomer: "الزبون", adminBookService: "الخدمة", adminBookServicePlaceholder: "قص شعر / صبغة / مكياج", adminBookDate: "التاريخ", adminBookTime: "الوقت", adminBookNotes: "ملاحظات", adminBookNotesPlaceholder: "ملاحظة اختيارية", adminBookButton: "إضافة الحجز", theme: "المظهر", light: "فاتح", dark: "داكن", language: "اللغة", textSize: "حجم الخط", normal: "عادي", large: "كبير" },
@@ -1095,6 +1280,38 @@
             clockOutMissingAlert: "لا يوجد تسجيل دخول مفتوح لهذه العاملة.",
             quickToolNotice: "تم فتح القسم المناسب من لوحة الإدارة.",
             reportsTitle: "تقارير",
+            monthlyReportTitle: "تقرير المداخيل الشهري",
+            monthlyReportMonth: "الشهر والسنة",
+            monthlyReportType: "نوع العملية",
+            monthlyTypeService: "خدمة",
+            monthlyTypeProduct: "منتج",
+            monthlyTypeBooking: "حجز",
+            monthlyTypePayment: "دفع مباشر",
+            applyFilterButton: "تطبيق الفلتر",
+            accountantReadyLabel: "جاهز للمحاسب / רואה חשבון",
+            loadSavedReportButton: "فتح تقرير محفوظ",
+            servicesIncomeLabel: "مداخيل الخدمات",
+            productsIncomeLabel: "مداخيل المنتجات",
+            cashIncomeLabel: "مدفوعات كاش",
+            cardIncomeLabel: "بطاقة / إلكتروني",
+            operationsCountLabel: "عدد العمليات",
+            unpaidCancelledCountLabel: "غير مدفوع / ملغي",
+            sourceHeader: "المصدر",
+            operationTypeHeader: "نوع العملية",
+            itemHeader: "الخدمة / المنتج",
+            remainingHeader: "المتبقي",
+            remainingPaymentMessage: "المتبقي للدفع",
+            paidFullyMessage: "تم الدفع بالكامل",
+            reportLanguageLabel: "لغة التقرير",
+            sendLanguageLabel: "لغة الإرسال",
+            whatsappBusinessSentAlert: "تم إرسال الفاتورة عبر WhatsApp Business.",
+            whatsappBusinessFailedAlert: "تعذر إرسال الفاتورة عبر WhatsApp Business. تأكد من إعداد API.",
+            invoiceDateBasisLabel: "حسب التاريخ",
+            invoiceDateBasisInvoice: "تاريخ إنشاء الفاتورة",
+            invoiceDateBasisBooking: "تاريخ الحجز / الخدمة",
+            sendWhatsappButton: "WhatsApp",
+            sendSmsButton: "SMS",
+            reportSavedAlert: "تم حفظ التقرير الشهري داخل النظام.",
             invoicesTitle: "فواتير",
             salesTitle: "مبيعات",
             workHoursTitle: "ساعات عمل",
@@ -1117,6 +1334,7 @@
             workHoursFiltersTitle: "حساب الساعات والرواتب",
             periodLabel: "الفترة",
             periodToday: "اليوم",
+            periodYesterdayToday: "أمس إلى اليوم",
             periodTwoDays: "يومين",
             periodThreeDays: "3 أيام",
             periodWeek: "أسبوع",
@@ -1216,6 +1434,38 @@
             clockOutMissingAlert: "אין כניסה פתוחה לעובדת הזאת.",
             quickToolNotice: "החלק המתאים בלוח הניהול נפתח.",
             reportsTitle: "דוחות",
+            monthlyReportTitle: "דוח הכנסות חודשי",
+            monthlyReportMonth: "חודש ושנה",
+            monthlyReportType: "סוג פעולה",
+            monthlyTypeService: "שירות",
+            monthlyTypeProduct: "מוצר",
+            monthlyTypeBooking: "תור",
+            monthlyTypePayment: "תשלום ישיר",
+            applyFilterButton: "החלת סינון",
+            accountantReadyLabel: "מוכן לרואה חשבון",
+            loadSavedReportButton: "פתיחת דוח שמור",
+            servicesIncomeLabel: "הכנסות שירותים",
+            productsIncomeLabel: "הכנסות מוצרים",
+            cashIncomeLabel: "תשלומי מזומן",
+            cardIncomeLabel: "כרטיס / דיגיטלי",
+            operationsCountLabel: "מספר פעולות",
+            unpaidCancelledCountLabel: "לא שולם / בוטל",
+            sourceHeader: "מקור",
+            operationTypeHeader: "סוג פעולה",
+            itemHeader: "שירות / מוצר",
+            remainingHeader: "נותר",
+            remainingPaymentMessage: "נותר לתשלום",
+            paidFullyMessage: "שולם במלואו",
+            reportLanguageLabel: "שפת הדוח",
+            sendLanguageLabel: "שפת השליחה",
+            whatsappBusinessSentAlert: "החשבונית נשלחה דרך WhatsApp Business.",
+            whatsappBusinessFailedAlert: "שליחת החשבונית דרך WhatsApp Business נכשלה. בדקי את הגדרת ה-API.",
+            invoiceDateBasisLabel: "לפי תאריך",
+            invoiceDateBasisInvoice: "תאריך יצירת החשבונית",
+            invoiceDateBasisBooking: "תאריך התור / השירות",
+            sendWhatsappButton: "WhatsApp",
+            sendSmsButton: "SMS",
+            reportSavedAlert: "הדוח החודשי נשמר במערכת.",
             invoicesTitle: "חשבוניות",
             salesTitle: "מכירות",
             workHoursTitle: "שעות עבודה",
@@ -1238,6 +1488,7 @@
             workHoursFiltersTitle: "חישוב שעות ושכר",
             periodLabel: "תקופה",
             periodToday: "היום",
+            periodYesterdayToday: "אתמול עד היום",
             periodTwoDays: "יומיים",
             periodThreeDays: "3 ימים",
             periodWeek: "שבוע",
@@ -1337,6 +1588,38 @@
             clockOutMissingAlert: "There is no open clock-in for this worker.",
             quickToolNotice: "Opened the matching admin section.",
             reportsTitle: "Reports",
+            monthlyReportTitle: "Monthly income report",
+            monthlyReportMonth: "Month and year",
+            monthlyReportType: "Operation type",
+            monthlyTypeService: "Service",
+            monthlyTypeProduct: "Product",
+            monthlyTypeBooking: "Booking",
+            monthlyTypePayment: "Direct payment",
+            applyFilterButton: "Apply filter",
+            accountantReadyLabel: "Ready for accountant",
+            loadSavedReportButton: "Open saved report",
+            servicesIncomeLabel: "Service income",
+            productsIncomeLabel: "Product income",
+            cashIncomeLabel: "Cash payments",
+            cardIncomeLabel: "Card / online",
+            operationsCountLabel: "Operations",
+            unpaidCancelledCountLabel: "Unpaid / cancelled",
+            sourceHeader: "Source",
+            operationTypeHeader: "Operation type",
+            itemHeader: "Service / product",
+            remainingHeader: "Remaining",
+            remainingPaymentMessage: "Remaining to pay",
+            paidFullyMessage: "Paid in full",
+            reportLanguageLabel: "Report language",
+            sendLanguageLabel: "Send language",
+            whatsappBusinessSentAlert: "Invoice sent through WhatsApp Business.",
+            whatsappBusinessFailedAlert: "Could not send through WhatsApp Business. Check API setup.",
+            invoiceDateBasisLabel: "Date basis",
+            invoiceDateBasisInvoice: "Invoice creation date",
+            invoiceDateBasisBooking: "Booking / service date",
+            sendWhatsappButton: "WhatsApp",
+            sendSmsButton: "SMS",
+            reportSavedAlert: "Monthly report saved in the system.",
             invoicesTitle: "Invoices",
             salesTitle: "Sales",
             workHoursTitle: "Work hours",
@@ -1359,6 +1642,7 @@
             workHoursFiltersTitle: "Calculate hours and pay",
             periodLabel: "Period",
             periodToday: "Today",
+            periodYesterdayToday: "Yesterday to today",
             periodTwoDays: "2 days",
             periodThreeDays: "3 days",
             periodWeek: "Week",
@@ -1666,6 +1950,49 @@
 
         function renderAdminHeaders(keys) {
             return `<tr>${keys.map((key) => `<th>${adminT(key, key)}</th>`).join("")}</tr>`;
+        }
+
+        const reportDictionaries = {
+            ar: {
+                title: "تقرير المداخيل الشهري", salon: "صالون توفيق", accountantReady: "جاهز للمحاسب / רואה חשבון",
+                invoice: "الفاتورة", date: "التاريخ", customer: "الزبونة", type: "نوع العملية", item: "الخدمة / المنتج",
+                amount: "المبلغ", remaining: "المتبقي", paymentMethod: "طريقة الدفع", status: "الحالة", source: "المصدر",
+                totalSales: "إجمالي المبيعات", servicesIncome: "مداخيل الخدمات", productsIncome: "مداخيل المنتجات",
+                operations: "عدد العمليات", cashIncome: "مدفوعات كاش", cardIncome: "بطاقة / إلكتروني",
+                product: "منتج", service: "خدمة", paidFull: "تم الدفع بالكامل", remainingToPay: "المتبقي للدفع"
+            },
+            he: {
+                title: "דוח הכנסות חודשי", salon: "סלון תופיק", accountantReady: "מוכן לרואה חשבון",
+                invoice: "חשבונית", date: "תאריך", customer: "לקוחה", type: "סוג פעולה", item: "שירות / מוצר",
+                amount: "סכום", remaining: "נותר", paymentMethod: "אמצעי תשלום", status: "סטטוס", source: "מקור",
+                totalSales: "סה\"כ מכירות", servicesIncome: "הכנסות שירותים", productsIncome: "הכנסות מוצרים",
+                operations: "מספר פעולות", cashIncome: "תשלומי מזומן", cardIncome: "כרטיס / דיגיטלי",
+                product: "מוצר", service: "שירות", paidFull: "שולם במלואו", remainingToPay: "נותר לתשלום"
+            },
+            en: {
+                title: "Monthly income report", salon: "SALON TOFIK", accountantReady: "Ready for accountant",
+                invoice: "Invoice", date: "Date", customer: "Customer", type: "Operation type", item: "Service / product",
+                amount: "Amount", remaining: "Remaining", paymentMethod: "Payment method", status: "Status", source: "Source",
+                totalSales: "Total sales", servicesIncome: "Service income", productsIncome: "Product income",
+                operations: "Operations", cashIncome: "Cash payments", cardIncome: "Card / online",
+                product: "Product", service: "Service", paidFull: "Paid in full", remainingToPay: "Remaining to pay"
+            }
+        };
+
+        function reportText(lang, key) {
+            return reportDictionaries[lang]?.[key] || reportDictionaries.en[key] || key;
+        }
+
+        function pdfSafeText(value) {
+            return String(value || "").replace(/\s+/g, "\u00A0");
+        }
+
+        function getMonthlyReportLanguage() {
+            return document.getElementById("monthlyReportLanguage")?.value || localStorage.getItem("salonLang") || "ar";
+        }
+
+        function getInvoiceSendLanguage() {
+            return document.getElementById("invoiceSendLanguage")?.value || localStorage.getItem("salonLang") || "ar";
         }
 
         function displayAppointmentStatus(status) {
@@ -2169,6 +2496,8 @@
             document.getElementById("adminBookingDate").value = getTodayValue();
             document.getElementById("shiftDateInput").value = getTodayValue();
             document.getElementById("workHoursPeriodFilter").value = "today";
+            setMonthlyReportDefaults();
+            syncInvoiceReportDateRange();
             syncWorkHoursDateFilters();
         }
 
@@ -3507,64 +3836,667 @@
             return snapshot.docs.map((invoiceDoc) => ({ id: invoiceDoc.id, ...invoiceDoc.data() }));
         }
 
+        async function getPaymentRecordsForReports() {
+            const snapshot = await getDocs(collection(db, "PaymentRecords"));
+            return snapshot.docs.map((paymentDoc) => ({ id: paymentDoc.id, ...paymentDoc.data() }));
+        }
+
+        async function getAppointmentsForReports() {
+            const snapshot = await getDocs(collection(db, "Appointments"));
+            return snapshot.docs.map((appointmentDoc) => ({ id: appointmentDoc.id, ...appointmentDoc.data() }));
+        }
+
+        function getCurrentMonthValue(value = new Date()) {
+            const date = value instanceof Date ? value : new Date(value);
+            const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
+            const year = safeDate.getFullYear();
+            const month = String(safeDate.getMonth() + 1).padStart(2, "0");
+            return `${year}-${month}`;
+        }
+
+        function toDateInputValue(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        }
+
+        function clampDateToToday(dateValue) {
+            const today = getTodayValue();
+            if (!dateValue) return today;
+            return dateValue > today ? today : dateValue;
+        }
+
+        function getMonthDateRange(monthValue) {
+            const safeMonth = String(monthValue || getCurrentMonthValue()) > getCurrentMonthValue() ? getCurrentMonthValue() : String(monthValue || getCurrentMonthValue());
+            const [year, month] = safeMonth.split("-").map(Number);
+            const first = new Date(year, month - 1, 1);
+            const last = new Date(year, month, 0);
+            return {
+                from: toDateInputValue(first),
+                to: clampDateToToday(toDateInputValue(last))
+            };
+        }
+
+        function syncMonthlyReportDateRange() {
+            const preset = document.getElementById("monthlyReportDatePreset")?.value || "month";
+            const monthInput = document.getElementById("monthlyReportMonth");
+            const fromInput = document.getElementById("monthlyReportFromDate");
+            const toInput = document.getElementById("monthlyReportToDate");
+            if (!fromInput || !toInput) return;
+            const today = getTodayValue();
+            fromInput.max = today;
+            toInput.max = today;
+            if (monthInput) monthInput.max = getCurrentMonthValue();
+            if (preset === "today") {
+                fromInput.value = today;
+                toInput.value = today;
+            } else if (preset === "yesterday_today") {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                fromInput.value = toDateInputValue(yesterday);
+                toInput.value = today;
+            } else if (preset === "month") {
+                if (monthInput && !monthInput.value) monthInput.value = getCurrentMonthValue();
+                if (monthInput && monthInput.value > getCurrentMonthValue()) monthInput.value = getCurrentMonthValue();
+                const range = getMonthDateRange(monthInput?.value);
+                fromInput.value = range.from;
+                toInput.value = range.to;
+            } else {
+                fromInput.value = clampDateToToday(fromInput.value);
+                toInput.value = clampDateToToday(toInput.value);
+                if (fromInput.value && toInput.value && fromInput.value > toInput.value) toInput.value = fromInput.value;
+            }
+        }
+
+        function normalizeReportStatus(statusLike) {
+            const status = String(statusLike || "").toLowerCase();
+            if (status.includes("cancel") || status.includes("ملغي") || status.includes("בוטל") || status.includes("cancelled")) return "cancelled";
+            if (status.includes("partial") || status.includes("جزئي") || status.includes("חלק")) return "partial";
+            if (status.includes("paid") || status.includes("مدفوع") || status.includes("שולם") || status.includes("recorded")) return "paid";
+            if (status.includes("pending") || status.includes("unpaid") || status.includes("غير") || status.includes("לא")) return "unpaid";
+            return status || "unpaid";
+        }
+
+        function normalizePaymentMethod(methodLike) {
+            const method = String(methodLike || "").toLowerCase();
+            if (method.includes("cash") || method.includes("كاش") || method.includes("מזומן")) return "cash";
+            if (method.includes("bank") || method.includes("transfer") || method.includes("تحويل") || method.includes("העברה")) return "bank";
+            if (method.includes("bit")) return "bit";
+            if (method.includes("paybox")) return "paybox";
+            if (method.includes("card") || method.includes("online") || method.includes("external") || method.includes("stripe") || method.includes("paypal") || method.includes("kavanu") || method.includes("بطاقة") || method.includes("כרטיס")) return "card";
+            return method || "unknown";
+        }
+
+        function reportDateOf(item, fallback = "") {
+            return String(item.lastPaymentAt || item.createdAt || item.issueDate || item.date || fallback || "").slice(0, 10);
+        }
+
+        function normalizeReportDate(value) {
+            const raw = String(value || "").trim();
+            const parts = raw.slice(0, 10).split("-");
+            if (parts.length === 3) {
+                const [year, month, day] = parts;
+                return `${year.padStart(4, "0")}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+            }
+            const date = new Date(raw);
+            return Number.isNaN(date.getTime()) ? raw.slice(0, 10) : date.toISOString().slice(0, 10);
+        }
+
+        function isIncomeRow(row) {
+            return moneyValue(row.incomeAmount) > 0 && ["paid", "partial"].includes(row.paymentStatus);
+        }
+
+        function getMonthlyReportFilters() {
+            syncMonthlyReportDateRange();
+            const from = document.getElementById("monthlyReportFromDate")?.value || getTodayValue();
+            const to = document.getElementById("monthlyReportToDate")?.value || from;
+            return {
+                month: document.getElementById("monthlyReportMonth")?.value || getCurrentMonthValue(),
+                from,
+                to,
+                type: document.getElementById("monthlyReportType")?.value || "all",
+                method: document.getElementById("monthlyReportPaymentMethod")?.value || "all",
+                status: document.getElementById("monthlyReportPaymentStatus")?.value || "all"
+            };
+        }
+
+        function setMonthlyReportDefaults() {
+            const input = document.getElementById("monthlyReportMonth");
+            if (input && !input.value) input.value = getCurrentMonthValue();
+            syncMonthlyReportDateRange();
+        }
+
+        function isDateInRange(date, from, to) {
+            return date && (!from || date >= from) && (!to || date <= to);
+        }
+
+        function buildMonthlyReportRows({ appointments, orders, payments, from, to }) {
+            const rows = [];
+            appointments.forEach((appointment) => {
+                const summary = getAppointmentPaymentSummary(appointment);
+                const date = normalizeReportDate(appointment.date || reportDateOf(appointment));
+                if (!isDateInRange(date, from, to)) return;
+                const appointmentStatus = normalizeReportStatus(appointment.status);
+                const paymentStatus = summary.paid > 0
+                    ? normalizeReportStatus(appointment.paymentStatus || (summary.remaining > 0 ? "partial" : "paid"))
+                    : (appointmentStatus === "cancelled" ? "cancelled" : "unpaid");
+                const amount = summary.paid;
+                rows.push({
+                    date,
+                    customer: appointment.name || appointment.customerName || appointment.userName || "-",
+                    operationType: "service",
+                    itemName: appointment.service || adminT("monthlyTypeBooking", "Booking"),
+                    amount,
+                    remainingAmount: moneyValue(summary.remaining),
+                    incomeAmount: ["paid", "partial"].includes(paymentStatus) ? amount : 0,
+                    paymentMethod: normalizePaymentMethod(appointment.lastPaymentMethod || appointment.paymentMethod || appointment.paymentProvider),
+                    paymentStatus,
+                    source: "booking",
+                    sourceId: appointment.id
+                });
+            });
+            orders.forEach((order) => {
+                const date = normalizeReportDate(reportDateOf(order));
+                if (!isDateInRange(date, from, to)) return;
+                const paymentStatus = normalizeReportStatus(order.paymentStatus);
+                const amount = moneyValue(order.totalGross ?? order.price);
+                rows.push({
+                    date,
+                    customer: order.customerName || order.customer?.name || "-",
+                    operationType: "product",
+                    itemName: order.productName || order.items?.[0]?.name || adminT("monthlyTypeProduct", "Product"),
+                    amount,
+                    incomeAmount: ["paid", "partial"].includes(paymentStatus) ? amount : 0,
+                    paymentMethod: normalizePaymentMethod(order.paymentMethod || order.paymentProvider?.mode || order.paymentProvider),
+                    paymentStatus,
+                    source: "product_purchase",
+                    sourceId: order.id
+                });
+            });
+            payments.forEach((payment) => {
+                const source = String(payment.sourceCollection || payment.source || "").toLowerCase();
+                if (["appointments", "orders"].includes(source)) return;
+                const date = normalizeReportDate(reportDateOf(payment));
+                if (!isDateInRange(date, from, to)) return;
+                const paymentStatus = normalizeReportStatus(payment.paymentStatus || "paid");
+                const amount = moneyValue(payment.amountGross || payment.totalGross);
+                rows.push({
+                    date,
+                    customer: payment.customer?.name || "-",
+                    operationType: "payment",
+                    itemName: payment.items?.map((item) => item.name).join(", ") || adminT("monthlyTypePayment", "Direct payment"),
+                    amount,
+                    incomeAmount: ["paid", "partial"].includes(paymentStatus) ? amount : 0,
+                    paymentMethod: normalizePaymentMethod(payment.paymentMethod || payment.paymentProvider?.mode || payment.paymentProvider),
+                    paymentStatus,
+                    source: "direct_payment",
+                    sourceId: payment.id
+                });
+            });
+            return rows.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+        }
+
+        function applyMonthlyReportFilters(rows, filters) {
+            return rows
+                .filter(isIncomeRow)
+                .filter((row) => filters.type === "all" || row.operationType === filters.type)
+                .filter((row) => filters.method === "all" || row.paymentMethod === filters.method)
+                .filter((row) => filters.status === "all" || row.paymentStatus === filters.status);
+        }
+
+        function calculateMonthlyReportSummary(rows) {
+            const paidRows = rows.filter(isIncomeRow);
+            const sumBy = (predicate) => paidRows.filter(predicate).reduce((sum, row) => sum + moneyValue(row.incomeAmount), 0);
+            return {
+                totalIncome: sumBy(() => true),
+                servicesIncome: sumBy((row) => row.operationType === "service" || row.operationType === "booking"),
+                productsIncome: sumBy((row) => row.operationType === "product"),
+                cashIncome: sumBy((row) => row.paymentMethod === "cash"),
+                cardIncome: sumBy((row) => ["card", "bit", "paybox"].includes(row.paymentMethod)),
+                operationsCount: rows.length,
+                unpaidCancelledCount: 0
+            };
+        }
+
         async function loadReportsDashboard() {
-            const [orders, invoices] = await Promise.all([getOrdersForReports(), getInvoicesForReports()]);
-            const paidAppointments = allAppointments.filter((appointment) => getAppointmentPaymentSummary(appointment).paid > 0);
-            const totalSales = orders.reduce((sum, order) => sum + moneyValue(order.totalGross ?? order.price), 0) +
-                allAppointments.reduce((sum, appointment) => sum + moneyValue(appointment.paymentPaidGross), 0);
+            setMonthlyReportDefaults();
+            const filters = getMonthlyReportFilters();
+            const [orders, appointments, payments] = await Promise.all([getOrdersForReports(), getAppointmentsForReports(), getPaymentRecordsForReports()]);
+            const allRows = buildMonthlyReportRows({ appointments, orders, payments, from: filters.from, to: filters.to });
+            const rows = applyMonthlyReportFilters(allRows, filters);
+            const summary = calculateMonthlyReportSummary(rows);
+            const reportLang = getMonthlyReportLanguage();
+            currentMonthlyReport = { rows, summary, month: filters.month, from: filters.from, to: filters.to, language: reportLang, filters, savedAt: new Date().toISOString() };
+            document.querySelector("#monthlyReportSheet .monthly-report-head h2").innerText = pdfSafeText(reportText(reportLang, "title"));
+            document.querySelector("#monthlyReportSheet .monthly-report-head small").innerText = pdfSafeText(reportText(reportLang, "salon"));
+            document.querySelector("#monthlyReportSheet .monthly-report-head div:last-child small").innerText = pdfSafeText(reportText(reportLang, "accountantReady"));
+            document.getElementById("monthlyReportSheet").dir = reportLang === "en" ? "ltr" : "rtl";
+            document.getElementById("monthlyReportPeriodLabel").innerText = `${filters.from} - ${filters.to}`;
             renderSummary("reportsSummary", [
-                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(totalSales) },
-                { label: adminT("invoicesCountLabel", "Invoices"), value: invoices.length },
-                { label: adminT("paidAppointmentsLabel", "Paid appointments"), value: paidAppointments.length },
-                { label: adminT("hoursTodayLabel", "Today hours"), value: `${getTodayWorkHours().toFixed(2)}h` }
+                { label: pdfSafeText(reportText(reportLang, "totalSales")), value: formatIls(summary.totalIncome) },
+                { label: pdfSafeText(reportText(reportLang, "servicesIncome")), value: formatIls(summary.servicesIncome) },
+                { label: pdfSafeText(reportText(reportLang, "productsIncome")), value: formatIls(summary.productsIncome) },
+                { label: pdfSafeText(reportText(reportLang, "operations")), value: summary.operationsCount }
             ]);
             const table = document.getElementById("reportsTable");
-            table.innerHTML = renderAdminHeaders(["invoiceHeader", "amountHeader", "paymentHeader", "dateTimeHeader"]);
-            const rows = [
-                ...orders.map((order) => ({ title: order.invoiceNumber || order.productName || "Order", amount: moneyValue(order.totalGross ?? order.price), status: order.paymentStatus || order.status || "-", date: order.createdAt || "-" })),
-                ...paidAppointments.map((appointment) => ({ title: appointment.lastInvoiceNumber || appointment.service || "Appointment", amount: moneyValue(appointment.paymentPaidGross), status: appointment.paymentStatus || "-", date: appointment.lastPaymentAt || appointment.date || "-" }))
-            ].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 50);
+            table.innerHTML = `<tr><th>${pdfSafeText(reportText(reportLang, "date"))}</th><th>${pdfSafeText(reportText(reportLang, "customer"))}</th><th>${pdfSafeText(reportText(reportLang, "type"))}</th><th>${pdfSafeText(reportText(reportLang, "item"))}</th><th>${pdfSafeText(reportText(reportLang, "amount"))}</th><th>${pdfSafeText(reportText(reportLang, "remaining"))}</th><th>${pdfSafeText(reportText(reportLang, "paymentMethod"))}</th><th>${pdfSafeText(reportText(reportLang, "status"))}</th><th>${pdfSafeText(reportText(reportLang, "source"))}</th></tr>`;
             if (!rows.length) {
                 const row = table.insertRow();
                 const cell = row.insertCell(0);
-                cell.colSpan = 4;
+                cell.colSpan = 9;
                 cell.className = "empty-row";
                 cell.innerText = "-";
+                renderSummary("monthlyReportFooterSummary", [
+                    { label: pdfSafeText(reportText(reportLang, "cashIncome")), value: formatIls(0) },
+                    { label: pdfSafeText(reportText(reportLang, "cardIncome")), value: formatIls(0) },
+                    { label: pdfSafeText(reportText(reportLang, "operations")), value: 0 },
+                    { label: pdfSafeText(reportText(reportLang, "totalSales")), value: formatIls(0) }
+                ]);
                 return;
             }
             rows.forEach((item) => {
                 const row = table.insertRow();
-                row.insertCell(0).innerHTML = safeText(item.title);
-                row.insertCell(1).innerHTML = `<strong>${formatIls(item.amount)}</strong>`;
-                row.insertCell(2).innerHTML = safeText(item.status);
-                row.insertCell(3).innerHTML = safeText(String(item.date).slice(0, 16));
+                row.insertCell(0).innerHTML = safeText(item.date);
+                row.insertCell(1).innerHTML = safeText(item.customer);
+                row.insertCell(2).innerHTML = safeText(item.operationType);
+                row.insertCell(3).innerHTML = safeText(item.itemName);
+                row.insertCell(4).innerHTML = `<strong>${formatIls(item.amount)}</strong>`;
+                row.insertCell(5).innerHTML = `<strong>${formatIls(item.remainingAmount || 0)}</strong>`;
+                row.insertCell(6).innerHTML = safeText(item.paymentMethod);
+                row.insertCell(7).innerHTML = safeText(item.paymentStatus);
+                row.insertCell(8).innerHTML = safeText(item.source);
             });
+            renderSummary("monthlyReportFooterSummary", [
+                { label: pdfSafeText(reportText(reportLang, "cashIncome")), value: formatIls(summary.cashIncome) },
+                { label: pdfSafeText(reportText(reportLang, "cardIncome")), value: formatIls(summary.cardIncome) },
+                { label: pdfSafeText(reportText(reportLang, "operations")), value: summary.operationsCount },
+                { label: pdfSafeText(reportText(reportLang, "totalSales")), value: formatIls(summary.totalIncome) }
+            ]);
+            loadSavedMonthlyReports();
+        }
+
+        function getMonthlyReportFileName(ext) {
+            const from = currentMonthlyReport.from || currentMonthlyReport.filters?.from || currentMonthlyReport.month || getTodayValue();
+            const to = currentMonthlyReport.to || currentMonthlyReport.filters?.to || from;
+            return `salon-tofik-income-report-${from}_to_${to}.${ext}`;
+        }
+
+        function monthlyReportRowsForExport() {
+            const lang = currentMonthlyReport.language || getMonthlyReportLanguage();
+            return currentMonthlyReport.rows.map((row) => ({
+                [reportText(lang, "date")]: row.date,
+                [reportText(lang, "customer")]: row.customer,
+                [reportText(lang, "type")]: row.operationType,
+                [reportText(lang, "item")]: row.itemName,
+                [reportText(lang, "amount")]: moneyValue(row.amount),
+                [reportText(lang, "remaining")]: moneyValue(row.remainingAmount),
+                IncomeIncluded: moneyValue(row.incomeAmount),
+                [reportText(lang, "paymentMethod")]: row.paymentMethod,
+                [reportText(lang, "status")]: row.paymentStatus,
+                [reportText(lang, "source")]: row.source,
+                SourceId: row.sourceId
+            }));
+        }
+
+        async function exportMonthlyReportPdf() {
+            const sheet = document.getElementById("monthlyReportSheet");
+            if (!sheet) return;
+            if (window.html2pdf) {
+                sheet.classList.add("pdf-export-mode");
+                try {
+                    await window.html2pdf().set({
+                        margin: 6,
+                        filename: getMonthlyReportFileName("pdf"),
+                        image: { type: "jpeg", quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+                        jsPDF: { unit: "mm", format: "a4", orientation: "landscape" }
+                    }).from(sheet).save();
+                } finally {
+                    sheet.classList.remove("pdf-export-mode");
+                }
+                return;
+            }
+            window.print();
+        }
+
+        function exportMonthlyReportExcel() {
+            const rows = monthlyReportRowsForExport();
+            const summary = currentMonthlyReport.summary || {};
+            const lang = currentMonthlyReport.language || getMonthlyReportLanguage();
+            if (window.XLSX) {
+                const wb = window.XLSX.utils.book_new();
+                const dataSheet = window.XLSX.utils.json_to_sheet(rows);
+                const summaryRows = [
+                    [reportText(lang, "date"), `${currentMonthlyReport.from || currentMonthlyReport.filters?.from || ""} - ${currentMonthlyReport.to || currentMonthlyReport.filters?.to || ""}`],
+                    [reportText(lang, "totalSales"), moneyValue(summary.totalIncome)],
+                    [reportText(lang, "servicesIncome"), moneyValue(summary.servicesIncome)],
+                    [reportText(lang, "productsIncome"), moneyValue(summary.productsIncome)],
+                    [reportText(lang, "cashIncome"), moneyValue(summary.cashIncome)],
+                    [reportText(lang, "cardIncome"), moneyValue(summary.cardIncome)],
+                    [reportText(lang, "operations"), summary.operationsCount || 0]
+                ];
+                const summarySheet = window.XLSX.utils.aoa_to_sheet(summaryRows);
+                window.XLSX.utils.book_append_sheet(wb, dataSheet, "Transactions");
+                window.XLSX.utils.book_append_sheet(wb, summarySheet, "Summary");
+                window.XLSX.writeFile(wb, getMonthlyReportFileName("xlsx"));
+                return;
+            }
+            const csv = rows.map((row) => Object.values(row).map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
+            downloadTextFile(getMonthlyReportFileName("csv"), `${Object.keys(rows[0] || {}).join(",")}\n${csv}`, "text/csv;charset=utf-8");
+        }
+
+        function downloadTextFile(filename, content, type = "application/json;charset=utf-8") {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        async function saveMonthlyReport() {
+            if (!currentMonthlyReport.rows.length) await loadReportsDashboard();
+            const reportId = `${currentMonthlyReport.from || currentMonthlyReport.month || getTodayValue()}_${currentMonthlyReport.to || ""}__${currentMonthlyReport.filters?.type || "all"}__${currentMonthlyReport.filters?.method || "all"}__${currentMonthlyReport.filters?.status || "all"}`;
+            const payload = {
+                ...currentMonthlyReport,
+                salonName: "SALON TOFIK",
+                reportId,
+                savedAt: new Date().toISOString(),
+                savedBy: auth.currentUser?.email || THE_ADMIN_EMAIL,
+                retention: { keepForAccountingAudit: true, source: "Firestore MonthlyReports" }
+            };
+            await setDoc(doc(db, "MonthlyReports", reportId), payload);
+            downloadTextFile(getMonthlyReportFileName("json"), JSON.stringify(payload, null, 2));
+            await loadSavedMonthlyReports();
+            alert(adminT("reportSavedAlert", "Monthly report saved in the system."));
+        }
+
+        async function loadSavedMonthlyReports() {
+            const select = document.getElementById("savedMonthlyReportsSelect");
+            if (!select) return;
+            const snapshot = await getDocs(collection(db, "MonthlyReports"));
+            savedMonthlyReports = snapshot.docs.map((reportDoc) => ({ id: reportDoc.id, ...reportDoc.data() }))
+                .sort((a, b) => String(b.savedAt || "").localeCompare(String(a.savedAt || "")));
+            select.innerHTML = savedMonthlyReports.length
+                ? savedMonthlyReports.map((report) => `<option value="${safeText(report.id)}">${safeText(report.from || report.month || report.id)} - ${safeText(report.to || "")} | ${safeText(String(report.savedAt || "").slice(0, 16))}</option>`).join("")
+                : `<option value="">-</option>`;
+        }
+
+        function loadSavedMonthlyReport() {
+            const id = document.getElementById("savedMonthlyReportsSelect")?.value;
+            const report = savedMonthlyReports.find((item) => item.id === id);
+            if (!report) return;
+            currentMonthlyReport = report;
+            document.getElementById("monthlyReportMonth").value = report.month || getCurrentMonthValue();
+            document.getElementById("monthlyReportFromDate").value = report.from || "";
+            document.getElementById("monthlyReportToDate").value = report.to || "";
+            document.getElementById("monthlyReportPeriodLabel").innerText = `${report.from || report.month || ""} - ${report.to || ""}`;
+            const summary = report.summary || calculateMonthlyReportSummary(report.rows || []);
+            renderSummary("reportsSummary", [
+                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(summary.totalIncome) },
+                { label: adminT("servicesIncomeLabel", "Service income"), value: formatIls(summary.servicesIncome) },
+                { label: adminT("productsIncomeLabel", "Product income"), value: formatIls(summary.productsIncome) },
+                { label: adminT("operationsCountLabel", "Operations"), value: summary.operationsCount || 0 }
+            ]);
+            currentMonthlyReport.rows = report.rows || [];
+            renderSavedReportRows(currentMonthlyReport.rows, summary);
+        }
+
+        function renderSavedReportRows(rows, summary) {
+            const table = document.getElementById("reportsTable");
+            table.innerHTML = `<tr><th>${adminT("dateTimeHeader", "Date")}</th><th>${adminT("customerHeader", "Customer")}</th><th>${adminT("operationTypeHeader", "Type")}</th><th>${adminT("itemHeader", "Service / product")}</th><th>${adminT("amountHeader", "Amount")}</th><th>${adminT("remainingHeader", "Remaining")}</th><th>${adminT("paymentMethodLabel", "Payment method")}</th><th>${adminT("statusHeader", "Status")}</th><th>${adminT("sourceHeader", "Source")}</th></tr>`;
+            rows.forEach((item) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerHTML = safeText(item.date);
+                row.insertCell(1).innerHTML = safeText(item.customer);
+                row.insertCell(2).innerHTML = safeText(item.operationType);
+                row.insertCell(3).innerHTML = safeText(item.itemName);
+                row.insertCell(4).innerHTML = `<strong>${formatIls(item.amount)}</strong>`;
+                row.insertCell(5).innerHTML = `<strong>${formatIls(item.remainingAmount || 0)}</strong>`;
+                row.insertCell(6).innerHTML = safeText(item.paymentMethod);
+                row.insertCell(7).innerHTML = safeText(item.paymentStatus);
+                row.insertCell(8).innerHTML = safeText(item.source);
+            });
+            renderSummary("monthlyReportFooterSummary", [
+                { label: adminT("cashIncomeLabel", "Cash payments"), value: formatIls(summary.cashIncome) },
+                { label: adminT("cardIncomeLabel", "Card / online"), value: formatIls(summary.cardIncome) },
+                { label: adminT("operationsCountLabel", "Operations"), value: summary.operationsCount || 0 },
+                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(summary.totalIncome) }
+            ]);
         }
 
         async function loadInvoicesReport() {
-            const invoices = await getInvoicesForReports();
+            syncInvoiceReportDateRange();
+            const [invoices, payments, appointments] = await Promise.all([getInvoicesForReports(), getPaymentRecordsForReports(), getAppointmentsForReports()]);
+            const filters = getInvoiceReportFilters();
+            const paymentById = new Map(payments.map((payment) => [payment.id, payment]));
+            const appointmentById = new Map(appointments.map((appointment) => [appointment.id, appointment]));
+            const rows = invoices.map((invoice) => normalizeInvoiceReportRow(invoice, paymentById.get(invoice.paymentRecordId), appointmentById.get(invoice.sourceId), filters.dateBasis))
+                .filter((row) => isInvoicePaidRow(row))
+                .filter((row) => isDateInRange(row.date, filters.from, filters.to))
+                .filter((row) => filters.type === "all" || row.operationType === filters.type)
+                .filter((row) => filters.method === "all" || row.paymentMethod === filters.method)
+                .sort((a, b) => String(b.date).localeCompare(String(a.date)));
             renderSummary("invoicesSummary", [
-                { label: adminT("invoicesCountLabel", "Invoices"), value: invoices.length },
-                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(invoices.reduce((sum, invoice) => sum + moneyValue(invoice.totals?.gross), 0)) }
+                { label: adminT("invoicesCountLabel", "Invoices"), value: rows.length },
+                { label: adminT("totalSalesLabel", "Total sales"), value: formatIls(rows.reduce((sum, row) => sum + moneyValue(row.amount), 0)) },
+                { label: adminT("servicesIncomeLabel", "Service income"), value: formatIls(rows.filter((row) => row.operationType === "service").reduce((sum, row) => sum + moneyValue(row.amount), 0)) },
+                { label: adminT("productsIncomeLabel", "Product income"), value: formatIls(rows.filter((row) => row.operationType === "product").reduce((sum, row) => sum + moneyValue(row.amount), 0)) }
             ]);
             const table = document.getElementById("invoicesTable");
-            table.innerHTML = renderAdminHeaders(["invoiceHeader", "customerHeader", "amountHeader", "taxHeader", "statusHeader"]);
-            if (!invoices.length) {
+            table.innerHTML = `<tr><th>${adminT("invoiceHeader", "Invoice")}</th><th>${adminT("customerHeader", "Customer")}</th><th>${adminT("operationTypeHeader", "Type")}</th><th>${adminT("paymentMethodLabel", "Payment method")}</th><th>${adminT("amountHeader", "Amount")}</th><th>${adminT("remainingHeader", "Remaining")}</th><th>VAT</th><th>${adminT("statusHeader", "Status")}</th><th>${adminT("actionsHeader", "Actions")}</th></tr>`;
+            if (!rows.length) {
                 const row = table.insertRow();
                 const cell = row.insertCell(0);
-                cell.colSpan = 5;
+                cell.colSpan = 9;
                 cell.className = "empty-row";
                 cell.innerText = "-";
                 return;
             }
-            invoices.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || ""))).forEach((invoice) => {
+            rows.forEach((invoice) => {
                 const row = table.insertRow();
-                row.insertCell(0).innerHTML = `<strong>${safeText(invoice.invoiceNumber || invoice.id)}</strong><br><small>${safeText(invoice.issueDate || "-")}</small>`;
-                row.insertCell(1).innerHTML = `${safeText(invoice.customer?.name || "-")}<br><small dir="ltr">${safeText(invoice.customer?.phone || invoice.customer?.email || "")}</small>`;
-                row.insertCell(2).innerHTML = `<strong>${formatIls(invoice.totals?.gross || 0)}</strong>`;
-                row.insertCell(3).innerHTML = `${formatIls(invoice.totals?.vat || 0)}<br><small>18%</small>`;
-                row.insertCell(4).innerHTML = safeText(invoice.invoiceStatus || "-");
+                row.insertCell(0).innerHTML = `<strong>${safeText(invoice.invoiceNumber || invoice.id)}</strong><br><small>${safeText(invoice.date || "-")}</small>`;
+                row.insertCell(1).innerHTML = `${safeText(invoice.customerName || "-")}<br><small dir="ltr">${safeText(invoice.phone || invoice.email || "")}</small>`;
+                row.insertCell(2).innerHTML = safeText(invoice.operationType);
+                row.insertCell(3).innerHTML = safeText(invoice.paymentMethod);
+                row.insertCell(4).innerHTML = `<strong>${formatIls(invoice.amount || 0)}</strong>`;
+                row.insertCell(5).innerHTML = `<strong>${formatIls(invoice.remainingAmount || 0)}</strong>`;
+                row.insertCell(6).innerHTML = `${formatIls(invoice.vat || 0)}<br><small>18%</small>`;
+                row.insertCell(7).innerHTML = safeText(invoice.paymentStatus);
+                const actionsCell = row.insertCell(8);
+                renderInvoiceSendActions(actionsCell, invoice);
             });
+        }
+
+        function getInvoiceReportFilters() {
+            return {
+                from: document.getElementById("invoiceReportFromDate")?.value || getTodayValue(),
+                to: document.getElementById("invoiceReportToDate")?.value || getTodayValue(),
+                dateBasis: document.getElementById("invoiceReportDateBasis")?.value || "invoice",
+                type: document.getElementById("invoiceReportType")?.value || "all",
+                method: document.getElementById("invoiceReportPaymentMethod")?.value || "all"
+            };
+        }
+
+        function syncInvoiceReportDateRange() {
+            const fromInput = document.getElementById("invoiceReportFromDate");
+            const toInput = document.getElementById("invoiceReportToDate");
+            if (!fromInput || !toInput) return;
+            const today = getTodayValue();
+            fromInput.max = today;
+            toInput.max = today;
+            if (!fromInput.value && !toInput.value) {
+                fromInput.value = today;
+                toInput.value = today;
+            } else {
+                fromInput.value = clampDateToToday(fromInput.value);
+                toInput.value = clampDateToToday(toInput.value);
+                if (fromInput.value && toInput.value && fromInput.value > toInput.value) toInput.value = fromInput.value;
+            }
+        }
+
+        function normalizeInvoiceReportRow(invoice, payment, appointment, dateBasis = "invoice") {
+            const source = String(invoice.sourceCollection || payment?.sourceCollection || "").toLowerCase();
+            const operationType = source.includes("order") ? "product" : "service";
+            const appointmentSummary = appointment ? getAppointmentPaymentSummary(appointment) : null;
+            const paymentStatus = appointmentSummary
+                ? (appointmentSummary.remaining > 0 ? "partial" : "paid")
+                : normalizeReportStatus(payment?.paymentStatus || invoice.paymentStatus || "");
+            const itemNames = Array.isArray(invoice.items) && invoice.items.length
+                ? invoice.items.map((item) => `${item.name || "Item"}${item.quantity ? ` x${item.quantity}` : ""}`).join(", ")
+                : (Array.isArray(payment?.items) ? payment.items.map((item) => `${item.name || "Item"}${item.quantity ? ` x${item.quantity}` : ""}`).join(", ") : "");
+            return {
+                id: invoice.id,
+                invoiceNumber: invoice.invoiceNumber || invoice.id,
+                date: normalizeReportDate(dateBasis === "booking" && operationType === "service" && appointment?.date ? appointment.date : (invoice.issueDate || invoice.createdAt)),
+                customerName: invoice.customer?.name || payment?.customer?.name || "-",
+                phone: invoice.customer?.phone || payment?.customer?.phone || "",
+                email: invoice.customer?.email || payment?.customer?.email || "",
+                operationType,
+                itemName: itemNames || appointment?.service || "-",
+                paymentMethod: normalizePaymentMethod(payment?.paymentMethod || invoice.paymentMethod || payment?.paymentProvider?.mode || invoice.paymentProvider?.mode),
+                paymentStatus,
+                amount: moneyValue(invoice.totals?.gross || payment?.amountGross),
+                remainingAmount: appointmentSummary ? moneyValue(appointmentSummary.remaining) : 0,
+                vat: moneyValue(invoice.totals?.vat || payment?.vatAmount),
+                source
+            };
+        }
+
+        function isInvoicePaidRow(row) {
+            return moneyValue(row.amount) > 0 && ["paid", "partial"].includes(row.paymentStatus);
+        }
+
+        function buildInvoiceMessageLines(invoice) {
+            const lang = invoice.language || getInvoiceSendLanguage();
+            const itemLabel = invoice.operationType === "product"
+                ? reportText(lang, "product")
+                : reportText(lang, "service");
+            const remainingLine = moneyValue(invoice.remainingAmount) > 0
+                ? `${reportText(lang, "remainingToPay")}: ${formatIls(invoice.remainingAmount)}`
+                : reportText(lang, "paidFull");
+            return [
+                "SALON TOFIK",
+                `${reportText(lang, "invoice")}: ${invoice.invoiceNumber}`,
+                `${itemLabel}: ${invoice.itemName || "-"}`,
+                `${reportText(lang, "amount")}: ${formatIls(invoice.amount)}`,
+                remainingLine,
+                `${reportText(lang, "date")}: ${invoice.date}`
+            ];
+        }
+
+        function buildInvoiceMessage(invoice) {
+            return encodeURIComponent(buildInvoiceMessageLines(invoice).join("\n"));
+        }
+
+        function buildInvoicePdfNode(invoice) {
+            const lang = invoice.language || getInvoiceSendLanguage();
+            const node = document.createElement("div");
+            node.dir = lang === "en" ? "ltr" : "rtl";
+            node.style.cssText = "width:720px;padding:28px;font-family:Arial,sans-serif;color:#111;background:white;";
+            node.innerHTML = `
+                <div style="border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:18px;">
+                    <h1 style="margin:0;font-size:28px;">SALON TOFIK</h1>
+                    <p style="margin:6px 0 0;color:#666;">${safeText(reportText(lang, "invoice"))}</p>
+                </div>
+                <table style="width:100%;border-collapse:collapse;font-size:16px;">
+                    ${buildInvoiceMessageLines(invoice).slice(1).map((line) => {
+                        const [label, ...value] = line.split(":");
+                        return `<tr><th style="text-align:right;border:1px solid #ddd;padding:10px;background:#f7f7f7;width:34%;">${safeText(label)}</th><td style="border:1px solid #ddd;padding:10px;">${safeText(value.join(":").trim())}</td></tr>`;
+                    }).join("")}
+                </table>
+            `;
+            return node;
+        }
+
+        async function createInvoicePdfBlob(invoice) {
+            const node = buildInvoicePdfNode(invoice);
+            document.body.appendChild(node);
+            try {
+                if (!window.html2pdf) return null;
+                return await window.html2pdf().set({
+                    margin: 8,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+                }).from(node).outputPdf("blob");
+            } finally {
+                node.remove();
+            }
+        }
+
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(String(reader.result || "").split(",")[1] || "");
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        async function sendInvoiceByWhatsapp(invoice) {
+            invoice.language = getInvoiceSendLanguage();
+            const phone = whatsappPhone(invoice.phone);
+            const filename = `${invoice.invoiceNumber || "invoice"}.pdf`;
+            const blob = await createInvoicePdfBlob(invoice);
+            if (!blob) return alert(adminT("whatsappBusinessFailedAlert", "Could not send through WhatsApp Business. Check API setup."));
+            try {
+                const token = await auth.currentUser?.getIdToken();
+                const response = await fetch(WHATSAPP_BUSINESS_SEND_ENDPOINT, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token || ""}`
+                    },
+                    body: JSON.stringify({
+                        to: phone,
+                        filename,
+                        pdfBase64: await blobToBase64(blob),
+                        caption: buildInvoiceMessageLines(invoice).join("\n"),
+                        invoiceNumber: invoice.invoiceNumber,
+                        invoiceId: invoice.id
+                    })
+                });
+                if (!response.ok) throw new Error(await response.text());
+                alert(adminT("whatsappBusinessSentAlert", "Invoice sent through WhatsApp Business."));
+            } catch (error) {
+                console.error("WhatsApp Business send failed:", error);
+                alert(adminT("whatsappBusinessFailedAlert", "Could not send through WhatsApp Business. Check API setup."));
+            }
+        }
+
+        function whatsappPhone(phone) {
+            const normalized = normalizePhoneNumber(phone);
+            return normalized ? normalized.replace(/^\+/, "") : "";
+        }
+
+        function renderInvoiceSendActions(container, invoice) {
+            invoice.language = getInvoiceSendLanguage();
+            const phone = normalizePhoneNumber(invoice.phone);
+            if (!phone) {
+                container.innerHTML = "-";
+                return;
+            }
+            const message = buildInvoiceMessage(invoice);
+            const waPhone = whatsappPhone(phone);
+            const whatsapp = document.createElement("a");
+            whatsapp.className = "btn-action btn-update";
+            whatsapp.href = "#";
+            whatsapp.innerText = adminT("sendWhatsappButton", "WhatsApp");
+            whatsapp.onclick = (event) => {
+                event.preventDefault();
+                sendInvoiceByWhatsapp(invoice);
+            };
+            const sms = document.createElement("a");
+            sms.className = "btn-action btn-payment";
+            sms.href = `sms:${phone}?body=${message}`;
+            sms.innerText = adminT("sendSmsButton", "SMS");
+            container.append(whatsapp, sms);
         }
 
         async function loadSalesReport() {
@@ -3982,6 +4914,34 @@
         });
         document.getElementById("toggleManualShiftPanelBtn")?.addEventListener("click", () => {
             document.getElementById("manualShiftPanel")?.classList.toggle("open");
+        });
+        document.getElementById("applyMonthlyReportFiltersBtn")?.addEventListener("click", loadReportsDashboard);
+        document.getElementById("monthlyReportLanguage")?.addEventListener("change", loadReportsDashboard);
+        document.getElementById("monthlyReportDatePreset")?.addEventListener("change", () => {
+            syncMonthlyReportDateRange();
+        });
+        document.getElementById("monthlyReportMonth")?.addEventListener("change", () => {
+            document.getElementById("monthlyReportDatePreset").value = "month";
+            syncMonthlyReportDateRange();
+        });
+        ["monthlyReportFromDate", "monthlyReportToDate"].forEach((id) => {
+            document.getElementById(id)?.addEventListener("change", () => {
+                document.getElementById("monthlyReportDatePreset").value = "custom";
+                syncMonthlyReportDateRange();
+            });
+        });
+        document.getElementById("exportMonthlyPdfBtn")?.addEventListener("click", exportMonthlyReportPdf);
+        document.getElementById("exportMonthlyExcelBtn")?.addEventListener("click", exportMonthlyReportExcel);
+        document.getElementById("printMonthlyReportBtn")?.addEventListener("click", () => window.print());
+        document.getElementById("saveMonthlyReportBtn")?.addEventListener("click", saveMonthlyReport);
+        document.getElementById("loadSavedMonthlyReportBtn")?.addEventListener("click", loadSavedMonthlyReport);
+        document.getElementById("applyInvoiceReportFiltersBtn")?.addEventListener("click", loadInvoicesReport);
+        document.getElementById("invoiceReportDateBasis")?.addEventListener("change", loadInvoicesReport);
+        document.getElementById("invoiceSendLanguage")?.addEventListener("change", loadInvoicesReport);
+        ["invoiceReportFromDate", "invoiceReportToDate"].forEach((id) => {
+            document.getElementById(id)?.addEventListener("change", () => {
+                syncInvoiceReportDateRange();
+            });
         });
 
         // ================= 3. المنتجات (المربعات + الخصومات) =================
