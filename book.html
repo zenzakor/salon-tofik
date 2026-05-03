@@ -46,12 +46,25 @@
         .booking-availability { display: none; margin-top: 14px; padding: 14px 16px; border: 1px solid #dbe4ee; border-radius: 10px; background: #f8fafc; color: #334155; font-size: 14px; line-height: 1.6; }
         .booking-availability.active { display: block; }
         .booking-availability strong { display: block; color: #111827; margin-bottom: 4px; }
+        .booking-availability span { display: block; margin-top: 6px; }
         .booking-availability.warning { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
         .booking-availability.blocked { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+        .service-choice-list { display: grid; gap: 10px; margin-top: 8px; }
+        .service-choice { display: flex; align-items: center; gap: 10px; padding: 13px 14px; border: 2px solid #ddd; border-radius: 8px; background: #fafafa; cursor: pointer; font-weight: bold; transition: border-color 0.2s ease, background 0.2s ease; }
+        .service-choice:hover { border-color: #111; background: #fff; }
+        .service-choice input { width: 20px; height: 20px; min-width: 20px; margin: 0; accent-color: #111; }
+        .service-choice span { flex: 1; }
+        .service-choice:has(input:checked) { border-color: #111; background: #f3f4f6; }
+        .booking-price-summary { display: none; margin-top: 12px; padding: 12px 14px; border-radius: 8px; background: #111827; color: #f8fafc; font-weight: bold; text-align: center; }
+        .booking-price-summary.active { display: block; }
+        .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn:disabled:hover { background-color: #000000; transform: none; box-shadow: none; }
         body.dark-mode .booking-availability { background: #181818; border-color: #333; color: #d1d5db; }
         body.dark-mode .booking-availability strong { color: #f8fafc; }
         body.dark-mode .booking-availability.warning { background: #2b2415; border-color: #7c2d12; color: #fed7aa; }
         body.dark-mode .booking-availability.blocked { background: #2b181d; border-color: #7f1d1d; color: #fecdd3; }
+        body.dark-mode .service-choice { background: #181818; border-color: #444; color: #f3f3f3; }
+        body.dark-mode .service-choice:hover, body.dark-mode .service-choice:has(input:checked) { background: #202020; border-color: #f3f3f3; }
         
         label { font-weight: bold; display: block; margin-top: 20px; margin-bottom: 8px; color: #222;}
         input, select, textarea { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 16px; box-sizing: border-box; background-color: #fafafa; transition: 0.3s; cursor: pointer;}
@@ -120,15 +133,7 @@
             </div>
 
             <label data-i18n="serviceLabel">نوع الخدمة المطلوبة:</label>
-            <select id="serviceType">
-                <option value="" disabled selected data-i18n="servicePlaceholder">-- اضغطي لاختيار الخدمة --</option>
-                <option value="قص شعر" data-i18n="serviceHaircut">قص شعر</option>
-                <option value="صبغة شعر" data-i18n="serviceColor">صبغة شعر</option>
-                <option value="تسريحة" data-i18n="serviceStyle">تسريحة</option>
-                <option value="مكياج" data-i18n="serviceMakeup">مكياج</option>
-                <option value="عناية بالبشرة" data-i18n="serviceSkin">عناية بالبشرة</option>
-                <option value="أخرى" data-i18n="serviceOther">خدمة أخرى</option>
-            </select>
+            <div id="serviceType" class="service-choice-list" aria-live="polite"></div>
 
             <label data-i18n="dateLabel">تاريخ الموعد:</label>
             <input type="text" id="bookDate" placeholder="📅 اضغطي لاختيار التاريخ..." data-i18n-placeholder="datePlaceholder">
@@ -148,6 +153,7 @@
                 </select>
             </div>
             <div id="bookingAvailability" class="booking-availability" aria-live="polite"></div>
+            <div id="bookingPriceSummary" class="booking-price-summary" aria-live="polite"></div>
 
             <label data-i18n="notesLabel">ملاحظات إضافية أو طلب خاص (اختياري):</label>
             <textarea id="notes" rows="3" placeholder="مثال: أريد صبغة بلون أشقر رمادي..." data-i18n-placeholder="notesPlaceholder"></textarea>
@@ -158,7 +164,7 @@
                 <a href="terms.html" target="_blank" rel="noopener" data-i18n="readTerms">قراءة الشروط وسياسة الإلغاء</a>
             </div>
 
-            <button id="submitBookBtn" class="btn" data-i18n="submitBook">تأكيد الحجز</button>
+            <button id="submitBookBtn" class="btn" data-i18n="submitBook" disabled>تأكيد الحجز</button>
             <div id="loader" class="loader" data-i18n="bookingLoader">جاري التحقق من توفر الموعد... ⏳</div>
         </div>
         
@@ -244,6 +250,8 @@
         };
         let salonBookingSettings = null;
         let salonBookingSettingsLoaded = false;
+        let bookingAvailabilityState = { complete: false, available: false, reason: "" };
+        let bookingAvailabilityRequestId = 0;
 
         const SALON_BOOKING_SETTINGS_DOC = ["SiteContent", "salonBookingSettings"];
         const BOOKING_DAY_KEYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -253,9 +261,9 @@
             he: { home: "בית", settings: "הגדרות", theme: "תצוגה", light: "בהיר", dark: "כהה", language: "שפה", textSize: "גודל טקסט", normal: "רגיל", large: "גדול", bookTitle: "📅 הזמנת תור", bookSubtitle: "בחרי את פרטי התור כדי שנוכל לתת לך את השירות הטוב ביותר.", serviceLabel: "סוג השירות:", dateLabel: "תאריך התור:", datePlaceholder: "📅 לחצי לבחירת תאריך...", timeLabel: "שעה מועדפת (שעות עבודה 9:00-19:00):", notesLabel: "הערות או בקשה מיוחדת (לא חובה):", notesPlaceholder: "לדוגמה: צבע שיער בלונד אפור...", submitBook: "אישור התור", bookingLoader: "בודק זמינות תור... ⏳", loginRequiredTitle: "🔒 צריך להתחבר קודם", loginRequiredText: "יש להתחבר מהעמוד הראשי כדי להזמין תור.", backHome: "חזרה לעמוד הראשי" },
             en: { home: "Home", settings: "Settings", theme: "Theme", light: "Light", dark: "Dark", language: "Language", textSize: "Text size", normal: "Normal", large: "Large", bookTitle: "📅 Book Your Appointment", bookSubtitle: "Choose your booking details so we can serve you best.", serviceLabel: "Requested service:", dateLabel: "Appointment date:", datePlaceholder: "📅 Click to choose a date...", timeLabel: "Preferred time (working hours 9 AM - 7 PM):", notesLabel: "Extra notes or special request (optional):", notesPlaceholder: "Example: I want ash-blonde color...", submitBook: "Confirm booking", bookingLoader: "Checking appointment availability... ⏳", loginRequiredTitle: "🔒 Please log in first", loginRequiredText: "You need to log in from the home page before booking.", backHome: "Back to home page" }
         };
-        Object.assign(uiText.ar, { servicePlaceholder: "-- اضغطي لاختيار الخدمة --", serviceHaircut: "قص شعر", serviceColor: "صبغة شعر", serviceStyle: "تسريحة", serviceMakeup: "مكياج", serviceSkin: "عناية بالبشرة", serviceOther: "خدمة أخرى", minutePlaceholder: "الدقيقة", hourPlaceholder: "الساعة", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي" });
-        Object.assign(uiText.he, { servicePlaceholder: "-- בחרי שירות --", serviceHaircut: "תספורת", serviceColor: "צבע שיער", serviceStyle: "תסרוקת", serviceMakeup: "איפור", serviceSkin: "טיפוח עור", serviceOther: "שירות אחר", minutePlaceholder: "דקה", hourPlaceholder: "שעה", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי" });
-        Object.assign(uiText.en, { servicePlaceholder: "-- Choose a service --", serviceHaircut: "Haircut", serviceColor: "Hair color", serviceStyle: "Hair styling", serviceMakeup: "Makeup", serviceSkin: "Skin care", serviceOther: "Other service", minutePlaceholder: "Minute", hourPlaceholder: "Hour", oldBookingsButton: "Old bookings", accountInfoButton: "My account info" });
+        Object.assign(uiText.ar, { serviceLabel: "الخدمات المطلوبة:", servicePlaceholder: "-- اختاري خدمة أو أكثر --", serviceHaircut: "قص شعر", serviceColor: "صبغة شعر", serviceStyle: "تسريحة", serviceMakeup: "مكياج", serviceSkin: "عناية بالبشرة", serviceOther: "خدمة أخرى", minutePlaceholder: "الدقيقة", hourPlaceholder: "الساعة", oldBookingsButton: "الحجوزات القديمة", accountInfoButton: "معلومات حسابي" });
+        Object.assign(uiText.he, { serviceLabel: "השירותים המבוקשים:", servicePlaceholder: "-- בחרי שירות אחד או יותר --", serviceHaircut: "תספורת", serviceColor: "צבע שיער", serviceStyle: "תסרוקת", serviceMakeup: "איפור", serviceSkin: "טיפוח עור", serviceOther: "שירות אחר", minutePlaceholder: "דקה", hourPlaceholder: "שעה", oldBookingsButton: "תורים ישנים", accountInfoButton: "פרטי החשבון שלי" });
+        Object.assign(uiText.en, { serviceLabel: "Requested services:", servicePlaceholder: "-- Choose one or more services --", serviceHaircut: "Haircut", serviceColor: "Hair color", serviceStyle: "Hair styling", serviceMakeup: "Makeup", serviceSkin: "Skin care", serviceOther: "Other service", minutePlaceholder: "Minute", hourPlaceholder: "Hour", oldBookingsButton: "Old bookings", accountInfoButton: "My account info" });
         Object.assign(uiText.ar, { prepaymentTitle: "مطلوب دفعة مسبقة جزئية", prepaymentText: "بسبب سجل الغياب، يجب دفع عربون جزئي قبل حجز الموعد القادم.", prepaymentFuture: "النظام جاهز للربط لاحقاً مع Stripe أو PayPal لإتمام الدفع.", prepaymentAlert: "هذا الحساب يحتاج دفعة مسبقة قبل إنشاء حجز جديد. سيتم تفعيل الدفع الإلكتروني قريباً." });
         Object.assign(uiText.he, { prepaymentTitle: "נדרשת מקדמה חלקית", prepaymentText: "בגלל היסטוריית היעדרויות, יש לשלם מקדמה חלקית לפני הזמנת התור הבא.", prepaymentFuture: "המערכת מוכנה לחיבור עתידי ל-Stripe או PayPal.", prepaymentAlert: "החשבון הזה דורש מקדמה לפני יצירת תור חדש. תשלום אונליין יופעל בקרוב." });
         Object.assign(uiText.en, { prepaymentTitle: "Partial deposit required", prepaymentText: "Because of missed appointments, a partial deposit is required before booking the next appointment.", prepaymentFuture: "The system is ready for a future Stripe or PayPal payment gateway.", prepaymentAlert: "This account requires a partial deposit before a new booking. Online payment will be enabled soon." });
@@ -269,8 +277,13 @@
             servicePriceLabel: "السعر",
             durationMinutesSuffix: "دقيقة",
             availabilityTitle: "حالة اليوم",
+            availabilityChecking: "جاري فحص التوفر...",
+            availabilityIncomplete: "اختاري الخدمات والتاريخ والوقت للتأكد من التوفر.",
+            availabilityReady: "يمكن الحجز في هذا الوقت.",
+            availabilityBlockedTitle: "لا يمكن الحجز في هذا الوقت",
             workingHoursLabel: "ساعات العمل",
             capacityLabel: "السعة",
+            totalPriceLabel: "السعر الإجمالي",
             regularDayLabel: "يوم عادي",
             busyDayLabel: "يوم ازدحام",
             closedDayLabel: "مغلق",
@@ -278,6 +291,7 @@
             bookingClosedAlert: "هذا اليوم مغلق للحجز.",
             bookingOutsideHoursAlert: "الوقت خارج ساعات العمل أو مدة الخدمة تتجاوز نهاية الدوام.",
             bookingCapacityAlert: "عذراً، لا توجد سعة كافية لهذا الوقت حسب مدة الخدمة. الرجاء اختيار وقت آخر.",
+            sameDayBookingAlert: "لديك حجز في هذا اليوم بالفعل. لا يمكن إنشاء حجزين في نفس اليوم.",
             servicesLoadError: "تعذر تحميل إعدادات الحجز. سيتم استخدام القيم الافتراضية."
         });
         Object.assign(uiText.he, {
@@ -287,8 +301,13 @@
             servicePriceLabel: "מחיר",
             durationMinutesSuffix: "דקות",
             availabilityTitle: "מצב היום",
+            availabilityChecking: "בודק זמינות...",
+            availabilityIncomplete: "בחרי שירותים, תאריך ושעה כדי לבדוק זמינות.",
+            availabilityReady: "אפשר להזמין בשעה הזו.",
+            availabilityBlockedTitle: "אי אפשר להזמין בשעה הזו",
             workingHoursLabel: "שעות עבודה",
             capacityLabel: "קיבולת",
+            totalPriceLabel: "מחיר כולל",
             regularDayLabel: "יום רגיל",
             busyDayLabel: "יום עמוס",
             closedDayLabel: "סגור",
@@ -296,6 +315,7 @@
             bookingClosedAlert: "היום הזה סגור להזמנות.",
             bookingOutsideHoursAlert: "השעה מחוץ לשעות העבודה או השירות מסתיים אחרי הסגירה.",
             bookingCapacityAlert: "אין קיבולת זמינה בשעה הזו לפי משך השירות. בחרי שעה אחרת.",
+            sameDayBookingAlert: "כבר יש לך תור ביום הזה. אי אפשר ליצור שני תורים באותו יום.",
             servicesLoadError: "לא ניתן לטעון הגדרות תורים. נעשה שימוש בברירת מחדל."
         });
         Object.assign(uiText.en, {
@@ -305,8 +325,13 @@
             servicePriceLabel: "Price",
             durationMinutesSuffix: "min",
             availabilityTitle: "Day status",
+            availabilityChecking: "Checking availability...",
+            availabilityIncomplete: "Choose services, date, and time to check availability.",
+            availabilityReady: "This time is available.",
+            availabilityBlockedTitle: "You cannot book at this time",
             workingHoursLabel: "Working hours",
             capacityLabel: "Capacity",
+            totalPriceLabel: "Total price",
             regularDayLabel: "Regular day",
             busyDayLabel: "Busy day",
             closedDayLabel: "Closed",
@@ -314,6 +339,7 @@
             bookingClosedAlert: "This day is closed for booking.",
             bookingOutsideHoursAlert: "The time is outside working hours or the service ends after closing.",
             bookingCapacityAlert: "There is no available capacity at this time for the service duration. Please choose another time.",
+            sameDayBookingAlert: "You already have a booking on this day. You cannot book twice on the same day.",
             servicesLoadError: "Could not load booking settings. Defaults will be used."
         });
 
@@ -469,7 +495,24 @@
         }
 
         function getSelectedBookingService() {
-            return findSalonService(document.getElementById("serviceType").value);
+            return getSelectedBookingServices()[0] || null;
+        }
+
+        function getSelectedBookingServices() {
+            return Array.from(document.querySelectorAll("#serviceType input[type='checkbox']:checked"))
+                .map((input) => findSalonService(input.value))
+                .filter(Boolean);
+        }
+
+        function getSelectedBookingTotals() {
+            const services = getSelectedBookingServices();
+            return {
+                services,
+                names: services.map((service) => service.name),
+                ids: services.map((service) => service.id),
+                price: services.reduce((sum, service) => sum + Math.max(0, Number(service.price || 0)), 0),
+                durationMinutes: services.reduce((sum, service) => sum + Math.max(5, Number(service.durationMinutes || 60)), 0)
+            };
         }
 
         function getAppointmentDurationMinutes(appointment = {}) {
@@ -481,7 +524,7 @@
         function shouldCountAppointmentForCapacity(appointment = {}) {
             const status = String(appointment.status || "").toLowerCase();
             if (!appointment.date || !appointment.time) return false;
-            return !status.includes("رفض") && !status.includes("reject") && !status.includes("cancel") && !status.includes("إلغاء") && !status.includes("no-show") && !status.includes("absent") && !appointment.noShow;
+            return !appointment.deletedFromCalendar && !status.includes("deleted") && !status.includes("رفض") && !status.includes("reject") && !status.includes("cancel") && !status.includes("إلغاء") && !status.includes("no-show") && !status.includes("absent") && !appointment.noShow;
         }
 
         function getAppointmentInterval(appointment = {}) {
@@ -511,9 +554,17 @@
             });
         }
 
-        function checkSalonBookingAvailability({ date, time, durationMinutes, appointments = [] }) {
+        function hasUserBookingOnDate(appointments, date, userId) {
+            if (!date || !userId) return false;
+            return appointments.some((appointment) => appointment.userId === userId && appointment.date === date && shouldCountAppointmentForCapacity(appointment));
+        }
+
+        function checkSalonBookingAvailability({ date, time, durationMinutes, appointments = [], userId = "" }) {
             const info = getSalonDateInfo(date);
             if (!info.open) return { available: false, reason: info.reason || uiT("bookingClosedAlert", "This day is closed for booking."), info };
+            if (hasUserBookingOnDate(appointments, date, userId)) {
+                return { available: false, reason: uiT("sameDayBookingAlert", "You already have a booking on this day."), info };
+            }
 
             const start = timeToMinutes(time);
             const duration = Math.max(5, Number(durationMinutes || 60));
@@ -530,31 +581,37 @@
         }
 
         function renderBookingServices() {
-            const select = document.getElementById("serviceType");
-            const selectedValue = select.value;
+            const list = document.getElementById("serviceType");
+            const selectedValues = new Set(Array.from(list.querySelectorAll("input:checked")).map((input) => input.value));
             const services = getSalonSettings().services.filter((service) => service.active !== false);
-            select.innerHTML = `<option value="" disabled selected>${uiT("servicePlaceholder", "-- اضغطي لاختيار الخدمة --")}</option>`;
+            list.innerHTML = "";
             if (!services.length) {
-                select.innerHTML = `<option value="" disabled selected>${uiT("noServicesAvailable", "No services are currently available for booking.")}</option>`;
+                list.innerHTML = `<div class="booking-availability active blocked">${uiT("noServicesAvailable", "No services are currently available for booking.")}</div>`;
                 return;
             }
             services.forEach((service) => {
-                const option = document.createElement("option");
-                option.value = service.id;
-                option.textContent = `${service.name} · ${uiT("serviceDurationLabel", "المدة")}: ${service.durationMinutes} ${uiT("durationMinutesSuffix", "دقيقة")} · ₪${Number(service.price || 0)}`;
-                select.appendChild(option);
+                const label = document.createElement("label");
+                label.className = "service-choice";
+                label.innerHTML = `
+                    <input type="checkbox" value="${safeText(service.id)}" ${selectedValues.has(service.id) ? "checked" : ""}>
+                    <span>${safeText(service.name)}</span>
+                `;
+                label.querySelector("input").addEventListener("change", () => {
+                    populateBookingHours();
+                    updateBookingAvailabilityMessage();
+                });
+                list.appendChild(label);
             });
-            if (selectedValue && services.some((service) => service.id === selectedValue)) select.value = selectedValue;
         }
 
         function populateBookingHours() {
             const selectedDate = document.getElementById("bookDate").value;
             const selectedHour = hourSelect.value;
             const info = selectedDate ? getSalonDateInfo(selectedDate) : { start: "09:00", end: "19:00", open: true };
-            const selectedService = getSelectedBookingService();
+            const selectedTotals = getSelectedBookingTotals();
             const workStart = timeToMinutes(info.start) ?? 540;
             const workEnd = timeToMinutes(info.end) ?? 1140;
-            const latestStart = selectedService ? Math.max(workStart, workEnd - selectedService.durationMinutes) : workEnd;
+            const latestStart = selectedTotals.durationMinutes ? Math.max(workStart, workEnd - selectedTotals.durationMinutes) : workEnd;
             const startHour = Math.floor(workStart / 60);
             const endHour = info.open ? Math.floor(latestStart / 60) : startHour - 1;
             hourSelect.innerHTML = `<option value="" disabled selected>${uiT("hourPlaceholder", "الساعة")}</option>`;
@@ -568,40 +625,91 @@
             if (selectedHour && Array.from(hourSelect.options).some((option) => option.value === selectedHour)) hourSelect.value = selectedHour;
         }
 
-        function updateBookingAvailabilityMessage() {
-            const box = document.getElementById("bookingAvailability");
+        function getBookingFormValues() {
+            const totals = getSelectedBookingTotals();
             const date = document.getElementById("bookDate").value;
-            const service = getSelectedBookingService();
+            const hour = hourSelect.value;
+            const minute = minuteSelect.value;
+            const time = hour && minute ? `${hour}:${minute}` : "";
+            return { ...totals, date, hour, minute, time };
+        }
+
+        function updateSubmitButtonState() {
+            const button = document.getElementById("submitBookBtn");
+            const values = getBookingFormValues();
+            const complete = !!(values.services.length && values.date && values.hour && values.minute);
+            bookingAvailabilityState.complete = complete;
+            if (button) button.disabled = !complete || !bookingAvailabilityState.available;
+        }
+
+        function renderBookingPriceSummary(values = getBookingFormValues()) {
+            const summary = document.getElementById("bookingPriceSummary");
+            if (!summary) return;
+            const complete = !!(values.services.length && values.date && values.hour && values.minute);
+            summary.classList.toggle("active", complete);
+            summary.textContent = complete ? `${uiT("totalPriceLabel", "السعر الإجمالي")}: ₪${values.price}` : "";
+        }
+
+        function setAvailabilityBox(className, title, body = "") {
+            const box = document.getElementById("bookingAvailability");
             if (!box) return;
             box.className = "booking-availability";
-            if (!date) {
-                box.classList.add("active");
-                box.innerHTML = `<strong>${uiT("availabilityTitle", "حالة اليوم")}</strong>${uiT("selectDateForAvailability", "اختاري التاريخ لعرض ساعات العمل والسعة.")}`;
-                return;
-            }
-            const info = getSalonDateInfo(date);
             box.classList.add("active");
-            if (!info.open) {
-                box.classList.add("blocked");
-                box.innerHTML = `<strong>${uiT("closedDayLabel", "مغلق")}</strong>${safeText(info.reason || uiT("bookingClosedAlert", "هذا اليوم مغلق للحجز."))}`;
+            if (className) box.classList.add(className);
+            box.innerHTML = `<strong>${safeText(title)}</strong>${body ? `<span>${safeText(body)}</span>` : ""}`;
+        }
+
+        async function loadAppointmentsForAvailability() {
+            const snapshot = await getDocs(collection(db, "Appointments"));
+            return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+        }
+
+        async function updateBookingAvailabilityMessage() {
+            const requestId = ++bookingAvailabilityRequestId;
+            const values = getBookingFormValues();
+            bookingAvailabilityState = { complete: false, available: false, reason: "" };
+            renderBookingPriceSummary(values);
+            updateSubmitButtonState();
+
+            if (!values.services.length || !values.date || !values.hour || !values.minute) {
+                setAvailabilityBox("", uiT("availabilityTitle", "حالة اليوم"), uiT("availabilityIncomplete", "اختاري الخدمات والتاريخ والوقت للتأكد من التوفر."));
                 return;
             }
-            const selectedTime = hourSelect.value && minuteSelect.value ? `${hourSelect.value}:${minuteSelect.value}` : "";
-            const duration = service?.durationMinutes || 60;
-            const endLabel = selectedTime ? minutesToTime((timeToMinutes(selectedTime) || 0) + duration) : "";
-            box.classList.toggle("warning", info.busy);
-            box.innerHTML = `
-                <strong>${info.busy ? uiT("busyDayLabel", "يوم ازدحام") : uiT("regularDayLabel", "يوم عادي")}</strong>
-                ${uiT("workingHoursLabel", "ساعات العمل")}: ${safeText(info.start)} - ${safeText(info.end)}<br>
-                ${uiT("capacityLabel", "السعة")}: ${info.capacity}<br>
-                ${service ? `${safeText(service.name)} · ${duration} ${uiT("durationMinutesSuffix", "دقيقة")}${endLabel ? ` · ${selectedTime} - ${endLabel}` : ""}` : ""}
-            `;
+
+            setAvailabilityBox("", uiT("availabilityTitle", "حالة اليوم"), uiT("availabilityChecking", "جاري فحص التوفر..."));
+            try {
+                const appointments = await loadAppointmentsForAvailability();
+                if (requestId !== bookingAvailabilityRequestId) return;
+                const availability = checkSalonBookingAvailability({
+                    date: values.date,
+                    time: values.time,
+                    durationMinutes: values.durationMinutes,
+                    appointments,
+                    userId: currentUserId
+                });
+                bookingAvailabilityState = {
+                    complete: true,
+                    available: availability.available,
+                    reason: availability.reason || ""
+                };
+                if (!availability.available) {
+                    setAvailabilityBox("blocked", uiT("availabilityBlockedTitle", "لا يمكن الحجز في هذا الوقت"), availability.reason);
+                } else {
+                    setAvailabilityBox("", uiT("availabilityReady", "يمكن الحجز في هذا الوقت."));
+                }
+            } catch (error) {
+                console.warn("Availability check failed:", error);
+                bookingAvailabilityState = { complete: true, available: false, reason: uiT("servicesLoadError", "Could not load booking settings.") };
+                setAvailabilityBox("blocked", uiT("availabilityBlockedTitle", "لا يمكن الحجز في هذا الوقت"), uiT("servicesLoadError", "تعذر تحميل إعدادات الحجز."));
+            } finally {
+                updateSubmitButtonState();
+            }
         }
 
         async function loadSalonBookingSettings(force = false) {
             if (salonBookingSettingsLoaded && !force) return getSalonSettings();
-            const select = document.getElementById("serviceType");
-            select.innerHTML = `<option value="" disabled selected>${uiT("loadingServices", "Loading services...")}</option>`;
+            const serviceList = document.getElementById("serviceType");
+            serviceList.innerHTML = `<div class="booking-availability active">${uiT("loadingServices", "Loading services...")}</div>`;
             try {
                 const snap = await getDoc(doc(db, SALON_BOOKING_SETTINGS_DOC[0], SALON_BOOKING_SETTINGS_DOC[1]));
                 salonBookingSettings = normalizeSalonBookingSettings(snap.exists() ? snap.data() : {});
@@ -690,6 +798,7 @@
                     document.getElementById("loginWarning").style.display = "none";
                     document.getElementById("bookingFormContainer").style.display = "block";
                     renderPrepaymentState();
+                    updateBookingAvailabilityMessage();
                 }
             } else {
                 currentUserId = null;
@@ -697,16 +806,17 @@
                 document.getElementById("loginWarning").style.display = "block";
                 document.getElementById("bookingFormContainer").style.display = "none";
                 renderPrepaymentState();
+                updateBookingAvailabilityMessage();
             }
         });
 
         document.getElementById("submitBookBtn").addEventListener("click", async () => {
             await loadSalonBookingSettings();
-            const selectedService = getSelectedBookingService();
-            const service = selectedService?.name || "";
-            const date = document.getElementById("bookDate").value;
-            const hour = document.getElementById("bookHour").value;
-            const minute = document.getElementById("bookMinute").value;
+            const bookingValues = getBookingFormValues();
+            const service = bookingValues.names.join(" + ");
+            const date = bookingValues.date;
+            const hour = bookingValues.hour;
+            const minute = bookingValues.minute;
             const notes = document.getElementById("notes").value;
 
             if (!loggedInUserData || !currentUserId) return alert("يجب تسجيل الدخول قبل الحجز.");
@@ -716,7 +826,7 @@
             }
             if (!service || !date || !hour || !minute) return alert("الرجاء تعبئة نوع الخدمة، التاريخ، والساعة والدقيقة!");
 
-            const finalTime = `${hour}:${minute}`;
+            const finalTime = bookingValues.time;
 
             document.getElementById("loader").style.display = "block";
             document.getElementById("submitBookBtn").disabled = true;
@@ -730,12 +840,15 @@
                 const availability = checkSalonBookingAvailability({
                     date,
                     time: finalTime,
-                    durationMinutes: selectedService?.durationMinutes || 60,
-                    appointments: existingAppointments
+                    durationMinutes: bookingValues.durationMinutes,
+                    appointments: existingAppointments,
+                    userId: currentUserId
                 });
                 if (!availability.available) {
                     alert(availability.reason);
-                    document.getElementById("loader").style.display = "none"; document.getElementById("submitBookBtn").disabled = false;
+                    document.getElementById("loader").style.display = "none";
+                    bookingAvailabilityState = { complete: true, available: false, reason: availability.reason };
+                    updateSubmitButtonState();
                     return; 
                 }
 
@@ -745,9 +858,16 @@
                     customerName: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
                     phone: loggedInUserData.phone || "",
                     service: service,
-                    serviceId: selectedService?.id || "",
-                    servicePrice: Number(selectedService?.price || 0),
-                    serviceDurationMinutes: Number(selectedService?.durationMinutes || 60),
+                    serviceId: bookingValues.ids[0] || "",
+                    serviceIds: bookingValues.ids,
+                    services: bookingValues.services.map((item) => ({
+                        id: item.id,
+                        name: item.name,
+                        price: Number(item.price || 0),
+                        durationMinutes: Number(item.durationMinutes || 60)
+                    })),
+                    servicePrice: Number(bookingValues.price || 0),
+                    serviceDurationMinutes: Number(bookingValues.durationMinutes || 60),
                     date: date,
                     time: finalTime,
                     notes: notes,
@@ -790,7 +910,10 @@
                 window.location.href = "index.html"; 
             } catch (error) {
                 console.error(error); alert("حدث خطأ أثناء الحجز: " + error.message);
-            } finally { document.getElementById("loader").style.display = "none"; document.getElementById("submitBookBtn").disabled = false; }
+            } finally {
+                document.getElementById("loader").style.display = "none";
+                updateSubmitButtonState();
+            }
         });
     </script>
     <script type="module" src="assets/notifications.js"></script>

@@ -219,6 +219,15 @@ html.mobile-view .salon-day-row {
     grid-template-columns: 1fr;
 }
 
+html.mobile-view .salon-mini-calendar-head {
+    align-items: stretch;
+    flex-direction: column;
+}
+
+html.mobile-view .salon-mini-calendar-head input {
+    width: 100%;
+}
+
 html.mobile-view .admin-booking-grid input,
 html.mobile-view .admin-booking-grid select,
 html.mobile-view .admin-create-user-grid input,

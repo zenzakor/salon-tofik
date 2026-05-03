@@ -205,6 +205,8 @@
         .booking-card small { display: block; color: #666; line-height: 1.7; }
         .booking-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
         .appointments-calendar { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; }
+        .calendar-weekday { color: #64748b; font-size: 13px; font-weight: 800; text-align: center; padding: 4px 0 2px; }
+        .calendar-day-spacer { min-height: 130px; visibility: hidden; pointer-events: none; }
         .calendar-day { min-height: 130px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px; cursor: pointer; transition: 0.2s; }
         .calendar-day:hover { border-color: #111; transform: translateY(-1px); }
         .calendar-day.today { border-color: #111; box-shadow: inset 0 0 0 1px #111; }
@@ -357,6 +359,23 @@
         .salon-empty { padding: 14px; border: 1px dashed #cbd5e1; border-radius: 8px; background: #f8fafc; color: #64748b; text-align: center; font-weight: bold; }
         .salon-status { display: grid; gap: 6px; margin-top: 12px; padding: 13px; border-radius: 8px; background: #f8fafc; border: 1px solid #e5e7eb; color: #334155; font-size: 13px; line-height: 1.55; }
         .salon-status strong { color: #111; }
+        .salon-mini-calendar { margin-top: 14px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa; }
+        .salon-mini-calendar-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+        .salon-mini-calendar-head h3 { margin: 0; font-size: 16px; }
+        .salon-mini-calendar-head input { width: 150px; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .salon-mini-calendar-legend { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 10px; color: #64748b; font-size: 12px; font-weight: bold; }
+        .salon-mini-calendar-legend span { display: inline-flex; align-items: center; gap: 5px; }
+        .salon-legend-dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; background: #22c55e; }
+        .salon-legend-closed { width: 14px; height: 10px; border-radius: 3px; display: inline-block; background: #e5e7eb; border: 1px solid #d1d5db; }
+        .salon-mini-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(30px, 1fr)); gap: 5px; direction: rtl; }
+        .salon-mini-weekday { color: #64748b; font-size: 11px; font-weight: 800; text-align: center; padding-bottom: 2px; }
+        .salon-mini-day, .salon-mini-blank { position: relative; min-height: 34px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #111827; font-weight: 800; cursor: pointer; }
+        .salon-mini-blank { background: transparent; border-color: transparent; cursor: default; }
+        .salon-mini-day:hover { border-color: #111; }
+        .salon-mini-day.closed { background: #e5e7eb; border-color: #d1d5db; color: #94a3b8; }
+        .salon-mini-day.busy { background: #fff7ed; border-color: #fed7aa; }
+        .salon-mini-day.selected { box-shadow: inset 0 0 0 2px #111827; }
+        .salon-mini-day .salon-booking-dot { position: absolute; bottom: 5px; left: 50%; width: 7px; height: 7px; border-radius: 999px; background: #22c55e; transform: translateX(-50%); box-shadow: 0 0 0 2px #fff; }
         .salon-service-table input { width: 100%; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; }
         .salon-service-table input[type="checkbox"] { width: 18px; min-width: 18px; height: 18px; accent-color: #111; }
         .calendar-day.salon-closed-day { background: #fff1f2; border-color: #fecdd3; }
@@ -364,9 +383,15 @@
         .calendar-day .salon-day-badge { display: inline-flex; align-items: center; margin-bottom: 6px; padding: 3px 7px; border-radius: 999px; background: #111827; color: #fff; font-size: 11px; font-weight: bold; }
         .booking-meta { color: #64748b; }
         body.dark-mode .salon-settings-panel p, body.dark-mode .salon-status, body.dark-mode .booking-meta { color: #cfcfcf; }
-        body.dark-mode .salon-day-row, body.dark-mode .salon-empty, body.dark-mode .salon-status, body.dark-mode .salon-pill { background: #181818; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .salon-day-row, body.dark-mode .salon-empty, body.dark-mode .salon-status, body.dark-mode .salon-pill, body.dark-mode .salon-mini-calendar { background: #181818; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .salon-mini-day { background: #202020; border-color: #333; color: #f3f3f3; }
+        body.dark-mode .salon-mini-day.closed { background: #2f333a; border-color: #475569; color: #94a3b8; }
+        body.dark-mode .salon-mini-day.busy { background: #2b2415; border-color: #7c2d12; }
+        body.dark-mode .salon-mini-calendar-legend, body.dark-mode .salon-mini-weekday { color: #cbd5e1; }
+        body.dark-mode .salon-mini-day .salon-booking-dot { box-shadow: 0 0 0 2px #202020; }
         body.dark-mode .calendar-day.salon-closed-day { background: #2b181d; border-color: #7f1d1d; }
         body.dark-mode .calendar-day.salon-busy-day { background: #2b2415; border-color: #7c2d12; }
+        body.dark-mode .calendar-weekday { color: #cbd5e1; }
         @media (max-width: 1120px) {
             .home-builder-layout { grid-template-columns: 1fr; }
             .home-preview-canvas { max-width: 100%; }
@@ -1070,6 +1095,17 @@
                             </label>
                         </div>
                         <div id="salonSettingsStatus" class="salon-status" aria-live="polite"></div>
+                        <div class="salon-mini-calendar">
+                            <div class="salon-mini-calendar-head">
+                                <h3 data-admin-text="miniCalendarTitle">خريطة أيام الشهر</h3>
+                                <input id="salonMiniCalendarMonth" type="month">
+                            </div>
+                            <div class="salon-mini-calendar-legend">
+                                <span><i class="salon-legend-closed"></i><span data-admin-text="miniCalendarClosedLegend">إجازة / لا يمكن الحجز</span></span>
+                                <span><i class="salon-legend-dot"></i><span data-admin-text="miniCalendarBookingLegend">يوجد حجز</span></span>
+                            </div>
+                            <div id="salonMiniCalendarGrid" class="salon-mini-calendar-grid"></div>
+                        </div>
                     </div>
 
                     <div class="salon-settings-panel full">
@@ -1370,6 +1406,9 @@
             editStatusPrompt: "الحالة:",
             editNotesPrompt: "الملاحظات:",
             deleteAppointmentConfirm: "هل تريد حذف هذا الحجز؟",
+            deleteAppointmentReasonPrompt: "اكتب سبب حذف هذا الحجز:",
+            deleteAppointmentReasonRequired: "يجب كتابة سبب الحذف قبل إزالة الحجز.",
+            deleteAppointmentArchivedAlert: "تم حذف الحجز من التقويم وحفظه في أرشيف الحذف.",
             updateStatusPrompt: "تحديث الحالة:",
             deleteOrderConfirm: "حذف الطلب؟",
             taxHeader: "VAT",
@@ -1524,6 +1563,9 @@
             editStatusPrompt: "סטטוס:",
             editNotesPrompt: "הערות:",
             deleteAppointmentConfirm: "למחוק את התור הזה?",
+            deleteAppointmentReasonPrompt: "כתבי את סיבת מחיקת התור:",
+            deleteAppointmentReasonRequired: "צריך לכתוב סיבת מחיקה לפני הסרת התור.",
+            deleteAppointmentArchivedAlert: "התור הוסר מהיומן ונשמר בארכיון המחיקות.",
             updateStatusPrompt: "עדכון סטטוס:",
             deleteOrderConfirm: "למחוק את ההזמנה?",
             taxHeader: "מע\"מ",
@@ -1678,6 +1720,9 @@
             editStatusPrompt: "Status:",
             editNotesPrompt: "Notes:",
             deleteAppointmentConfirm: "Delete this booking?",
+            deleteAppointmentReasonPrompt: "Write the reason for deleting this booking:",
+            deleteAppointmentReasonRequired: "A deletion reason is required before removing the booking.",
+            deleteAppointmentArchivedAlert: "The booking was removed from the calendar and saved to the deletion archive.",
             updateStatusPrompt: "Update status:",
             deleteOrderConfirm: "Delete this order?",
             taxHeader: "VAT",
@@ -2122,6 +2167,11 @@
             settingsLoadError: "تعذر تحميل إعدادات الصالون، تم استخدام القيم الافتراضية.",
             serviceRequiredAlert: "أدخل اسم الخدمة ومدة صحيحة.",
             invalidWorkingHoursAlert: "تأكد أن بداية العمل قبل نهاية العمل في كل يوم مفتوح.",
+            miniCalendarTitle: "خريطة أيام الشهر",
+            miniCalendarClosedLegend: "إجازة / لا يمكن الحجز",
+            miniCalendarBookingLegend: "يوجد حجز",
+            closeBookedDayAlert: "لا يمكن إغلاق هذا اليوم لأن عليه حجوزات قائمة. عدّل أو أجّل أو احذف الحجوزات أولاً.",
+            bookedDayDetails: "الحجوزات الموجودة",
             closedReasonRequiredAlert: "اكتب سبب الإغلاق ليظهر للزبائن.",
             specialDateRequiredAlert: "اختر تاريخ اليوم الخاص.",
             bookingClosedAlert: "هذا اليوم مغلق للحجز.",
@@ -2176,6 +2226,11 @@
             settingsLoadError: "לא ניתן לטעון הגדרות סלון, נעשה שימוש בברירת מחדל.",
             serviceRequiredAlert: "יש להזין שם שירות ומשך תקין.",
             invalidWorkingHoursAlert: "יש לוודא ששעת הפתיחה לפני שעת הסגירה בכל יום פתוח.",
+            miniCalendarTitle: "מפת ימי החודש",
+            miniCalendarClosedLegend: "חופשה / אין הזמנות",
+            miniCalendarBookingLegend: "יש תור",
+            closeBookedDayAlert: "אי אפשר לסגור את היום הזה כי קיימים בו תורים. ערכי, דחי או מחקי את התורים קודם.",
+            bookedDayDetails: "תורים קיימים",
             closedReasonRequiredAlert: "יש לכתוב סיבת סגירה שתוצג ללקוחות.",
             specialDateRequiredAlert: "יש לבחור תאריך.",
             bookingClosedAlert: "היום הזה סגור להזמנות.",
@@ -2230,6 +2285,11 @@
             settingsLoadError: "Could not load salon settings, defaults were used.",
             serviceRequiredAlert: "Enter a service name and a valid duration.",
             invalidWorkingHoursAlert: "Make sure each open day starts before it ends.",
+            miniCalendarTitle: "Month Day Map",
+            miniCalendarClosedLegend: "Closed / unavailable",
+            miniCalendarBookingLegend: "Has bookings",
+            closeBookedDayAlert: "This day cannot be closed because it has active bookings. Reschedule, edit, or delete those bookings first.",
+            bookedDayDetails: "Existing bookings",
             closedReasonRequiredAlert: "Write the closure reason shown to customers.",
             specialDateRequiredAlert: "Choose a special day date.",
             bookingClosedAlert: "This day is closed for booking.",
@@ -2409,6 +2469,7 @@
 
         function shouldCountAppointmentForCapacity(appointment = {}) {
             if (!appointment?.date || !appointment?.time) return false;
+            if (isDeletedAppointment(appointment)) return false;
             return !isRejectedAppointment(appointment.status) && !isCancelledAppointment(appointment) && !isNoShowAppointment(appointment);
         }
 
@@ -2417,6 +2478,26 @@
             if (start === null) return null;
             const duration = getAppointmentDurationMinutes(appointment);
             return { start, end: start + duration };
+        }
+
+        function getActiveAppointmentsForDate(dateValue) {
+            return allAppointments.filter((appointment) => appointment.date === dateValue && shouldCountAppointmentForCapacity(appointment));
+        }
+
+        function formatBookedDayWarning(dateValue, appointments = getActiveAppointmentsForDate(dateValue)) {
+            const details = appointments
+                .slice()
+                .sort((a, b) => String(a.time || "").localeCompare(String(b.time || "")))
+                .map((appointment) => `- ${appointment.time || "-"} | ${appointment.customerName || adminT("unnamedCustomer", "Customer")} | ${appointment.service || adminT("unspecifiedService", "Service")}`)
+                .join("\n");
+            return `${adminT("closeBookedDayAlert", "This day cannot be closed because it has active bookings.")}\n\n${adminT("bookedDayDetails", "Existing bookings")} (${dateValue}):\n${details}`;
+        }
+
+        function canCloseSalonDate(dateValue) {
+            const appointments = getActiveAppointmentsForDate(dateValue);
+            if (!appointments.length) return true;
+            alert(formatBookedDayWarning(dateValue, appointments));
+            return false;
         }
 
         function hasCapacityConflict(date, start, end, capacity, ignoredAppointmentId = "") {
@@ -2539,11 +2620,62 @@
                 item.querySelector("button").addEventListener("click", () => {
                     salonBookingSettings.specialDays = salonBookingSettings.specialDays.filter((entry) => entry.date !== day.date);
                     renderSpecialDaysList();
+                    renderSalonMiniCalendar();
                     showSalonSettingsStatus();
                     renderAppointmentsDashboard();
                 });
                 list.appendChild(item);
             });
+        }
+
+        function renderSalonMiniCalendar() {
+            const grid = document.getElementById("salonMiniCalendarGrid");
+            const monthInput = document.getElementById("salonMiniCalendarMonth");
+            if (!grid || !monthInput) return;
+            if (!monthInput.value) monthInput.value = getMonthValue(selectedAppointmentDate || getTodayValue());
+
+            const selectedMonth = monthInput.value || getMonthValue();
+            const [year, month] = selectedMonth.split("-").map(Number);
+            if (!year || !month) return;
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const firstWeekday = new Date(year, month - 1, 1).getDay();
+            const selectedSpecialDate = document.getElementById("specialDayDateInput")?.value || "";
+            grid.innerHTML = "";
+
+            BOOKING_DAY_KEYS.forEach((dayKey) => {
+                const label = document.createElement("div");
+                label.className = "salon-mini-weekday";
+                label.textContent = getBookingDayLabel(dayKey).slice(0, 3);
+                grid.appendChild(label);
+            });
+
+            for (let index = 0; index < firstWeekday; index++) {
+                const blank = document.createElement("div");
+                blank.className = "salon-mini-blank";
+                grid.appendChild(blank);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const dateInfo = getSalonDateInfo(dateKey);
+                const appointments = getActiveAppointmentsForDate(dateKey);
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = `salon-mini-day ${!dateInfo.open ? "closed" : ""} ${dateInfo.busy ? "busy" : ""} ${dateKey === selectedSpecialDate ? "selected" : ""}`;
+                button.title = `${dateKey}${!dateInfo.open ? ` | ${adminT("closedBadge", "Closed")}` : ""}${appointments.length ? ` | ${appointments.length} ${adminT("newBookings", "bookings")}` : ""}`;
+                button.innerHTML = `${day}${appointments.length ? '<span class="salon-booking-dot"></span>' : ""}`;
+                button.addEventListener("click", () => {
+                    const dateInput = document.getElementById("specialDayDateInput");
+                    const typeInput = document.getElementById("specialDayTypeInput");
+                    const reasonInput = document.getElementById("specialDayReasonInput");
+                    const specialDay = getSalonSpecialDay(dateKey);
+                    if (dateInput) dateInput.value = dateKey;
+                    if (typeInput) typeInput.value = specialDay?.type || "closed";
+                    if (reasonInput) reasonInput.value = specialDay?.reason || "";
+                    renderSalonMiniCalendar();
+                });
+                grid.appendChild(button);
+            }
         }
 
         function renderSalonServicesTable() {
@@ -2593,6 +2725,7 @@
             if (busyCapacity) busyCapacity.value = settings.capacity.busy;
             renderSalonWorkingHours();
             renderSpecialDaysList();
+            renderSalonMiniCalendar();
             renderSalonServicesTable();
             showSalonSettingsStatus();
         }
@@ -2634,6 +2767,7 @@
             const reason = document.getElementById("specialDayReasonInput")?.value.trim() || "";
             if (!date) return alert(adminT("specialDateRequiredAlert", "Choose a special day date."));
             if (type === "closed" && !reason) return alert(adminT("closedReasonRequiredAlert", "Write the closure reason shown to customers."));
+            if (type === "closed" && !canCloseSalonDate(date)) return;
 
             const settings = getSalonSettings();
             settings.specialDays = settings.specialDays.filter((day) => day.date !== date);
@@ -2641,6 +2775,7 @@
             document.getElementById("specialDayDateInput").value = "";
             document.getElementById("specialDayReasonInput").value = "";
             renderSpecialDaysList();
+            renderSalonMiniCalendar();
             showSalonSettingsStatus();
             renderAppointmentsDashboard();
         }
@@ -2679,6 +2814,10 @@
             });
             settings.specialDays.forEach((day) => {
                 if (day.type === "closed" && !day.reason) throw new Error(adminT("closedReasonRequiredAlert", "Write the closure reason shown to customers."));
+                if (day.type === "closed") {
+                    const appointments = getActiveAppointmentsForDate(day.date);
+                    if (appointments.length) throw new Error(formatBookedDayWarning(day.date, appointments));
+                }
             });
             return settings;
         }
@@ -2722,6 +2861,7 @@
 
         document.getElementById("regularCapacityInput")?.addEventListener("input", syncSalonBookingSettingsFromForm);
         document.getElementById("busyCapacityInput")?.addEventListener("input", syncSalonBookingSettingsFromForm);
+        document.getElementById("salonMiniCalendarMonth")?.addEventListener("change", renderSalonMiniCalendar);
         document.getElementById("addSpecialDayBtn")?.addEventListener("click", addSpecialDay);
         document.getElementById("addSalonServiceBtn")?.addEventListener("click", addSalonService);
         document.getElementById("saveSalonSettingsBtn")?.addEventListener("click", saveSalonBookingSettings);
@@ -2782,6 +2922,11 @@
         function isCancelledAppointment(appointment) {
             const value = String(appointment?.status || "").toLowerCase();
             return value.includes("cancel") || value.includes("إلغاء") || value.includes("בוטל");
+        }
+
+        function isDeletedAppointment(appointment) {
+            const value = String(appointment?.status || "").toLowerCase();
+            return !!appointment?.deletedFromCalendar || value.includes("deleted_by_admin") || value.includes("deleted");
         }
 
         function isConfirmedAppointment(status) {
@@ -3985,7 +4130,8 @@
             allAppointments = [];
             const querySnapshot = await getDocs(collection(db, "Appointments"));
             querySnapshot.forEach((docSnap) => {
-                allAppointments.push({ id: docSnap.id, ...docSnap.data() });
+                const appointment = { id: docSnap.id, ...docSnap.data() };
+                if (!isDeletedAppointment(appointment)) allAppointments.push(appointment);
             });
             allAppointments.sort((a, b) => `${a.date || ""} ${a.time || ""}`.localeCompare(`${b.date || ""} ${b.time || ""}`));
             if (!document.getElementById("appointmentsMonth").value) {
@@ -4264,6 +4410,11 @@
                 locked.className = "legal-lock-note";
                 locked.innerText = adminT("legalLocked", "Legal record locked");
                 container.appendChild(locked);
+                const archiveDeleteBtn = document.createElement("button");
+                archiveDeleteBtn.innerText = adminT("delete", "حذف");
+                archiveDeleteBtn.className = "btn-action btn-delete";
+                archiveDeleteBtn.onclick = () => deleteAppointment(appointment.id);
+                container.appendChild(archiveDeleteBtn);
                 return;
             }
 
@@ -4372,8 +4523,20 @@
             const selectedMonth = document.getElementById("appointmentsMonth").value || getMonthValue();
             const [year, month] = selectedMonth.split("-").map(Number);
             const daysInMonth = new Date(year, month, 0).getDate();
+            const firstWeekday = new Date(year, month - 1, 1).getDay();
             const todayKey = new Date().toISOString().slice(0, 10);
             calendar.innerHTML = "";
+            BOOKING_DAY_KEYS.forEach((dayKey) => {
+                const label = document.createElement("div");
+                label.className = "calendar-weekday";
+                label.textContent = getBookingDayLabel(dayKey);
+                calendar.appendChild(label);
+            });
+            for (let index = 0; index < firstWeekday; index++) {
+                const spacer = document.createElement("div");
+                spacer.className = "calendar-day-spacer";
+                calendar.appendChild(spacer);
+            }
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateKey = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -4468,6 +4631,7 @@
             renderPendingBookings();
             renderAppointmentsCalendar();
             renderSelectedDayAppointments();
+            renderSalonMiniCalendar();
         }
 
         window.selectAppointmentDate = function(dateKey) {
@@ -4541,23 +4705,39 @@
 
         window.deleteAppointment = async function(appointmentId) {
             const appointment = allAppointments.find((item) => item.id === appointmentId);
-            if (isAppointmentProtectedFromChanges(appointment)) return alert(adminT("legalLocked", "Legal record locked"));
-            if (!confirm(adminT("deleteAppointmentConfirm", "هل تريد حذف هذا الحجز؟"))) return;
+            const deleteReason = prompt(adminT("deleteAppointmentReasonPrompt", "Write the reason for deleting this booking:"), "");
+            if (deleteReason === null) return;
+            if (!deleteReason.trim()) return alert(adminT("deleteAppointmentReasonRequired", "A deletion reason is required before removing the booking."));
             const reversedPenalty = await reverseAppointmentPenalty(appointment);
+            const deletedAt = new Date().toISOString();
             await updateDoc(doc(db, "Appointments", appointmentId), {
-                status: "cancelled_by_admin",
-                cancelledAt: new Date().toISOString(),
-                cancelledBy: auth.currentUser?.uid || THE_ADMIN_EMAIL,
-                cancellationSaved: true,
-                legalLocked: true,
+                status: "deleted_by_admin",
+                deletedFromCalendar: true,
+                deletedAt,
+                deletedAtMs: Date.now(),
+                deletedBy: auth.currentUser?.uid || THE_ADMIN_EMAIL,
+                deletedByEmail: auth.currentUser?.email || THE_ADMIN_EMAIL,
+                deleteReason: deleteReason.trim(),
+                deletionArchive: {
+                    originalAppointmentId: appointmentId,
+                    bookingDate: appointment?.date || "",
+                    bookingTime: appointment?.time || "",
+                    customerName: appointment?.customerName || "",
+                    customerPhone: appointment?.phone || "",
+                    customerEmail: appointment?.email || "",
+                    service: appointment?.service || "",
+                    serviceId: appointment?.serviceId || "",
+                    serviceDurationMinutes: Number(appointment?.serviceDurationMinutes || appointment?.durationMinutes || 0),
+                    appointmentSnapshot: appointment || {}
+                },
                 retention: {
                     keepForBookingHistory: true,
-                    source: "Firestore Appointments"
+                    source: "Firestore Appointments deletion archive"
                 }
             });
             await notifyUser(appointment?.userId, {
-                title: "تم إلغاء حجزك",
-                body: `تم إلغاء الحجز بتاريخ ${appointment?.date || "-"} الساعة ${appointment?.time || "-"}.`,
+                title: "تم حذف حجزك",
+                body: `تم حذف الحجز بتاريخ ${appointment?.date || "-"} الساعة ${appointment?.time || "-"} بسبب: ${deleteReason.trim()}.`,
                 type: "booking",
                 link: "old-bookings.html",
                 sourceCollection: "Appointments",
@@ -4565,6 +4745,7 @@
             });
             await loadAppointments();
             if (reversedPenalty) await loadUsers();
+            alert(adminT("deleteAppointmentArchivedAlert", "The booking was removed from the calendar and saved to the deletion archive."));
         }
 
         document.getElementById("appointmentsMonth").addEventListener("change", () => {
