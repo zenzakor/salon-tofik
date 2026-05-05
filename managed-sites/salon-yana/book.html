@@ -267,7 +267,7 @@
         let bookingAvailabilityState = { complete: false, available: false, reason: "" };
         let bookingAvailabilityRequestId = 0;
 
-        const SALON_BOOKING_SETTINGS_DOC = ["SiteContent", "salonBookingSettings"];
+        const SALON_BOOKING_SETTINGS_DOC = ["site_salon_yana_SiteContent", "salonBookingSettings"];
         const BOOKING_DAY_KEYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
         const uiText = {
@@ -674,7 +674,7 @@
         }
 
         async function loadAppointmentsForAvailability() {
-            const snapshot = await getDocs(collection(db, "Appointments"));
+            const snapshot = await getDocs(collection(db, "site_salon_yana_Appointments"));
             return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
         }
 
@@ -743,7 +743,7 @@
             if (!payload?.userId) return;
             const createdAtMs = Date.now();
             try {
-                await addDoc(collection(db, "Notifications"), {
+                await addDoc(collection(db, "site_salon_yana_Notifications"), {
                     userId: String(payload.userId),
                     targetType: payload.targetType || (payload.userId === "admin" ? "admin" : "user"),
                     title: payload.title || "",
@@ -806,7 +806,7 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
-                const docSnap = await getDoc(doc(db, "Users", user.uid));
+                const docSnap = await getDoc(doc(db, "site_salon_yana_Users", user.uid));
                 if (docSnap.exists()) {
                     loggedInUserData = { ...docSnap.data(), email: user.email };
                     document.getElementById("loginWarning").style.display = "none";
@@ -846,7 +846,7 @@
             document.getElementById("submitBookBtn").disabled = true;
 
             try {
-                const querySnapshot = await getDocs(collection(db, "Appointments"));
+                const querySnapshot = await getDocs(collection(db, "site_salon_yana_Appointments"));
                 const existingAppointments = [];
                 querySnapshot.forEach((doc) => {
                     existingAppointments.push({ id: doc.id, ...doc.data() });
@@ -866,7 +866,7 @@
                     return; 
                 }
 
-                const appointmentRef = await addDoc(collection(db, "Appointments"), {
+                const appointmentRef = await addDoc(collection(db, "site_salon_yana_Appointments"), {
                     userId: currentUserId,
                     email: loggedInUserData.email || "",
                     customerName: `${loggedInUserData.firstName || ""} ${loggedInUserData.lastName || ""}`.trim(),
@@ -907,7 +907,7 @@
                     body: `${customerName} يريد حجز ${service} بتاريخ ${date} الساعة ${finalTime}.`,
                     type: "booking",
                     link: "admin.html#appointments",
-                    sourceCollection: "Appointments",
+                    sourceCollection: "site_salon_yana_Appointments",
                     sourceId: appointmentRef.id,
                     actorName: customerName
                 });
@@ -918,7 +918,7 @@
                     body: `تم إرسال طلب الحجز بتاريخ ${date} الساعة ${finalTime}. سنراجعه قريبًا.`,
                     type: "booking",
                     link: "index.html",
-                    sourceCollection: "Appointments",
+                    sourceCollection: "site_salon_yana_Appointments",
                     sourceId: appointmentRef.id
                 });
                 window.location.href = "index.html"; 
@@ -931,5 +931,6 @@
         });
     </script>
     <script type="module" src="assets/notifications.js"></script>
+    <script src="assets/site-settings.js"></script>
 </body>
 </html>

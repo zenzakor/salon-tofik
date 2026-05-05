@@ -31,6 +31,10 @@ service cloud.firestore {
       return signedIn() && request.resource.data.userId == request.auth.uid;
     }
 
+    function isManagedSiteCollection(collectionName) {
+      return collectionName.matches('site_[A-Za-z0-9_]+_(Users|Appointments|Orders|PaymentRecords|Invoices|Carts|Notifications|Products|Reviews|SiteContent|Workers|WorkerShifts|MonthlyReports|WhatsappInvoiceSends)');
+    }
+
     match /Users/{userId} {
       allow create: if ownsUserRecord(userId) || isAdmin();
       allow read, update: if ownsUserRecord(userId) || isAdmin();
@@ -107,6 +111,12 @@ service cloud.firestore {
     match /WhatsappInvoiceSends/{sendId} {
       allow read: if isAdmin();
       allow create, update, delete: if false;
+    }
+
+    match /{collectionName}/{documentId} {
+      allow read: if isManagedSiteCollection(collectionName);
+      allow create: if isManagedSiteCollection(collectionName) && signedIn();
+      allow update, delete: if isManagedSiteCollection(collectionName) && isAdmin();
     }
   }
 }

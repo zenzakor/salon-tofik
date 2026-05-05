@@ -1,0 +1,55 @@
+{
+  "sites": [
+    {
+      "id": "salon-tofik",
+      "name": "Salon Tofik",
+      "category": "Salons",
+      "entry": "index.html",
+      "source": "root",
+      "createdAt": "2026-05-05T00:00:00.000Z",
+      "settings": {
+        "siteName": "Salon Tofik",
+        "phone": "",
+        "whiteLogo": "assets/logo-white.png",
+        "blackLogo": "assets/logo-black.png"
+      }
+    },
+    {
+      "id": "salon-yana",
+      "name": "Yana",
+      "category": "Salons",
+      "entry": "managed-sites/salon-yana/index.html",
+      "source": "managed",
+      "folder": "managed-sites/salon-yana",
+      "copiedFrom": "salon-tofik",
+      "createdAt": "2026-05-05T16:52:00.182Z",
+      "settings": {
+        "siteName": "Yana",
+        "phone": "+972542326844",
+        "whiteLogo": "assets/logo-white.png",
+        "blackLogo": "assets/logo-black.png",
+        "firebaseConfig": ""
+      },
+      "database": {
+        "isolated": true,
+        "prefix": "site_salon_yana",
+        "collections": {
+          "Users": "site_salon_yana_Users",
+          "Appointments": "site_salon_yana_Appointments",
+          "Orders": "site_salon_yana_Orders",
+          "PaymentRecords": "site_salon_yana_PaymentRecords",
+          "Invoices": "site_salon_yana_Invoices",
+          "Carts": "site_salon_yana_Carts",
+          "Notifications": "site_salon_yana_Notifications",
+          "Products": "site_salon_yana_Products",
+          "Reviews": "site_salon_yana_Reviews",
+          "SiteContent": "site_salon_yana_SiteContent",
+          "Workers": "site_salon_yana_Workers",
+          "WorkerShifts": "site_salon_yana_WorkerShifts",
+          "MonthlyReports": "site_salon_yana_MonthlyReports",
+          "WhatsappInvoiceSends": "site_salon_yana_WhatsappInvoiceSends"
+        }
+      }
+    }
+  ]
+}
